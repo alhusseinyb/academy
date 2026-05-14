@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المعلم الذكي | أكاديمية مستر الحسيني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #8e44ad; --secondary: #9b59b6; --accent: #f1c40f; --bg: #f4f6f7; --text: #2c3e50; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: linear-gradient(to right, #2c3e50, #8e44ad); color: white; padding: 30px 20px; text-align: center; border-bottom: 4px solid var(--accent); position: relative; }
+        .home-btn { position: absolute; right: 20px; top: 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; border: 1px solid rgba(255,255,255,0.5); }
+        .home-btn:hover { background: var(--accent); color: var(--text); }
+        .container { max-width: 800px; margin: 30px auto; padding: 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        
+        .ai-box { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(142, 68, 173, 0.15); border: 2px solid #d2b4de; }
+        .ai-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .ai-icon { font-size: 3em; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0% {transform: translateY(0px);} 50% {transform: translateY(-10px);} 100% {transform: translateY(0px);} }
+        
+        textarea { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 10px; font-size: 16px; font-family: 'Tajawal'; resize: vertical; box-sizing: border-box; }
+        textarea:focus { outline: none; border-color: var(--primary); }
+        
+        .upload-btn-wrapper { position: relative; overflow: hidden; display: inline-block; margin-top: 10px; }
+        .btn-upload { border: 2px dashed var(--primary); color: var(--primary); background-color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .upload-btn-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        
+        .buttons-row { display: flex; gap: 15px; margin-top: 20px; }
+        .btn-ai { flex: 1; background: var(--primary); color: white; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3); }
+        .btn-ai:hover { background: #732d91; transform: translateY(-2px); }
+        .btn-quiz { background: #e67e22; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
+        .btn-quiz:hover { background: #d35400; }
+        
+        #resultArea { margin-top: 30px; background: #fdfefe; padding: 25px; border-radius: 10px; border-left: 5px solid var(--primary); display: none; line-height: 1.8; font-size: 1.1em; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        #loadingMsg { display: none; text-align: center; color: var(--primary); font-weight: bold; margin-top: 20px; font-size: 1.2em; }
+        
+        #previewImage { max-width: 200px; max-height: 200px; display: none; margin-top: 10px; border-radius: 8px; border: 2px solid #ccc; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">🏠 العودة للرئيسية</a>
+    <h1 style="margin: 0; font-size: 2.2em;">🤖 المعلم الذكي (AI Tutor)</h1>
+    <p style="opacity: 0.9;">مساعدك الشخصي لشرح القواعد وحل الأسئلة الصعبة على مدار 24 ساعة!</p>
+</header>
+
+<div class="container">
+    <div class="ai-box">
+        <div class="ai-header">
+            <div class="ai-icon">🤖</div>
+            <div>
+                <h2 style="margin: 0; color: var(--primary);">مرحباً بك يا بطل!</h2>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d;">اسألني أي سؤال في المنهج، أو ارفع صورة للسؤال الذي عجزت عنه.</p>
+            </div>
+        </div>
+
+        <textarea id="userInput" rows="4" placeholder="مثال: اشرح لي الفرق بين Since و For... أو اكتب سؤالك هنا..."></textarea>
+        
+        <div class="upload-btn-wrapper">
+            <button class="btn-upload">📸 رفع صورة لسؤال (اختياري)</button>
+            <input type="file" id="imageInput" accept="image/*" onchange="previewFile()">
+        </div>
+        <img id="previewImage" src="" alt="معاينة الصورة">
+
+        <div class="buttons-row">
+            <button class="btn-ai btn-quiz" onclick="askAI('quiz')">🧠 اشرح واختبرني (شرح + Quiz)</button>
+            <button class="btn-ai" onclick="askAI('solve')">💡 حل السؤال فوراً</button>
+        </div>
+
+        <div id="loadingMsg">⏳ جاري التفكير والتحليل... الرجاء الانتظار قليلاً...</div>
+        <div id="resultArea"></div>
+    </div>
+</div>
+
+<script>
+    // ⚠️ ضع الرابط الجديد الخاص بـ (AI Bridge) هنا
+    var AI_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwV4U-puIEwOEaOJzos9F0aEXJ8SaVsk-WGdFkzrEUhlUlqn2Z8aYKKzA6fT1xMprzcNw/exec";
+
+    var base64Image = null;
+
+    // معاينة الصورة وتحويلها
+    function previewFile() {
+        var file = document.getElementById('imageInput').files[0];
+        var reader = new FileReader();
+        reader.onloadend = function() {
+            base64Image = reader.result;
+            var img = document.getElementById('previewImage');
+            img.src = base64Image;
+            img.style.display = "block";
+        }
+        if (file) { reader.readAsDataURL(file); }
+    }
+
+    // تنسيق رد الذكاء الاصطناعي (تحويل النجمتين إلى خط عريض)
+    function formatResponse(text) {
+        let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--primary)">$1</strong>');
+        formatted = formatted.replace(/\n/g, '<br>');
+        return formatted;
+    }
+
+    function askAI(action) {
+        if(AI_SCRIPT_URL === "ضع_رابط_سكربت_الذكاء_الاصطناعي_هنا") { alert("لم يتم وضع الرابط السري بعد!"); return; }
+
+        var userText = document.getElementById("userInput").value.trim();
+        if (!userText && !base64Image) { alert("أرجوك اكتب سؤالاً أو ارفع صورة!"); return; }
+
+        // هندسة الأوامر (Prompt Engineering) لضبط ردود الذكاء الاصطناعي
+        var finalPrompt = "";
+        if (action === 'quiz') {
+            finalPrompt = "أنت معلم لغة إنجليزية محترف في مصر تشرح لطلاب الإعدادية. اشرح القاعدة أو الكلمة التالية بأسلوب مبسط جداً وممتع باللغة العربية: (" + userText + "). بعد الشرح، قم بإنشاء اختبار قصير (Quiz) مكون من 3 أسئلة اختياري (MCQ) باللغة الإنجليزية لاختبار فهمهم. وفي نهاية الإجابة، ضع الإجابات الصحيحة للأسئلة بشكل واضح.";
+        } else {
+            finalPrompt = "أنت معلم لغة إنجليزية محترف. أجب عن هذا السؤال أو قم بحل السؤال الموجود في الصورة، مع تقديم شرح مبسط باللغة العربية لطلاب الإعدادية عن سبب اختيارك لهذه الإجابة: " + userText;
+        }
+
+        document.getElementById("loadingMsg").style.display = "block";
+        document.getElementById("resultArea").style.display = "none";
+        document.querySelectorAll(".btn-ai").forEach(b => b.disabled = true);
+
+        var payload = { prompt: finalPrompt, image: base64Image };
+
+        fetch(AI_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("loadingMsg").style.display = "none";
+            var resultDiv = document.getElementById("resultArea");
+            resultDiv.innerHTML = formatResponse(data);
+            resultDiv.style.display = "block";
+            document.querySelectorAll(".btn-ai").forEach(b => b.disabled = false);
+        })
+        .catch(err => {
+            document.getElementById("loadingMsg").style.display = "none";
+            alert("حدث خطأ في الاتصال. تأكد من الإنترنت.");
+            document.querySelectorAll(".btn-ai").forEach(b => b.disabled = false);
+        });
+    }
+</script>
+</body>
+</html>

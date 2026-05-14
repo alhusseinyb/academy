@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكاديمية مستر الحسيني يحيى للغة الإنجليزية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a252f; --secondary: #2c3e50; --accent: #e67e22; --prep1: #27ae60; --prep2: #2980b9; --prep3: #c0392b; --ai: #8e44ad; --bg: #ecf0f1; --text: #2c3e50; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; text-align: center; padding: 60px 20px; border-bottom: 5px solid var(--accent); }
+        .hero h1 { font-size: 2.8em; margin: 0; font-weight: 900; }
+        .hero p { font-size: 1.3em; margin: 10px 0; opacity: 0.9; }
+
+        .main-content { flex: 1; max-width: 1100px; margin: -30px auto 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box;}
+        
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .grade-card { background: white; border-radius: 15px; padding: 30px 15px; text-align: center; text-decoration: none; color: var(--text); box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: 0.3s; border: 2px solid transparent; }
+        .grade-card:hover { transform: translateY(-10px); }
+        .grade-card h2 { font-size: 1.8em; margin: 10px 0; }
+        .grade-card .icon { font-size: 3.5em; }
+        
+        /* ألوان البطاقات */
+        .card-p1:hover { border-color: var(--prep1); } .card-p1 h2 { color: var(--prep1); }
+        .card-p2:hover { border-color: var(--prep2); } .card-p2 h2 { color: var(--prep2); }
+        .card-p3:hover { border-color: var(--prep3); } .card-p3 h2 { color: var(--prep3); }
+        .card-ai:hover { border-color: var(--ai); } .card-ai h2 { color: var(--ai); }
+
+        footer { background: #1a252f; color: white; text-align: center; padding: 30px; margin-top: auto; border-top: 5px solid var(--accent); }
+        .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
+        .footer-links a { color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px;}
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>أكاديمية مستر الحسيني يحيى</h1>
+        <p>الإنجليزية بشكل مختلف - نظام تعليمي ذكي ومتكامل</p>
+    </div>
+
+    <div class="main-content">
+        <div class="grid-container">
+            <a href="prep1.html" class="grade-card card-p1">
+                <div class="icon">📗</div>
+                <h2>الصف الأول الإعدادي</h2>
+                <p>اختبارات تفاعلية شاملة</p>
+            </a>
+            
+            <a href="prep2.html" class="grade-card card-p2">
+                <div class="icon">📘</div>
+                <h2>الصف الثاني الإعدادي</h2>
+                <p>مراجعات ووحدات دراسية</p>
+            </a>
+
+            <a href="prep3.html" class="grade-card card-p3">
+                <div class="icon">📕</div>
+                <h2>الشهادة الإعدادية</h2>
+                <p>طريقك نحو الدرجة النهائية</p>
+            </a>
+
+            <a href="ai-tutor.html" class="grade-card card-ai">
+                <div class="icon">🤖</div>
+                <h2>المعلم الذكي (AI)</h2>
+                <p>اسأل، صوّر، واشرح بالذكاء الاصطناعي</p>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <h3 style="margin: 0;">🔗 روابط هامة</h3>
+        <div class="footer-links">
+            <a href="golden.html">📝 الدليل الذهبي للإجابة</a>
+            <a href="https://www.facebook.com/Alhusseiny.badawy" target="_blank">📘 فيسبوك</a>
+            <a href="https://wa.me/201003124783" target="_blank">💬 واتساب</a>
+        </div>
+        <p style="margin-top: 15px; font-size: 13px; opacity: 0.7;">جميع الحقوق محفوظة © 2024 مستر الحسيني يحيى</p>
+    </footer>
+
+</body>
+</html>

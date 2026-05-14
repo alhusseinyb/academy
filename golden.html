@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورقة الذهب 2026 – Mr. Al-Husseiny</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0a7c6e;
+    --teal-light: #12b09c;
+    --teal-pale: #e6f7f5;
+    --gold: #d4a017;
+    --gold-light: #f5c842;
+    --gold-pale: #fdf8e8;
+    --red: #c0392b;
+    --red-pale: #fdf0ef;
+    --blue: #1a4f8a;
+    --blue-pale: #eef3fb;
+    --purple: #6c3483;
+    --purple-pale: #f5eefb;
+    --ink: #0d1f1a;
+    --ink-soft: #2c4a42;
+    --grey: #f2f5f4;
+    --border: #d0e8e4;
+    --white: #ffffff;
+    --ai: #8e44ad;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: #0d1f1a;
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ══════ ANIMATED BG ══════ */
+  .bg-pattern {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(10,124,110,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(212,160,23,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(26,79,138,0.08) 0%, transparent 70%);
+  }
+
+  .floating-stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: var(--gold-light);
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle var(--dur, 3s) var(--delay, 0s) infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.7; transform: scale(1.5); }
+  }
+
+  /* ══════ WRAPPER ══════ */
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  /* ══════ HEADER ══════ */
+  .header {
+    text-align: center;
+    padding: 50px 30px 40px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .header-crown {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 10px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .header h1 {
+    font-family: 'Cairo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(26px, 5vw, 46px);
+    color: var(--gold-light);
+    line-height: 1.2;
+    text-shadow: 0 2px 20px rgba(212,160,23,0.4);
+    margin-bottom: 6px;
+  }
+  .header h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 400;
+    font-size: clamp(14px, 2.5vw, 18px);
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 18px;
+  }
+  .header-pills {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center;
+  }
+  .pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75);
+    border-radius: 30px;
+    padding: 5px 16px;
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+  .pill.gold { background: rgba(212,160,23,0.2); border-color: var(--gold); color: var(--gold-light); }
+
+  /* ══════ TABS ══════ */
+  .tabs-nav {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .tab-btn {
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+    border-radius: 30px;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .tab-btn.active {
+    background: var(--teal);
+    border-color: var(--teal-light);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(10,124,110,0.4);
+  }
+  .tab-btn.active.gold-tab  { background: var(--gold); border-color: var(--gold-light); box-shadow: 0 4px 20px rgba(212,160,23,0.4); color: #1a1206; }
+  .tab-btn.active.red-tab   { background: var(--red);  border-color: #e74c3c; box-shadow: 0 4px 20px rgba(192,57,43,0.4); }
+  .tab-btn.active.blue-tab  { background: var(--blue); border-color: #2980b9; box-shadow: 0 4px 20px rgba(26,79,138,0.4); }
+  .tab-btn.active.purple-tab{ background: var(--purple); border-color: #9b59b6; box-shadow: 0 4px 20px rgba(108,52,131,0.4); }
+
+  /* ══════ TAB PANELS ══════ */
+  .tab-panel { display: none; animation: fadeIn 0.3s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
+
+  /* ══════ SECTION CARD ══════ */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .card-head {
+    padding: 18px 24px 14px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .card-head.teal   { background: linear-gradient(135deg, #0a7c6e, #12b09c); color: #fff; border-bottom-color: #0a7c6e; }
+  .card-head.gold   { background: linear-gradient(135deg, #b8860b, #d4a017); color: #fff; border-bottom-color: #b8860b; }
+  .card-head.red    { background: linear-gradient(135deg, #922b21, #c0392b); color: #fff; border-bottom-color: #922b21; }
+  .card-head.blue   { background: linear-gradient(135deg, #1a4f8a, #2471a3); color: #fff; border-bottom-color: #1a4f8a; }
+  .card-head.purple { background: linear-gradient(135deg, #5b2c6f, #6c3483); color: #fff; border-bottom-color: #5b2c6f; }
+
+  .card-icon { font-size: 28px; flex-shrink: 0; }
+  .card-head h3 { font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.3; }
+  .card-head p  { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .card-body { padding: 22px 24px; }
+
+  /* ══════ RULE ITEMS ══════ */
+  .rule-item {
+    display: flex; gap: 14px;
+    background: var(--grey);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-right: 4px solid var(--teal);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rule-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .rule-item.gold-border  { border-right-color: var(--gold); }
+  .rule-item.red-border   { border-right-color: var(--red); }
+  .rule-item.blue-border  { border-right-color: var(--blue); }
+  .rule-item.purple-border{ border-right-color: var(--purple); }
+
+  .rule-badge {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--teal); color: #fff;
+    font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .rule-badge.gold   { background: var(--gold); }
+  .rule-badge.red    { background: var(--red); }
+  .rule-badge.blue   { background: var(--blue); }
+  .rule-badge.purple { background: var(--purple); }
+
+  .rule-content h4 {
+    font-weight: 700; font-size: 14.5px; color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .rule-content .en-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    color: var(--teal); background: var(--teal-pale);
+    padding: 1px 8px; border-radius: 10px;
+    display: inline-block; margin-bottom: 5px;
+  }
+  .rule-content p { font-size: 13.5px; color: #444; line-height: 1.75; }
+
+  /* ══════ HIGHLIGHT BOX ══════ */
+  .highlight {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.7;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .highlight.teal   { background: var(--teal-pale); border-right: 3px solid var(--teal); color: #0a4f45; }
+  .highlight.gold   { background: var(--gold-pale);  border-right: 3px solid var(--gold);  color: #7a5a00; }
+  .highlight.red    { background: var(--red-pale);   border-right: 3px solid var(--red);   color: #7a1d14; }
+  .highlight.blue   { background: var(--blue-pale);  border-right: 3px solid var(--blue);  color: #0d2d55; }
+  .highlight.purple { background: var(--purple-pale);border-right: 3px solid var(--purple);color: #3d1a4e; }
+
+  /* ══════ PRONOUN CARDS ══════ */
+  .pronoun-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+    margin-top: 12px;
+  }
+  .pronoun-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .pronoun-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  .pronoun-card .pword {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700;
+    color: var(--blue); margin-bottom: 6px;
+  }
+  .pronoun-card .pmean { font-size: 13px; color: #555; margin-bottom: 6px; font-weight: 600; }
+  .pronoun-card .pex   { font-size: 11.5px; color: #888; }
+  .pronoun-card .ptag  {
+    margin-top: 7px;
+    background: var(--blue-pale); color: var(--blue);
+    font-size: 11px; font-weight: 700;
+    border-radius: 6px; padding: 2px 8px;
+    display: inline-block;
+  }
+
+  /* ══════ TABLE ══════ */
+  .styled-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13.5px; }
+  .styled-table th {
+    padding: 11px 14px;
+    font-weight: 700;
+    text-align: right;
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+  }
+  .styled-table th:first-child { border-radius: 0 10px 0 0; }
+  .styled-table th:last-child  { border-radius: 10px 0 0 0; }
+  .styled-table.teal th   { background: var(--teal);   color: #fff; }
+  .styled-table.gold th   { background: var(--gold);   color: #fff; }
+  .styled-table.blue th   { background: var(--blue);   color: #fff; }
+  .styled-table.purple th { background: var(--purple); color: #fff; }
+  .styled-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+  .styled-table tr:nth-child(even) td { background: #f8faf9; }
+  .styled-table tr:last-child td { border-bottom: none; }
+  .styled-table td:first-child { font-weight: 700; }
+
+  .tag {
+    display: inline-block; border-radius: 5px;
+    padding: 1px 8px; font-size: 12px; font-weight: 700;
+    margin: 1px 2px;
+  }
+  .tag.t  { background: var(--teal-pale);   color: var(--teal); }
+  .tag.g  { background: var(--gold-pale);   color: #8a6000; }
+  .tag.r  { background: var(--red-pale);    color: var(--red); }
+  .tag.b  { background: var(--blue-pale);   color: var(--blue); }
+  .tag.p  { background: var(--purple-pale); color: var(--purple); }
+
+  /* ══════ FLIP CARDS ══════ */
+  .flip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .flip-card { height: 150px; perspective: 1000px; cursor: pointer; }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  }
+  .flip-card:hover .flip-inner,
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute; inset: 0;
+    border-radius: 14px;
+    backface-visibility: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 14px;
+    text-align: center;
+  }
+  .flip-front {
+    background: linear-gradient(135deg, var(--teal), var(--teal-light));
+    color: #fff;
+  }
+  .flip-front .f-icon { font-size: 30px; margin-bottom: 8px; }
+  .flip-front h4 { font-size: 14px; font-weight: 700; line-height: 1.4; }
+  .flip-front .f-hint { font-size: 11px; opacity: 0.75; margin-top: 4px; }
+  .flip-back {
+    background: #fff;
+    border: 2px solid var(--teal-light);
+    transform: rotateY(180deg);
+    color: var(--ink);
+  }
+  .flip-back h4 { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 5px; }
+  .flip-back p  { font-size: 12.5px; color: #555; line-height: 1.6; }
+
+  /* color variants for flip */
+  .flip-front.gold-f   { background: linear-gradient(135deg, #b8860b, #d4a017); }
+  .flip-back.gold-b    { border-color: var(--gold); }
+  .flip-back.gold-b h4 { color: var(--gold); }
+  .flip-front.red-f    { background: linear-gradient(135deg, #922b21, #c0392b); }
+  .flip-back.red-b     { border-color: var(--red); }
+  .flip-back.red-b h4  { color: var(--red); }
+  .flip-front.blue-f   { background: linear-gradient(135deg, #1a4f8a, #2471a3); }
+  .flip-back.blue-b    { border-color: var(--blue); }
+  .flip-back.blue-b h4 { color: var(--blue); }
+  .flip-front.purple-f { background: linear-gradient(135deg, #5b2c6f, #6c3483); }
+  .flip-back.purple-b  { border-color: var(--purple); }
+  .flip-back.purple-b h4 { color: var(--purple); }
+
+  /* ══════ CT CARDS ══════ */
+  .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+  @media(max-width:580px) { .ct-grid { grid-template-columns: 1fr; } }
+  .ct-card {
+    background: var(--grey);
+    border-radius: 14px;
+    padding: 16px;
+    border-top: 4px solid var(--teal);
+    transition: transform 0.2s;
+  }
+  .ct-card:hover { transform: translateY(-2px); }
+  .ct-card.gold-top   { border-top-color: var(--gold); }
+  .ct-card.red-top    { border-top-color: var(--red); }
+  .ct-card.purple-top { border-top-color: var(--purple); }
+
+  .ct-type { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+  .ct-q    { font-size: 13px; font-style: italic; color: var(--blue); font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+  .ct-starter {
+    background: #fff; border-radius: 8px; padding: 8px 12px;
+    font-size: 13.5px; font-weight: 700; color: var(--teal);
+    border-right: 3px solid var(--teal); margin-bottom: 8px;
+  }
+  .ct-starter.gold   { color: var(--gold); border-right-color: var(--gold); }
+  .ct-starter.red    { color: var(--red);  border-right-color: var(--red); }
+  .ct-starter.purple { color: var(--purple); border-right-color: var(--purple); }
+  .ct-examples { font-size: 12px; color: #666; line-height: 1.8; }
+  .ct-ar { font-size: 12px; color: #888; margin-top: 4px; font-style: italic; }
+
+  /* ══════ MORALS ══════ */
+  .moral-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--grey);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-right: 4px solid var(--gold);
+    transition: transform 0.2s;
+  }
+  .moral-item:hover { transform: translateX(-3px); }
+  .moral-star { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .moral-en { font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 3px; }
+  .moral-ar { font-size: 13px; color: #777; }
+
+  /* ══════ CHECKLIST ══════ */
+  .checklist { display: flex; flex-direction: column; gap: 10px; }
+  .check-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 13.5px; color: var(--ink);
+    background: var(--grey); border-radius: 10px;
+    padding: 12px 14px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .check-row:hover { background: var(--teal-pale); }
+  .check-box-ui {
+    width: 22px; height: 22px;
+    border: 2.5px solid var(--teal);
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: transparent;
+    transition: all 0.2s;
+  }
+  .check-row.checked .check-box-ui {
+    background: var(--teal); color: #fff; border-color: var(--teal);
+  }
+  .check-row .check-text { line-height: 1.6; }
+  .check-row .check-ar   { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* ══════ WRITING TIPS ══════ */
+  .wt-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+    margin-top: 10px;
+  }
+  @media(max-width:580px) { .wt-grid { grid-template-columns: 1fr 1fr; } }
+  .wt-card {
+    background: var(--grey);
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .wt-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+  .wt-icon { font-size: 26px; margin-bottom: 8px; }
+  .wt-title { font-weight: 700; font-size: 13px; color: var(--ink); margin-bottom: 5px; }
+  .wt-en    { font-size: 11px; color: var(--teal); font-weight: 700; letter-spacing: 0.3px; margin-bottom: 6px; }
+  .wt-body  { font-size: 12.5px; color: #555; line-height: 1.6; }
+
+  /* ══════ PREFIX TABLE ══════ */
+  .prefix-badge {
+    display: inline-block;
+    background: var(--purple); color: #fff;
+    font-weight: 700; font-size: 14px;
+    padding: 3px 10px; border-radius: 8px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+  }
+  .prefix-badge.suf { background: var(--blue); }
+  .prefix-example { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* ══════ PROGRESS TRACKER ══════ */
+  .progress-bar {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px; height: 6px;
+    margin: 16px 0 24px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 20px;
+    background: linear-gradient(90deg, var(--teal-light), var(--gold-light));
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    text-align: center; color: rgba(255,255,255,0.5);
+    font-size: 12px; margin-bottom: 6px;
+  }
+
+  /* ══════ DIVIDER ══════ */
+  .div-line {
+    border: none; border-top: 1.5px dashed var(--border);
+    margin: 18px 0;
+  }
+
+  /* ══════ HEADER LINKS OVERRIDE ══════ */
+  .home-btn {
+    position: absolute; right: 20px; top: 20px;
+    background: rgba(255,255,255,0.1); color: white;
+    text-decoration: none; padding: 8px 15px;
+    border-radius: 8px; font-weight: bold; font-size: 0.9em;
+    transition: 0.3s; border: 1px solid rgba(255,255,255,0.3);
+  }
+  .home-btn:hover { background: var(--gold); color: var(--ink); border-color: var(--gold-light); }
+
+  /* ══════ FOOTER ══════ */
+  .footer {
+    text-align: center; margin-top: 40px;
+    color: rgba(255,255,255,0.5);
+    font-size: 12.5px; line-height: 2;
+  }
+  .footer-links {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 20px; margin-bottom: 20px;
+  }
+  .footer-links a {
+    color: #fff; text-decoration: none; font-weight: bold;
+    padding: 10px 18px; border-radius: 8px; transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.2); font-size: 13.5px;
+  }
+  .footer-links a:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+  /* ══════ RESPONSIVE ══════ */
+  @media(max-width:620px) {
+    .pronoun-row { grid-template-columns: repeat(3,1fr); }
+    .wt-grid { grid-template-columns: repeat(2,1fr); }
+    .flip-grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media(max-width:400px) {
+    .pronoun-row { grid-template-columns: 1fr 1fr; }
+    .flip-grid   { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ══════ PRINT ══════ */
+  @media print {
+    body { background: white; }
+    .bg-pattern, .floating-stars { display: none; }
+    .header h1, .header h2 { color: #0a7c6e !important; text-shadow: none; }
+    .tab-panel { display: block !important; }
+    .tabs-nav { display: none; }
+    .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 30px; break-inside: avoid; }
+    .footer { color: #888; }
+    .footer strong { color: var(--gold); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+<div class="floating-stars" id="stars"></div>
+
+<div class="wrapper">
+
+  <div class="header">
+    <a href="index.html" class="home-btn">🏠 العودة للرئيسية</a>
+    <span class="header-crown">👑</span>
+    <h1>الورقة الذهبية للامتحان النهائي</h1>
+    <h2>The Golden Worksheet · مستر الحسيني يحيى · 2026</h2>
+    <div class="header-pills">
+      <span class="pill gold">✦ Gen Alpha 2026</span>
+      <span class="pill">الفهم القرائي</span>
+      <span class="pill">القصة</span>
+      <span class="pill">المفردات</span>
+      <span class="pill">الكتابة</span>
+      <span class="pill">نظام تعليمي متكامل</span>
+    </div>
+  </div>
+
+  <div class="progress-label" id="prog-label">اختر الجزء الذي تريد مذاكرته 👇</div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active"        onclick="switchTab('reading',  this, 0)"  >📖 الفهم القرائي</button>
+    <button class="tab-btn"               onclick="switchTab('story',    this, 25)" >📚 القصة</button>
+    <button class="tab-btn gold-btn"      onclick="switchTab('vocab',    this, 50)" >🔤 المفردات</button>
+    <button class="tab-btn"               onclick="switchTab('writing',  this, 75)" >✍️ الكتابة</button>
+    <button class="tab-btn"               onclick="switchTab('checklist',this, 100)">✅ قائمة المراجعة</button>
+  </div>
+
+
+  <div id="tab-reading" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-head teal">
+        <div class="card-icon">📖</div>
+        <div>
+          <h3>قطعة الفهم القرائي — Reading Comprehension</h3>
+          <p>اتبع هذه القواعد الـ 6 في كل امتحان وستحصل على الدرجة كاملة</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="rule-item">
+          <div class="rule-badge">١</div>
+          <div class="rule-content">
+            <div class="en-label">30-Second Rule</div>
+            <h4>اقرأ الأسئلة أولاً — قبل القطعة!</h4>
+            <p>قبل ما تقرأ القطعة، خد 30 ثانية واقرأ كل الأسئلة الأول. عقلك هيبقى شغال تلقائياً يدور على الإجابة وهو بيقرأ.</p>
+            <div class="highlight teal">💡 <span>السبب: لو عقلك عارف "المطلوب" هيركز عليه فوراً وهو بيقرأ بدل ما تقرأ كل كلمة بدون هدف.</span></div>
+          </div>
+        </div>
+
+        <div class="rule-item gold-border">
+          <div class="rule-badge gold">٢</div>
+          <div class="rule-content">
+            <div class="en-label">Keywords Hunt</div>
+            <h4>صياد الكلمات المهمة — Keywords</h4>
+            <p>ضع خط تحت <strong>الأسماء والتواريخ والأرقام والأماكن</strong> في السؤال. بعد كده دور على "المرادف" بتاعها في القطعة — القطعة نادراً ما تستخدم نفس الكلمة بالظبط.</p>
+            <div class="highlight gold">🎯 <span>مثال: السؤال يقول "children" والقطعة تقول "students" — هما نفس المعنى!</span></div>
+          </div>
+        </div>
+
+        <div class="rule-item red-border">
+          <div class="rule-badge red">٣</div>
+          <div class="rule-content">
+            <div class="en-label">Context Clue Strategy</div>
+            <h4>الكلمة الصعبة؟ السياق هو المفتاح</h4>
+            <p>لو لقيت كلمة مش عارفها، غطيها بإصبعك واقرأ الجملة اللي قبلها والجملة اللي بعدها. المعنى هيظهر لوحده من "السياق".</p>
+            <div class="highlight red">❌ <span>لا تقف عند كلمة صعبة وتضيع وقتك — المطلوب منك تفهم المعنى العام، مش تترجم قاموس.</span></div>
+          </div>
+        </div>
+
+        <div class="rule-item blue-border">
+          <div class="rule-badge blue">٤</div>
+          <div class="rule-content">
+            <div class="en-label">Pronoun Reference</div>
+            <h4>الضمائر — It / They / There تعود على إيه؟</h4>
+            <p>لو السؤال سألك "What does <em>it / they / there</em> refer to?" — دايماً ارجع للجملة اللي قبل الضمير مباشرة. الإجابة هناك.</p>
+            <div class="pronoun-row">
+              <div class="pronoun-card">
+                <div class="pword">It</div>
+                <div class="pmean">يعود على شيء</div>
+                <div class="pex">شيء واحد غير بشري</div>
+                <div class="ptag">مفرد غير عاقل</div>
+              </div>
+              <div class="pronoun-card">
+                <div class="pword">They</div>
+                <div class="pmean">يعود على أشياء أو أشخاص</div>
+                <div class="pex">جمع (بشر أو أشياء)</div>
+                <div class="ptag">جمع</div>
+              </div>
+              <div class="pronoun-card">
+                <div class="pword">There</div>
+                <div class="pmean">يعود على مكان</div>
+                <div class="pex">اسم مكان ذُكر قبله</div>
+                <div class="ptag">مكان</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-badge">٥</div>
+          <div class="rule-content">
+            <div class="en-label">Title / Main Idea</div>
+            <h4>سؤال العنوان أو الفكرة الرئيسية</h4>
+            <p>الإجابة غالباً في <strong>أول جملة</strong> في القطعة. اسأل نفسك: "إيه الكلمة اللي اتكررت أكتر في القطعة؟" — دي الفكرة الرئيسية وهي العنوان.</p>
+          </div>
+        </div>
+
+        <div class="rule-item gold-border">
+          <div class="rule-badge gold">٦</div>
+          <div class="rule-content">
+            <div class="en-label">Summarise</div>
+            <h4>التلخيص — Summarise</h4>
+            <p>اقرأ أول جملة في الفقرة المطلوبة وغير فيها كلمة أو اتنين بمرادفهم. هتاخد الدرجة كاملة لأنك أثبت إنك فاهم.</p>
+          </div>
+        </div>
+
+        <hr class="div-line">
+
+        <h3 style="font-weight:700;font-size:16px;margin-bottom:12px;color:var(--ink)">📋 كيف تبدأ إجابتك — جدول الإنقاذ</h3>
+        <table class="styled-table teal">
+          <thead>
+            <tr>
+              <th>كلمة السؤال</th>
+              <th>ابدأ إجابتك بـ…</th>
+              <th>دور على إيه في القطعة؟</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag r">Why…?</span> لماذا</td>
+              <td><strong>Because…</strong></td>
+              <td>دور على: <em>because / so / therefore / as a result</em></td>
+            </tr>
+            <tr>
+              <td><span class="tag b">Where…?</span> أين</td>
+              <td><strong>In / At / On…</strong></td>
+              <td>أي كلمة تبدأ بـ Capital Letter (اسم مكان)</td>
+            </tr>
+            <tr>
+              <td><span class="tag t">When…?</span> متى</td>
+              <td><strong>At / On / In…</strong></td>
+              <td>رقم، تاريخ، أو كلمة زمن (day / month / year)</td>
+            </tr>
+            <tr>
+              <td><span class="tag g">How…?</span> كيف</td>
+              <td><strong>By… / He was…</strong></td>
+              <td>طريقة، وسيلة مواصلات، أو صفة للشخص</td>
+            </tr>
+            <tr>
+              <td><span class="tag p">Who…?</span> من</td>
+              <td><strong>اسم الشخص / He / She…</strong></td>
+              <td>أي اسم شخص يبدأ بـ Capital Letter</td>
+            </tr>
+            <tr>
+              <td><span class="tag r">What…?</span> ماذا</td>
+              <td><strong>اسم أو جملة اسمية</strong></td>
+              <td>الاسم الأقرب للكلمة المهمة في السؤال</td>
+            </tr>
+            <tr>
+              <td><span class="tag b">How many/much?</span></td>
+              <td><strong>رقم أو كمية</strong></td>
+              <td>أي رقم أو كمية في القطعة</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><div id="tab-story" class="tab-panel">
+
+    <div class="card">
+      <div class="card-head red">
+        <div class="card-icon">📚</div>
+        <div>
+          <h3>أسئلة القصة — The Story</h3>
+          <p>القصة مش حفظ — القصة رأي وتفكير!</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <h3 style="font-weight:700;font-size:15px;margin-bottom:12px;color:var(--ink)">① صح أم خطأ — True or False</h3>
+        <div class="rule-item red-border">
+          <div class="rule-badge red">!</div>
+          <div class="rule-content">
+            <h4>كلمة واحدة تقلب الإجابة 180 درجة</h4>
+            <p>اقرأ الجملة بتركيز شديد. كلمات زي <span class="tag r">not</span> <span class="tag r">never</span> <span class="tag r">only</span> <span class="tag r">always</span> بتغير المعنى كله. افحصها الأول قبل ما تقول True أو False.</p>
+            <div class="highlight red">❗ <span>مثال: الجملة تقول "He <u>always</u> helps" لكن القصة قالت "He <u>sometimes</u> helps" — الإجابة: <strong>False</strong></span></div>
+          </div>
+        </div>
+
+        <hr class="div-line">
+
+        <h3 style="font-weight:700;font-size:15px;margin-bottom:6px;color:var(--ink)">② التفكير الناقد — Critical Thinking (2026)</h3>
+        <p style="font-size:13px;color:#666;margin-bottom:14px;">مفيش إجابة "صح وحيدة" — المصحح عايز <strong>رأيك بالإنجليزي الصح</strong> فقط.</p>
+
+        <div class="ct-grid">
+          <div class="ct-card">
+            <div class="ct-type">نوع السؤال ١</div>
+            <div class="ct-q">"What do you think of…?" / "Do you like / admire…?"</div>
+            <div class="ct-starter">I think he/she is… + صفة</div>
+            <div class="ct-examples">
+              <strong>صفات مفيدة:</strong><br>
+              brave (شجاع) · kind (طيب) · clever (ذكي)<br>
+              honest (أمين) · determined (مثابر) · helpful (مفيد)
+            </div>
+          </div>
+          <div class="ct-card gold-top">
+            <div class="ct-type">نوع السؤال ٢</div>
+            <div class="ct-q">"What would you do if you were [character]?"</div>
+            <div class="ct-starter gold">I would… + فعل مضارع</div>
+            <div class="ct-examples">
+              <em>I would help my friends.</em><br>
+              <em>I would try to solve the problem.</em><br>
+              <em>I would tell the truth.</em>
+            </div>
+          </div>
+          <div class="ct-card red-top">
+            <div class="ct-type">نوع السؤال ٣</div>
+            <div class="ct-q">"Why do you think [character] did…?"</div>
+            <div class="ct-starter red">I think… because…</div>
+            <div class="ct-examples">
+              اديل سبب بعد كلمة <strong>because</strong><br>
+              جملة واحدة كفاية تماماً.
+            </div>
+            <div class="ct-ar">أعتقد أن… لأن…</div>
+          </div>
+          <div class="ct-card purple-top">
+            <div class="ct-type">نوع السؤال ٤</div>
+            <div class="ct-q">"What is the moral / lesson of the story?"</div>
+            <div class="ct-starter purple">The moral is that…</div>
+            <div class="ct-examples">
+              اختار من "بنك الدروس" ⬇️
+            </div>
+            <div class="ct-ar">الدرس المستفاد هو أن…</div>
+          </div>
+        </div>
+
+        <hr class="div-line">
+
+        <h3 style="font-weight:700;font-size:15px;margin-bottom:12px;color:var(--ink)">⭐ بنك الدروس المستفادة — The Moral Bank</h3>
+
+        <div class="moral-item"><span class="moral-star">🌟</span><div>
+          <div class="moral-en">We should always help each other.</div>
+          <div class="moral-ar">يجب أن نساعد بعضنا دائماً.</div>
+        </div></div>
+        <div class="moral-item"><span class="moral-star">🌟</span><div>
+          <div class="moral-en">We should never give up, no matter how hard things are.</div>
+          <div class="moral-ar">لا ينبغي أن نستسلم أبداً، مهما كانت الصعاب.</div>
+        </div></div>
+        <div class="moral-item"><span class="moral-star">🌟</span><div>
+          <div class="moral-en">Teamwork is the key to success.</div>
+          <div class="moral-ar">العمل الجماعي هو مفتاح النجاح.</div>
+        </div></div>
+        <div class="moral-item"><span class="moral-star">🌟</span><div>
+          <div class="moral-en">Honesty is always the best policy.</div>
+          <div class="moral-ar">الصدق هو دائماً أفضل سياسة.</div>
+        </div></div>
+        <div class="moral-item"><span class="moral-star">🌟</span><div>
+          <div class="moral-en">Kindness and respect make the world a better place.</div>
+          <div class="moral-ar">اللطف والاحترام يجعلان العالم مكاناً أفضل.</div>
+        </div></div>
+        <div class="moral-item"><span class="moral-star">🌟</span><div>
+          <div class="moral-en">Hard work always leads to success.</div>
+          <div class="moral-ar">العمل الجاد يقود دائماً إلى النجاح.</div>
+        </div></div>
+
+      </div>
+    </div>
+
+  </div><div id="tab-vocab" class="tab-panel">
+
+    <div class="card">
+      <div class="card-head purple">
+        <div class="card-icon">🔤</div>
+        <div>
+          <h3>المفردات والاشتقاق — Vocabulary & Word-Building</h3>
+          <p>مناهج 2026 بتركز على بناء الكلمات — تعلم النظام مش الكلمات واحدة واحدة</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <p style="font-size:13.5px;color:#555;margin-bottom:16px;line-height:1.8;">
+          <strong>الفكرة الذهبية:</strong> لو عرفت معنى الـ Prefix (البادئة) أو الـ Suffix (اللاحقة)، تقدر تفهم أي كلمة حتى لو ما شفتهاش قبل كده!
+        </p>
+
+        <h3 style="font-weight:700;font-size:15px;margin-bottom:10px;color:var(--ink)">🃏 بطاقات الاشتقاق — اضغط على البطاقة لتقلب!</h3>
+        <p style="font-size:12px;color:#999;margin-bottom:14px;">(hover أو اضغط على أي بطاقة لترى المعنى)</p>
+
+        <div class="flip-grid">
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front"><div class="f-icon">➖</div><h4>un-</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back"><h4>النفي / العكس</h4><p>un + happy = unhappy (غير سعيد)<br>un + kind = unkind<br>un + usual = unusual</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front red-f"><div class="f-icon">🚫</div><h4>dis-</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back red-b"><h4>النفي / العكس</h4><p>dis + honest = dishonest<br>dis + agree = disagree<br>dis + appear = disappear</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front blue-f"><div class="f-icon">❌</div><h4>im- / in-</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back blue-b"><h4>النفي / مستحيل</h4><p>im + possible = impossible<br>in + correct = incorrect<br>ir + responsible = irresponsible</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front gold-f"><div class="f-icon">🔄</div><h4>re-</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back gold-b"><h4>مرة تانية / من جديد</h4><p>re + build = rebuild (يبني من جديد)<br>re + turn = return<br>re + use = reuse</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front purple-f"><div class="f-icon">💪</div><h4>-ful</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back purple-b"><h4>ممتلئ بـ / كثير من</h4><p>hope + ful = hopeful (متفائل)<br>care + ful = careful<br>power + ful = powerful</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front red-f"><div class="f-icon">🕳️</div><h4>-less</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back red-b"><h4>بدون / خالي من</h4><p>hope + less = hopeless (يائس)<br>care + less = careless<br>home + less = homeless</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front blue-f"><div class="f-icon">📦</div><h4>-ness</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back blue-b"><h4>صفة → اسم</h4><p>kind + ness = kindness (لطف)<br>happy + ness = happiness<br>dark + ness = darkness</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front gold-f"><div class="f-icon">⚙️</div><h4>-tion / -sion</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back gold-b"><h4>فعل → اسم (نتيجة)</h4><p>educate → education (تعليم)<br>solve → solution<br>pollute → pollution</p></div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-inner">
+              <div class="flip-front purple-f"><div class="f-icon">👤</div><h4>-er / -or</h4><div class="f-hint">ما معناها؟</div></div>
+              <div class="flip-back purple-b"><h4>الشخص الذي يقوم بـ</h4><p>teach + er = teacher (معلم)<br>act + or = actor<br>drive + r = driver</p></div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="div-line">
+
+        <h3 style="font-weight:700;font-size:15px;margin-bottom:12px;color:var(--ink)">📊 جدول المراجعة السريعة</h3>
+        <table class="styled-table purple">
+          <thead>
+            <tr>
+              <th>البادئة / اللاحقة</th>
+              <th>المعنى بالعربي</th>
+              <th>أمثلة</th>
+              <th>استخدام في الامتحان</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="prefix-badge">un-</span></td><td>ليس / عكس</td><td>unhappy, unkind</td><td>عكس الصفات</td></tr>
+            <tr><td><span class="prefix-badge">im-/in-/ir-</span></td><td>ليس / مستحيل</td><td>impossible, incorrect</td><td>صفات سلبية</td></tr>
+            <tr><td><span class="prefix-badge">dis-</span></td><td>عكس / إلغاء</td><td>dishonest, disagree</td><td>أفعال وصفات معكوسة</td></tr>
+            <tr><td><span class="prefix-badge">re-</span></td><td>مرة أخرى</td><td>rebuild, reuse</td><td>مرادف "من جديد"</td></tr>
+            <tr><td><span class="prefix-badge suf">-ful</span></td><td>ممتلئ بـ</td><td>hopeful, careful</td><td>صفات إيجابية</td></tr>
+            <tr><td><span class="prefix-badge suf">-less</span></td><td>بدون</td><td>hopeless, careless</td><td>صفات سلبية</td></tr>
+            <tr><td><span class="prefix-badge suf">-ness</span></td><td>حالة / صفة</td><td>kindness, darkness</td><td>صفة → اسم</td></tr>
+            <tr><td><span class="prefix-badge suf">-tion/-sion</span></td><td>عملية / نتيجة</td><td>education, solution</td><td>فعل → اسم</td></tr>
+            <tr><td><span class="prefix-badge suf">-er/-or</span></td><td>من يقوم بـ</td><td>teacher, actor</td><td>أسماء الوظائف</td></tr>
+          </tbody>
+        </table>
+
+        <div class="highlight purple" style="margin-top:14px">
+          💡 <span><strong>الطريقة السريعة:</strong> لما تشوف كلمة جديدة، غطي البادئة أو اللاحقة وشوف الجذر (Root Word) الأول. بعد كده أضف معنى الـ Prefix/Suffix. مثال: <strong>dis + honest = ليس أميناً = غير أمين</strong> ✓</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div><div id="tab-writing" class="tab-panel">
+
+    <div class="card">
+      <div class="card-head gold">
+        <div class="card-icon">✍️</div>
+        <div>
+          <h3>الكتابة والتعبير — Writing & Expression</h3>
+          <p>الدرجات "الضايعة" بتيجي من أخطاء بسيطة — تعلم القواعد دي وما تخسرش درجة واحدة</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="wt-grid">
+          <div class="wt-card">
+            <div class="wt-icon">🔠</div>
+            <div class="wt-title">الحروف الكبيرة</div>
+            <div class="wt-en">Capital Letters</div>
+            <div class="wt-body">ابدأ كل جملة وكل اسم علم (شخص أو مكان) بحرف كبير. مثال: <em>Ahmed lives in Cairo.</em></div>
+          </div>
+          <div class="wt-card">
+            <div class="wt-icon">⏺</div>
+            <div class="wt-title">نقطة النهاية</div>
+            <div class="wt-en">Full Stop ( . )</div>
+            <div class="wt-body">اختم كل جملة بنقطة (.) أو علامة استفهام (؟). جملة بدون نقطة = نقص في الدرجة.</div>
+          </div>
+          <div class="wt-card">
+            <div class="wt-icon">📏</div>
+            <div class="wt-title">المسافات بين الكلمات</div>
+            <div class="wt-en">Word Spacing</div>
+            <div class="wt-body">اترك مسافة واضحة بين كل كلمة والأخرى. الخط المتراص يصعب تصحيحه ويضيع درجات.</div>
+          </div>
+          <div class="wt-card">
+            <div class="wt-icon">🎯</div>
+            <div class="wt-title">أجب السؤال فعلاً</div>
+            <div class="wt-en">Answer the Q</div>
+            <div class="wt-body">لا تنقل فقرات كاملة من القطعة. غير كلمة أو اتنين تثبت إنك فاهم المطلوب.</div>
+          </div>
+          <div class="wt-card">
+            <div class="wt-icon">🔁</div>
+            <div class="wt-title">راجع إجاباتك</div>
+            <div class="wt-en">Review</div>
+            <div class="wt-body">قبل ما تسلم، ارجع اقرأ كل إجابة. هل هي منطقية؟ هل ردت على السؤال فعلاً؟</div>
+          </div>
+          <div class="wt-card">
+            <div class="wt-icon">📝</div>
+            <div class="wt-title">أسلوب التلخيص</div>
+            <div class="wt-en">Summarise</div>
+            <div class="wt-body">خد أول جملة من الفقرة وأعد صياغتها بكلامك. جملتين كافيتين تماماً.</div>
+          </div>
+        </div>
+
+        <hr class="div-line">
+
+        <h3 style="font-weight:700;font-size:15px;margin-bottom:12px;color:var(--ink)">✏️ جمل افتتاحية للتعبير الكتابي</h3>
+
+        <table class="styled-table gold">
+          <thead>
+            <tr>
+              <th>نوع الكتابة</th>
+              <th>ابدأ بـ…</th>
+              <th>معنى الجملة بالعربي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>وصف شخص</td>
+              <td><em>He/She is a… person who…</em></td>
+              <td>هو / هي شخص… يقوم بـ…</td>
+            </tr>
+            <tr>
+              <td>رأيك في موضوع</td>
+              <td><em>I think that… because…</em></td>
+              <td>أعتقد أن… لأن…</td>
+            </tr>
+            <tr>
+              <td>وصف مشكلة</td>
+              <td><em>The main problem is that…</em></td>
+              <td>المشكلة الرئيسية هي أن…</td>
+            </tr>
+            <tr>
+              <td>اقتراح حل</td>
+              <td><em>I suggest that we should…</em></td>
+              <td>أقترح أن نقوم بـ…</td>
+            </tr>
+            <tr>
+              <td>خاتمة / ختام</td>
+              <td><em>In conclusion / Finally, …</em></td>
+              <td>في الختام / أخيراً…</td>
+            </tr>
+            <tr>
+              <td>مقارنة</td>
+              <td><em>… is better than … because…</em></td>
+              <td>… أفضل من … لأن…</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight gold" style="margin-top:14px">
+          🏆 <span><strong>سر النجاح في التعبير:</strong> جملة واحدة صح أفضل من خمس جمل غلط. خليك بسيط وصح دايماً.</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div><div id="tab-checklist" class="tab-panel">
+
+    <div class="card">
+      <div class="card-head teal">
+        <div class="card-icon">✅</div>
+        <div>
+          <h3>قائمة المراجعة النهائية — Final Exam Checklist</h3>
+          <p>اضغط على كل بند لما تتأكد منه قبل التسليم</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="checklist" id="checklist">
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">قرأت كل الأسئلة <strong>قبل</strong> قراءة القطعة.</div><div class="check-ar">I read all questions BEFORE reading the passage.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">وضعت خطاً تحت الكلمات المهمة في كل سؤال.</div><div class="check-ar">I underlined keywords in every question.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">كل إجابة بدأت بالكلمة الصح (Because / In / At / He / She…).</div><div class="check-ar">Every answer starts with the correct opener.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">كل جملة بدأت بحرف <strong>كبير (Capital Letter)</strong>.</div><div class="check-ar">Every sentence starts with a capital letter.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">كل جملة انتهت بـ <strong>نقطة ( . )</strong> أو علامة استفهام.</div><div class="check-ar">Every sentence ends with a full stop or question mark.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">أسئلة الضمائر (It / They / There) — رجعت للجملة اللي قبلها.</div><div class="check-ar">For pronoun reference, I looked at the sentence before.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">أسئلة التفكير الناقد — أديت رأيي + سبب (because).</div><div class="check-ar">Critical thinking answers include my opinion + because.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">أسئلة T/F — تأكدت من كلمات (not / never / only / always).</div><div class="check-ar">T/F: I checked for tricky words like not/never/only.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">المفردات — تحققت من الـ Prefix أو Suffix لو كانت الكلمة صعبة.</div><div class="check-ar">For hard words, I checked the prefix/suffix pattern.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">رجعت وقرأت كل إجاباتي — وأنا متأكد إنها منطقية ومجاوبة السؤال.</div><div class="check-ar">I re-read all my answers — they make sense and answer the question.</div></div>
+          </div>
+          <div class="check-row" onclick="toggleCheck(this)">
+            <div class="check-box-ui">✓</div>
+            <div><div class="check-text">خطي واضح والمسافات بين الكلمات كافية.</div><div class="check-ar">My handwriting is clear with proper spacing.</div></div>
+          </div>
+        </div>
+
+        <div id="check-result" style="margin-top:20px;display:none">
+          <div class="highlight teal" style="font-size:15px;font-weight:700;justify-content:center;text-align:center">
+            🎉 أنت جاهز للامتحان! بالتوفيق يا بطل 🏆
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><div class="footer">
+    <div class="footer-links">
+      <a href="prep1.html" style="background: rgba(39, 174, 96, 0.2); border-color: #27ae60; color: #2ecc71;">🌐 الأول الإعدادي</a>
+      <a href="prep2.html" style="background: rgba(41, 128, 185, 0.2); border-color: #2980b9; color: #3498db;">🌐 الثاني الإعدادي</a>
+      <a href="prep3.html" style="background: rgba(192, 57, 43, 0.2); border-color: #c0392b; color: #e74c3c;">🌐 الشهادة الإعدادية</a>
+      <a href="ai-tutor.html" style="background: rgba(142, 68, 173, 0.2); border-color: var(--ai); color: #af7ac5;">🤖 المعلم الذكي (AI)</a>
+    </div>
+    <strong>مستر الحسيني يحيى</strong> · لغة إنجليزية · نظام أكاديمي متكامل<br>
+    <em style="font-size:11.5px">"أنت لا تتعلم الإنجليزية فقط — أنت تفكر بالإنجليزية."</em>
+  </div>
+
+</div><script>
+  // ── Floating stars ──
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --dur:${2+Math.random()*4}s;
+      --delay:${Math.random()*5}s;
+      width:${1+Math.random()*3}px;
+      height:${1+Math.random()*3}px;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // ── Tabs ──
+  const panels = {
+    reading:'tab-reading', story:'tab-story',
+    vocab:'tab-vocab', writing:'tab-writing', checklist:'tab-checklist'
+  };
+  function switchTab(name, btn, progress) {
+    // hide all panels
+    Object.values(panels).forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    // deactivate all buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    // show selected
+    document.getElementById(panels[name]).classList.add('active');
+    btn.classList.add('active');
+    // progress bar
+    document.getElementById('prog-fill').style.width = progress + '%';
+    const labels = {
+      reading:'الجزء الأول: الفهم القرائي 📖',
+      story:'الجزء الثاني: أسئلة القصة 📚',
+      vocab:'الجزء الثالث: المفردات والاشتقاق 🔤',
+      writing:'الجزء الرابع: الكتابة والتعبير ✍️',
+      checklist:'الجزء الخامس: قائمة المراجعة النهائية ✅'
+    };
+    document.getElementById('prog-label').textContent = labels[name];
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // ── Checklist ──
+  function toggleCheck(row) {
+    row.classList.toggle('checked');
+    const all = document.querySelectorAll('.check-row');
+    const done = document.querySelectorAll('.check-row.checked');
+    const result = document.getElementById('check-result');
+    if (done.length === all.length) {
+      result.style.display = 'block';
+    } else {
+      result.style.display = 'none';
+    }
+    // update progress bar
+    const pct = Math.round((done.length / all.length) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent =
+      `اكتملت ${done.length} من ${all.length} بنود المراجعة ✅`;
+  }
+</script>
+
+</body>
+</html>

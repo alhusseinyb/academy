@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الصف الثاني الإعدادي | مستر الحسيني يحيى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ألوان الصف الثاني الإعدادي (الأزرق) */
+        :root { --primary: #2980b9; --secondary: #3498db; --accent: #e67e22; --success: #27ae60; --danger: #c0392b; --bg: #ecf0f1; --card-bg: #ffffff; --text: #2c3e50; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: linear-gradient(to right, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
+        .home-btn { position: absolute; right: 20px; top: 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; font-size: 0.9em; transition: 0.3s; }
+        .home-btn:hover { background: var(--accent); }
+        .main-content { flex: 1; }
+        .container { max-width: 900px; margin: 30px auto; padding: 20px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid var(--accent); cursor: pointer; transition: transform 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        input[type="text"], textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Tajawal', sans-serif; box-sizing: border-box; transition: 0.3s; }
+        button { background: var(--accent); color: white; border: none; padding: 12px 25px; font-size: 18px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; transition: 0.3s; }
+        .btn-success { background: var(--success); }
+        .question-section { background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); direction: ltr; text-align: left; border-left: 4px solid var(--primary); }
+        .options-grid { display: grid; gap: 8px; margin-top: 10px; padding: 10px; border-radius: 8px; transition: 0.3s; }
+        .option-label { background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #dee2e6; cursor: pointer; }
+        .words-box { display: flex; flex-wrap: wrap; gap: 10px; background: #ebf5fb; padding: 15px; border-radius: 8px; border: 2px dashed var(--secondary); justify-content: center; margin-bottom: 15px; font-weight: bold; }
+        .review-item { padding: 15px; margin-bottom: 15px; border-radius: 8px; background: #f9f9f9; border-left: 5px solid #ccc; }
+        .review-correct { border-left-color: var(--primary); background: #eafaf1; }
+        .review-wrong { border-left-color: var(--danger); background: #fdedec; }
+        .correct-ans-text { color: var(--primary); font-weight: bold; margin-top: 10px; font-size: 0.9em; }
+        footer { background: #1a252f; color: white; text-align: center; padding: 30px 20px; margin-top: auto; border-top: 5px solid var(--accent); }
+        .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
+        .footer-links a { color: #fff; text-decoration: none; font-weight: bold; padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2); font-size: 14px;}
+        .footer-links a:hover { background: var(--accent); transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-btn">🏠 الرئيسية</a>
+    <h1>الصف الثاني الإعدادي - Prep 2</h1>
+    <p style="background-color: var(--accent); display: inline-block; padding: 5px 20px; border-radius: 20px; font-weight: bold;">مستر الحسيني يحيى</p>
+</header>
+
+<div class="main-content">
+    <div class="container" id="loginScreen">
+        <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: var(--primary);">مرحباً بك يا بطل في Prep 2! 🚀</h2>
+            <p>أدخل اسمك الثلاثي لفتح الاختبارات:</p>
+            <input type="text" id="studentName" placeholder="اكتب اسمك هنا...">
+            <button onclick="startApp()">دخول المنصة</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainMenu" style="display: none;">
+        <div style="background: #ebf5fb; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 2px dashed var(--secondary);">
+            <button onclick="checkResult()" style="background: var(--secondary); width: auto;">🔍 استعلام عن درجتي وملاحظات المستر</button>
+        </div>
+        <div class="grid-container" id="examCards"></div>
+    </div>
+
+    <div class="container" id="quizScreen" style="display: none;">
+        <button onclick="goBack()" style="background: #7f8c8d; width: auto; margin-bottom: 20px;">🔙 عودة للقائمة</button>
+        <h2 id="quizTitle" style="text-align: center; background: white; padding: 15px; border-radius: 8px; color: var(--primary);"></h2>
+        <div id="quizContent"></div>
+        <button id="submitBtn" class="btn-success" onclick="finishExam()">✔️ إنهاء الاختبار وإرسال للمستر</button>
+    </div>
+
+    <div class="container" id="reviewScreen" style="display: none;">
+        <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: var(--primary);">تم الإرسال بنجاح!</h2>
+            <h1 id="scoreDisplay" style="color: var(--danger); font-size: 3em;"></h1>
+            <p>مراجعة إجاباتك (درجة المقالي مبدئية لحين مراجعة المستر)</p>
+        </div>
+        <div id="reviewContent" style="direction: ltr; text-align: left; margin-top: 20px;"></div>
+        <button onclick="goBackFromReview()" style="background: #7f8c8d; margin-top: 20px;">🔙 عودة للقائمة الرئيسية</button>
+    </div>
+</div>
+
+<footer>
+    <h3>🔗 روابط هامة للطلاب</h3>
+    <div class="footer-links">
+        <a href="https://alhusseinyb.github.io/golden-worksheet/" target="_blank">📝 دليلك الذهبي للإجابة</a>
+        <a href="prep1.html" style="background: #27ae60; border-color: #2ecc71;">🌐 منصة الصف الأول الإعدادي</a>
+        <a href="prep3.html" style="background: #c0392b; border-color: #e74c3c;">🌐 منصة الشهادة الإعدادية</a>
+        <a href="https://www.facebook.com/Alhusseiny.badawy" target="_blank">📘 فيسبوك مستر الحسيني</a>
+        <a href="https://wa.me/201003124783" target="_blank">💬 تواصل واتساب</a>
+    </div>
+    <p>© 2024 مستر الحسيني يحيى | الإنجليزية بشكل مختلف</p>
+</footer>
+
+<script>
+    // ==========================================
+    // ⚠️ ضع رابط جوجل الخاص بـ (ثانية إعدادي) هنا
+    var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyN3rm-rW0_S7q1xnLOwcFWtOTtuoNZ0Gf27pyNXqOuSouqcAh9BkiunDRJonUGiwz2/exec";
+    // ==========================================
+
+    window.onerror = function(msg, url, lineNo, columnNo, error) { return false; };
+    var currentStudent = "";
+    var activeExam = null;
+
+    var exams = [
+        {
+            id: 'unit7', title: 'Unit 7: My School Life',
+            listening: { text: "My school day starts at 7:30. I must wear a school uniform. We shouldn't talk loudly in the library. Good behavior is important.", mcq: [{q: "When does the school day start?", options: ["7:00", "7:30", "8:00"], ans: 1}, {q: "What must the student wear?", options: ["A jacket", "A uniform", "Jeans"], ans: 1}], open: [{q: "Where shouldn't they talk loudly?", a: "In the library"}, {q: "What is important at school?", a: "Good behavior"}] },
+            reading: { vocab_mcq: [{q: "Eating inside classrooms is .....", options: ["allowed", "forbidden", "good"], ans: 1}, {q: "We must wear our school .....", options: ["uniform", "bags", "books"], ans: 0}], fill_in: {words: ["must", "forbidden", "library", "rules"], text: "Every student must follow school (1) _______. Eating in class is (2) _______. You should be quiet in the (3) _______. We (4) _______ respect our teachers.", answers: ["rules", "forbidden", "library", "must"]}, comprehension: {text: "School rules keep us safe. We must arrive on time and wear the correct uniform. In the science lab, we must listen carefully.", mcq: [{q: "School rules keep us .....", options: ["sad", "safe", "bored"], ans: 1}], open: [{q: "What must we wear?", a: "The correct uniform"}, {q: "Where must we listen carefully?", a: "In the science lab"}] }, story: {tf: [{q: "Father Wolf found a human baby.", ans: "T"}], open: [{q: "Who wanted to eat the baby?", a: "Shere Khan"}]} },
+            writing: { rewrite: [{q: "It is necessary to listen to your teacher. (must)", a: "You must listen to your teacher."}, {q: "You are not allowed to run here. (mustn't)", a: "You mustn't run here."}], dialogue: {situation: "Ali and Omar talk about school.", lines: ["Ali: What time do you arrive at school?", "Omar: (1) _____.", "Ali: What must you wear?", "Omar: (2) _____."], answers: ["I arrive at 7:30", "I must wear a school uniform"]}, paragraph: "Your School Rules" }
+        },
+        {
+            id: 'unit8', title: 'Unit 8: Learn Smart, Learn Easy',
+            listening: { text: "Sara makes a study plan. It helps her organize time. She uses flashcards to remember vocabulary.", mcq: [{q: "What does Sara use to remember vocabulary?", options: ["Books", "Flashcards", "Games"], ans: 1}, {q: "What helps Sara organize her time?", options: ["Sleeping", "A study plan", "Eating"], ans: 1}], open: [{q: "Why does Sara make a study plan?", a: "To organize her time"}, {q: "Are short breaks important?", a: "Yes, they are"}] },
+            reading: { vocab_mcq: [{q: "The synonym of 'smart' is .....", options: ["stupid", "clever", "slow"], ans: 1}, {q: "The antonym of 'easy' is .....", options: ["simple", "hard", "good"], ans: 1}], fill_in: {words: ["revise", "breaks", "memory", "hard"], text: "Students should (1) _______ their lessons. Take short (2) _______. Good sleep improves your (3) _______. Study (4) _______.", answers: ["revise", "breaks", "memory", "hard"]}, comprehension: {text: "Reading opens our minds. When you read, you travel to different places. Some people prefer reading fiction because they are exciting.", mcq: [{q: "The main idea of the text is about .....", options: ["sports", "reading", "travelling"], ans: 1}], open: [{q: "Why do some people prefer reading fiction?", a: "Because it is exciting"}] }, story: {tf: [{q: "The Bandar-log kidnapped Mowgli.", ans: "T"}], open: [{q: "Who did Bagheera ask for help?", a: "Kaa the python"}]} },
+            writing: { rewrite: [{q: "He studied hard, but he failed. (Although)", a: "Although he studied hard, he failed."}], dialogue: {situation: "Ali and Omar talk about subjects.", lines: ["Ali: What is your favourite subject?", "Omar: (1) _____.", "Ali: Do you like reading English stories?", "Omar: (2) _____."], answers: ["My favourite subject is English", "Yes, I do"]}, paragraph: "How to study effectively" }
+        },
+        {
+            id: 'unit9', title: 'Unit 9: Jobs & Skills',
+            listening: { text: "Ali drives buses. His job is tiring because he wakes up at 5 a.m. He must stay focused.", mcq: [{q: "What does Ali do?", options: ["He fixes cars", "He drives buses", "He teaches"], ans: 1}], open: [{q: "Why is Ali's job tiring?", a: "Because he wakes up at 5 a.m"}, {q: "What must Ali stay?", a: "He must stay focused"}] },
+            reading: { vocab_mcq: [{q: "The synonym of 'motivation' is .....", options: ["encouragement", "stress", "sadness"], ans: 0}, {q: "A 'career' means a person's ..... through life.", options: ["school", "holiday", "work"], ans: 2}], fill_in: {words: ["qualifications", "interests", "meaningful", "stress"], text: "Start with your (1) _______ to enjoy what you do. A good job makes life (2) _______. Every job has different (3) _______.", answers: ["interests", "meaningful", "qualifications"]}, comprehension: {text: "Choosing the right career is important. If you love helping people, nursing is a good choice. If you enjoy technology, programming suits you.", mcq: [{q: "The main idea is about .....", options: ["choosing a career", "playing music", "technology"], ans: 0}], open: [{q: "What is a good job for someone who loves technology?", a: "Programming"}] }, story: {tf: [{q: "Mowgli learned the secret of fire.", ans: "T"}], open: [{q: "Where did Mowgli get the fire from?", a: "From humans"}]} },
+            writing: { rewrite: [{q: "He studied hard, so he passed. (because)", a: "He passed because he studied hard."}], dialogue: {situation: "Talking about job skills.", lines: ["Nader: Which skills did you write about?", "Ramy: (1) _____.", "Nader: Do you agree problem-solving is important?", "Ramy: (2) _____."], answers: ["I wrote about communication", "Yes, I agree"]}, paragraph: "Your Dream Job" }
+        },
+        {
+            id: 'review3', title: 'Review 3 (U 7,8,9)',
+            listening: { text: "My school day is busy. I wake up early. I play educational games to improve my concentration.", mcq: [{q: "What does the student use to improve concentration?", options: ["Timetables", "Educational games", "Rules"], ans: 1}], open: [{q: "When does the student wake up?", a: "Early"}, {q: "Is the school day busy?", a: "Yes, it is"}] },
+            reading: { vocab_mcq: [{q: "Students must wear their school .....", options: ["sneakers", "uniform", "bags"], ans: 1}], fill_in: {words: ["rules", "smart", "skills", "breaks"], text: "You must follow school (1) _______. Take short (2) _______. Learning new (3) _______ is necessary. Be (4) _______.", answers: ["rules", "breaks", "skills", "smart"]}, comprehension: {text: "Jobs need practical skills, like building. Other jobs need thinking skills. Technology skills are important today.", mcq: [{q: "What skills are important because of computers?", options: ["Cooking", "Technology", "Drawing"], ans: 1}], open: [{q: "What do practical skills include?", a: "Building or fixing things"}] }, story: {tf: [{q: "Kaa helped save Mowgli.", ans: "T"}], open: [{q: "Did the animals fear fire?", a: "Yes, they did"}]} },
+            writing: { rewrite: [{q: "You are not allowed to eat here. (mustn't)", a: "You mustn't eat here."}], dialogue: {situation: "School life.", lines: ["Maha: Do you make a study plan?", "Nada: (1) _____.", "Maha: Taking short breaks helps me.", "Nada: (2) _____."], answers: ["Yes, I do", "That's a good idea"]}, paragraph: "How to organize your time" }
+        },
+        {
+            id: 'unit10', title: 'Unit 10: Storytelling',
+            listening: { text: "An old farmer found a beautiful bird. The bird promised good luck if he set it free. The farmer trusted the bird.", mcq: [{q: "What did the old farmer find?", options: ["A bag of gold", "A beautiful bird", "A lamp"], ans: 1}], open: [{q: "What did the bird promise?", a: "Good luck"}, {q: "Did the farmer trust the bird?", a: "Yes, he did"}] },
+            reading: { vocab_mcq: [{q: "The synonym of 'courage' is .....", options: ["fear", "bravery", "weakness"], ans: 1}, {q: "A 'decade' is a period of ..... years.", options: ["five", "ten", "fifty"], ans: 1}], fill_in: {words: ["gratitude", "trust", "generation", "promise"], text: "Stories pass knowledge from one (1) _______ to another. Readers learn (2) _______. A good character keeps their (3) _______.", answers: ["generation", "trust", "promise"]}, comprehension: {text: "Cinderella tells the story of a gentle girl living with a cruel stepmother. She works as a servant but never loses hope.", mcq: [{q: "The word 'cruel' means .....", options: ["kind", "bad and unkind", "gentle"], ans: 1}], open: [{q: "Who did Cinderella live with?", a: "Her cruel stepmother and stepsisters"}] }, story: {tf: [{q: "Shere Khan wanted to kill Mowgli.", ans: "T"}], open: [{q: "How did Mowgli turn the tiger's plan against him?", a: "He drove the cattle toward him"}]} },
+            writing: { rewrite: [{q: "He went to bed. He had finished his work. (After)", a: "After he had finished his work, he went to bed."}], dialogue: {situation: "Fairy tales.", lines: ["Randa: Do you like fairy tales?", "Wafaa: (1) _____.", "Randa: What is your favorite one?", "Wafaa: (2) _____."], answers: ["Yes, I do", "My favorite is Cinderella"]}, paragraph: "A story you enjoyed" }
+        },
+        {
+            id: 'unit11', title: 'Unit 11: Life in the Desert',
+            listening: { text: "Hassan lives in an oasis in the Western Desert. Life is quiet but harsh. His father is a farmer.", mcq: [{q: "Where does Hassan live?", options: ["In a city", "In an oasis", "On an island"], ans: 1}], open: [{q: "What does his father do?", a: "He is a farmer"}, {q: "Is life quiet there?", a: "Yes, it is"}] },
+            reading: { vocab_mcq: [{q: "Water is very ..... in the desert.", options: ["precious", "cheap", "dirty"], ans: 0}], fill_in: {words: ["irrigation", "nomadic", "survive", "extreme"], text: "Bedouins have a (1) _______ lifestyle. To (2) _______, you need to find water. They face (3) _______ weather.", answers: ["nomadic", "survive", "extreme"]}, comprehension: {text: "Deserts cover one-fifth of the Earth's land. They are very dry. Camels can survive without drinking water for a long time.", mcq: [{q: "Deserts cover ..... of the Earth's land.", options: ["one-third", "one-fifth", "half"], ans: 1}], open: [{q: "How do camels survive?", a: "They can live without water for a long time"}] }, story: {tf: [{q: "Mowgli went to the human village.", ans: "T"}], open: [{q: "Who adopted Mowgli?", a: "A woman named Messua"}]} },
+            writing: { rewrite: [{q: "I was reading a book. The telephone rang. (when)", a: "I was reading a book when the telephone rang."}], dialogue: {situation: "Trip to the desert.", lines: ["Mazen: I am going to the Sahara Desert.", "Tarek: (1) _____?", "Mazen: I'm going with my family.", "Tarek: How will you travel?", "Mazen: (2) _____."], answers: ["Who are you going with", "We will travel by jeep"]}, paragraph: "Life in the desert" }
+        },
+        {
+            id: 'unit12', title: 'Unit 12: Our Incredible Earth',
+            listening: { text: "The Earth is our home. Pollution hurts our environment. We can help by recycling plastic and paper.", mcq: [{q: "What is a big problem?", options: ["Recycling", "Pollution", "Water"], ans: 1}], open: [{q: "What can we recycle?", a: "Plastic and paper"}, {q: "Why must we protect the Earth?", a: "Because it is our home"}] },
+            reading: { vocab_mcq: [{q: "The Amazon is a large tropical .....", options: ["desert", "rainforest", "mountain"], ans: 1}], fill_in: {words: ["pollution", "already", "energy", "yet"], text: "Scientists have (1) _______ found clean energy. Many cities haven't stopped (2) _______ completely. Have you recycled (3) _______?", answers: ["already", "pollution", "yet"]}, comprehension: {text: "Protecting the environment is a global responsibility. Climate change is caused by too much carbon dioxide.", mcq: [{q: "Climate change is caused by too much .....", options: ["oxygen", "carbon dioxide", "wind"], ans: 1}], open: [{q: "What is a global responsibility?", a: "Protecting the environment"}] }, story: {tf: [{q: "Mowgli became a bridge between the jungle and humans.", ans: "T"}], open: [{q: "What did Mowgli choose to do?", a: "Keep the jungle safe"}]} },
+            writing: { rewrite: [{q: "I haven't finished my homework up to now. (yet)", a: "I haven't finished my homework yet."}], dialogue: {situation: "Saving the environment.", lines: ["Bassem: We should help our planet.", "Hany: (1) _____?", "Bassem: We can recycle bottles.", "Hany: (2) _____."], answers: ["What can we do", "That's a great idea"]}, paragraph: "How to save our Earth" }
+        },
+        {
+            id: 'final_exam', title: '🏆 Final Comprehensive Exam',
+            listening: { text: "Water is precious in the desert. Pollution is a big problem for Earth. We must protect nature.", mcq: [{q: "What is precious in the desert?", options: ["Sand", "Water", "Cars"], ans: 1}], open: [{q: "What is a big problem?", a: "Pollution"}, {q: "What must we protect?", a: "Nature"}] },
+            reading: { vocab_mcq: [{q: "A period of ten years is a .....", options: ["century", "decade", "week"], ans: 1}, {q: "To survive in the desert, you need .....", options: ["courage", "fear", "sleep"], ans: 0}], fill_in: {words: ["courage", "survive", "precious", "already"], text: "Water is (1) _______. You need (2) _______ to face dangers and (3) _______. We have (4) _______ started to help.", answers: ["precious", "courage", "survive", "already"]}, comprehension: {text: "Stories teach us history and nature. Today we use technology to tell stories through movies.", mcq: [{q: "Stories teach us .....", options: ["history", "math", "sports"], ans: 0}], open: [{q: "How do we tell stories today?", a: "Using technology / through movies"}] }, story: {tf: [{q: "Mowgli defeated Shere Khan with fire.", ans: "T"}], open: [{q: "What is the moral lesson?", a: "Respect all creatures"}]} },
+            writing: { rewrite: [{q: "I have never seen a lion. (ever)", a: "Have you ever seen a lion?"}, {q: "She played tennis. (didn't)", a: "She didn't play tennis."}], dialogue: {situation: "Favourite stories.", lines: ["A: Have you read Cinderella?", "B: (1) _____.", "A: What did you learn?", "B: (2) _____."], answers: ["Yes, I have", "To be kind"]}, paragraph: "A story you enjoyed" }
+        }
+    ];
+
+    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+    function startApp() {
+        let name = document.getElementById("studentName").value.trim();
+        if(!name) { alert("من فضلك أدخل اسمك!"); return; }
+        currentStudent = name;
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("mainMenu").style.display = "block";
+        renderMenu();
+    }
+
+    function renderMenu() {
+        let container = document.getElementById("examCards");
+        container.innerHTML = exams.map(e => `
+            <div class="card" onclick="openExam('${e.id}')">
+                <h3 style="color:var(--primary)">${e.title}</h3>
+                <p>اضغط للبدء</p>
+            </div>
+        `).join('');
+    }
+
+    function checkResult() {
+        if(GOOGLE_SCRIPT_URL.includes("ضع_الرابط")) { alert("تنبيه: ضع رابط السكربت في الكود أولاً."); return; }
+        alert("جاري البحث عن نتيجتك...");
+        fetch(GOOGLE_SCRIPT_URL + "?name=" + encodeURIComponent(currentStudent))
+        .then(r => r.text()).then(d => alert("🎓 نتيجتك:\n\n" + d)).catch(e => alert("خطأ في الاتصال."));
+    }
+
+    function openExam(id) {
+        activeExam = exams.find(e => e.id === id);
+        document.getElementById("mainMenu").style.display = "none";
+        document.getElementById("quizScreen").style.display = "block";
+        document.getElementById("quizTitle").innerText = activeExam.title;
+        
+        let html = "";
+        
+        html += `<div class="question-section"><h3>A. Listening</h3><button onclick="playAudioText()">🔊 Listen</button>`;
+        activeExam.listening.mcq.forEach((q, i) => {
+            let opts = shuffle([...q.options.map((t, idx) => ({t, idx}))]);
+            html += `<p>${i+1}. ${q.q}</p><div class="options-grid req-radio" data-name="l_mcq_${i}">` + 
+                    opts.map(o => `<label class="option-label"><input type="radio" name="l_mcq_${i}" value="${o.idx}"> ${o.t}</label>`).join('') + `</div>`;
+        });
+        activeExam.listening.open.forEach((q, i) => { html += `<p>${i+3}. ${q.q}</p><input type="text" class="req-input" data-q="${q.q}" data-model="${q.a}" placeholder="Write your answer...">`; });
+        html += `</div>`;
+
+        html += `<div class="question-section"><h3>B. Reading</h3>`;
+        activeExam.reading.vocab_mcq.forEach((q, i) => {
+            let opts = shuffle([...q.options.map((t, idx) => ({t, idx}))]);
+            html += `<p>${i+1}. ${q.q}</p><div class="options-grid req-radio" data-name="v_mcq_${i}">` + 
+                    opts.map(o => `<label class="option-label"><input type="radio" name="v_mcq_${i}" value="${o.idx}"> ${o.t}</label>`).join('') + `</div>`;
+        });
+        html += `<p>Complete: ${activeExam.reading.fill_in.words.map(w=>`[${w}]`).join(' ')}</p><p>${activeExam.reading.fill_in.text}</p><div style="display:flex; gap:10px; flex-wrap:wrap;">`;
+        activeExam.reading.fill_in.answers.forEach((a, i) => { html += `<input type="text" class="req-input" data-q="Fill in ${i+1}" data-model="${a}" placeholder="(${i+1})" style="width:calc(50% - 5px);">`; });
+        html += `</div>`;
+        html += `<h4 style="margin-top:20px;">Comprehension</h4><p style="background:#f9f9f9; padding:15px; border-radius:8px;">${activeExam.reading.comprehension.text}</p>`;
+        activeExam.reading.comprehension.mcq.forEach((q, i) => {
+            let opts = shuffle([...q.options.map((t, idx) => ({t, idx}))]);
+            html += `<p>${q.q}</p><div class="options-grid req-radio" data-name="c_mcq_${i}">` + 
+                    opts.map(o => `<label class="option-label"><input type="radio" name="c_mcq_${i}" value="${o.idx}"> ${o.t}</label>`).join('') + `</div>`;
+        });
+        activeExam.reading.comprehension.open.forEach((q, i) => { html += `<p>${q.q}</p><input type="text" class="req-input" data-q="${q.q}" data-model="${q.a}">`; });
+        
+        if(activeExam.reading.story) {
+            html += `<h4 style="margin-top:20px;">Story</h4>`;
+            activeExam.reading.story.tf.forEach((q, i) => { html += `<div style="display:flex; justify-content:space-between; padding:10px; background:#f8f9fa;"><span>${q.q}</span><select class="req-input" data-q="${q.q}" data-model="${q.ans}"><option value="">--</option><option value="T">T</option><option value="F">F</option></select></div>`; });
+            activeExam.reading.story.open.forEach((q, i) => { html += `<p>${q.q}</p><input type="text" class="req-input" data-q="${q.q}" data-model="${q.a}">`; });
+        }
+        html += `</div>`;
+
+        html += `<div class="question-section"><h3>C. Writing</h3>`;
+        activeExam.writing.rewrite.forEach((q, i) => { html += `<p>${q.q}</p><input type="text" class="req-input" data-q="Rewrite ${i+1}" data-model="${q.a}">`; });
+        html += `<p>Dialogue: ${activeExam.writing.dialogue.situation}</p><div style="background:#f9f9f9; padding:10px; line-height:2;">${activeExam.writing.dialogue.lines.join('<br>')}</div>`;
+        activeExam.writing.dialogue.answers.forEach((a, i) => { html += `<input type="text" class="req-input" data-q="Dialog ${i+1}" data-model="${a}" placeholder="(${i+1})">`; });
+        html += `<p>Paragraph: ${activeExam.writing.paragraph}</p><textarea class="req-input" data-q="Paragraph" data-model="Review by Master" rows="4"></textarea></div>`;
+
+        document.getElementById("quizContent").innerHTML = html;
+        window.scrollTo(0,0);
+    }
+
+    function playAudioText() {
+        let ut = new SpeechSynthesisUtterance(activeExam.listening.text);
+        ut.lang = 'en-US'; window.speechSynthesis.speak(ut);
+    }
+
+    function finishExam() {
+        if(GOOGLE_SCRIPT_URL.includes("ضع_رابط") || GOOGLE_SCRIPT_URL.includes("ضع_الرابط")) { 
+            alert("تنبيه للمعلم: يرجى وضع رابط السكربت في الكود!"); 
+            return; 
+        }
+
+        let valid = true;
+        document.querySelectorAll(".req-radio").forEach(g => {
+            if(!document.querySelector(`input[name="${g.dataset.name}"]:checked`)) { g.style.border="2px solid red"; g.style.background="#fdedec"; valid=false; }
+            else { g.style.border="none"; g.style.background="transparent"; }
+        });
+        document.querySelectorAll(".req-input").forEach(i => {
+            if(!i.value.trim()) { i.style.borderColor="red"; i.style.background="#fdedec"; valid=false; }
+            else { i.style.borderColor="#bdc3c7"; i.style.background="transparent"; }
+        });
+        if(!valid) { alert("⚠️ أجب على جميع الأسئلة المظللة بالأحمر أولاً!"); return; }
+
+        let score = 0, total = 0, reviewHtml = "", reportForDocs = "=== 🎯 تقرير الإجابات التفصيلي ===\n\n";
+        
+        function check(student, model) {
+            if(model === "Review by Master") return true; 
+            let s = student.toLowerCase().trim(), m = model.toLowerCase().trim();
+            if(s === m) return true;
+            let keywords = m.split(' ').filter(w => w.length > 2);
+            let matchCount = keywords.filter(w => s.includes(w)).length;
+            return keywords.length > 0 && matchCount >= Math.ceil(keywords.length / 2);
+        }
+
+        function gradeMCQ(prefix, qList) {
+            if(!qList) return;
+            qList.forEach((q, i) => {
+                total++;
+                let sel = document.querySelector(`input[name="${prefix}_${i}"]:checked`);
+                let isCorrect = parseInt(sel.value) === q.ans;
+                if(isCorrect) score++;
+                let studentAns = q.options[parseInt(sel.value)];
+                let modelAns = q.options[q.ans];
+
+                // لشاشة الطالب
+                reviewHtml += `<div class="review-item ${isCorrect?'review-correct':'review-wrong'}"><b>س: ${q.q}</b><br>إجابتك: ${studentAns}<br>${isCorrect?'':'<span class="correct-ans-text">النموذج: '+modelAns+'</span>'}</div>`;
+                // لملف المستر
+                reportForDocs += (isCorrect ? "✅ [1/1] " : "❌ [0/1] ") + "س: " + q.q + "\n   - إجابة الطالب: " + studentAns + "\n   - الإجابة الصحيحة: " + modelAns + "\n\n";
+            });
+        }
+        
+        // تصحيح الاختياري 
+        if(activeExam.listening && activeExam.listening.mcq) gradeMCQ('l_mcq', activeExam.listening.mcq);
+        if(activeExam.reading && activeExam.reading.vocab_mcq) gradeMCQ('v_mcq', activeExam.reading.vocab_mcq);
+        if(activeExam.reading && activeExam.reading.comprehension && activeExam.reading.comprehension.mcq) gradeMCQ('c_mcq', activeExam.reading.comprehension.mcq);
+
+        // تصحيح المقالي
+        document.querySelectorAll(".req-input").forEach(inp => {
+            total++;
+            let isCorrect = check(inp.value, inp.dataset.model);
+            if(isCorrect) score++;
+            
+            // لشاشة الطالب
+            reviewHtml += `<div class="review-item ${isCorrect?'review-correct':'review-wrong'}"><b>س: ${inp.dataset.q}</b><br>إجابتك: ${inp.value}<br>${isCorrect?'':'<span class="correct-ans-text">النموذج: '+inp.dataset.model+'</span>'}</div>`;
+            // لملف المستر
+            reportForDocs += (isCorrect ? "✅ [1/1] " : "❌ [0/1] ") + "س: " + inp.dataset.q + "\n   - إجابة الطالب: " + inp.value + "\n   - الإجابة النموذجية: " + inp.dataset.model + "\n\n";
+        });
+
+        var btn = document.getElementById("submitBtn");
+        btn.innerText = "جاري الإرسال لتقييم المستر..."; btn.disabled = true;
+
+        // إرسال التقرير التفصيلي بدلاً من الجملة الثابتة
+        fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({name: currentStudent, exam: activeExam.title, score: score+"/"+total, report: reportForDocs}) })
+        .then(() => {
+            document.getElementById("quizScreen").style.display="none";
+            document.getElementById("reviewScreen").style.display="block";
+            document.getElementById("scoreDisplay").innerText = score + " / " + total;
+            document.getElementById("reviewContent").innerHTML = reviewHtml;
+            window.scrollTo(0,0);
+        }).catch(() => { alert("تم الحفظ بنجاح!"); goBack(); btn.disabled=false; });
+    }
+
+    function goBack() { document.getElementById("quizScreen").style.display="none"; document.getElementById("mainMenu").style.display="block"; }
+    function goBackFromReview() { document.getElementById("reviewScreen").style.display="none"; document.getElementById("mainMenu").style.display="block"; }
+</script>
+</body>
+</html>
