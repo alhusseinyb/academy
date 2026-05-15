@@ -14,108 +14,219 @@
         :root { 
             --primary: #1a252f; --secondary: #2c3e50; --accent: #e74c3c; 
             --teal: #16a085; --bg: #f4f7f6; --white: #ffffff; --text: #2c3e50; 
+            --sidebar-width: 250px;
         }
-        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
 
-        header { background: var(--primary); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-bottom: 4px solid var(--teal); }
-        .logo { font-weight: 900; font-size: 1.5em; display: flex; align-items: center; gap: 10px; }
-        .admin-badge { background: var(--accent); color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+        /* القائمة الجانبية (Sidebar) */
+        .sidebar { width: var(--sidebar-width); background: var(--primary); color: white; display: flex; flex-direction: column; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 100; transition: 0.3s; }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-header h2 { margin: 0; font-size: 1.5em; color: var(--teal); }
+        .sidebar-header p { margin: 5px 0 0; font-size: 12px; color: #bdc3c7; }
         
-        .btn-logout { background: #fdedec; color: #c0392b; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Tajawal'; font-weight: bold; transition: 0.3s; }
-        .btn-logout:hover { background: #c0392b; color: white; }
-
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; }
-
-        /* شاشة جاري التحميل أو حظر الدخول */
-        .status-screen { text-align: center; padding: 100px 20px; background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 50px; }
-
-        /* كروت الإحصائيات */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); border-right: 6px solid var(--teal); display: flex; justify-content: space-between; align-items: center; }
-        .stat-card.exams { border-right-color: var(--teal); }
-        .stat-card.students { border-right-color: #2980b9; }
-        .stat-info h3 { margin: 0; font-size: 2.2em; font-weight: 900; color: var(--secondary); }
-        .stat-info p { margin: 5px 0 0 0; color: #7f8c8d; font-size: 14px; font-weight: bold; }
-        .stat-icon { font-size: 35px; }
-
-        /* شريط البحث */
-        .controls-row { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); margin-bottom: 25px; display: flex; gap: 15px; align-items: center; }
-        .search-input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Tajawal'; box-sizing: border-box; }
-        .search-input:focus { border-color: var(--teal); outline: none; }
-
-        /* جدول التحكم العظيم */
-        .table-container { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); overflow-x: auto; padding: 10px; }
-        .admin-table { width: 100%; border-collapse: collapse; text-align: right; }
-        .admin-table th { padding: 15px 12px; background: #f8f9fa; color: #7f8c8d; font-size: 14px; font-weight: bold; border-bottom: 2px solid #eee; }
-        .admin-table td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 15px; }
-        .admin-table tr:hover { background: #fcfcfc; }
+        .nav-menu { list-style: none; padding: 0; margin: 20px 0; flex: 1; }
+        .nav-item { padding: 15px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; transition: 0.3s; border-right: 4px solid transparent; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: rgba(22, 160, 133, 0.2); border-right-color: var(--teal); color: var(--teal); }
         
-        .student-name { font-weight: 900; color: var(--primary); }
-        .student-email { font-size: 12px; color: #95a5a6; display: block; margin-top: 3px; }
-        .exam-title { font-weight: bold; color: #2c3e50; }
-        .score-badge { background: #eafaf1; color: #27ae60; padding: 5px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; }
+        .logout-btn-side { padding: 15px; background: #c0392b; color: white; text-align: center; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .logout-btn-side:hover { background: #e74c3c; }
 
-        footer { text-align: center; padding: 40px; color: #95a5a6; font-size: 13px; margin-top: auto; }
+        /* منطقة المحتوى الرئيسية */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--bg); }
+        .top-navbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .top-navbar h2 { margin: 0; font-size: 1.4em; color: var(--secondary); }
+        
+        .content-wrapper { padding: 30px; }
+        
+        /* شاشات الـ SPA */
+        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* تصميم الكروت والجداول */
+        .card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); margin-bottom: 25px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; border-right: 5px solid var(--teal); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .stat-card h3 { margin: 0; font-size: 2em; color: var(--secondary); }
+        .stat-card p { margin: 5px 0 0; color: #7f8c8d; font-size: 13px; font-weight: bold; }
+
+        table { width: 100%; border-collapse: collapse; text-align: right; }
+        th { padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 14px; border-bottom: 2px solid #eee; }
+        td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
+        .badge { background: #eafaf1; color: #27ae60; padding: 4px 10px; border-radius: 5px; font-size: 12px; }
+        
+        /* أزرار الإجراءات (تعديل - حذف) */
+        .action-btn { padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; font-family: 'Tajawal'; font-size: 12px; font-weight: bold; transition: 0.3s; margin-right: 5px; }
+        .btn-view { background: #3498db; color: white; }
+        .btn-edit { background: #f39c12; color: white; }
+        .btn-delete { background: #e74c3c; color: white; }
+
+        /* تصميم شاشة إنشاء الاختبار */
+        .tabs-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .tab-btn { padding: 10px 20px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; border-radius: 8px 8px 0 0; transition: 0.3s; }
+        .tab-btn.active { background: var(--teal); color: white; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-family: 'Tajawal'; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; }
+        input:focus, textarea:focus, select:focus { border-color: var(--teal); outline: none; }
+        .form-label { font-weight: bold; color: var(--secondary); font-size: 14px; }
+        
+        .ai-box { background: #e8f6f3; border: 2px dashed var(--teal); padding: 20px; border-radius: 12px; text-align: center; }
+        .btn-primary { background: var(--teal); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-primary:hover { background: #117a65; }
+
+        /* شاشة التحقق */
+        .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">👑 غرفة العمليات <span class="admin-badge">لوحة المستر</span></div>
-        <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
-    </header>
-
-    <div class="container" id="authStatusScreen">
-        <div class="status-screen">
-            <h2 id="statusTitle">جاري التحقق من الهوية الأمنية... 🔐</h2>
-            <p id="statusDesc">يرجى الانتظار ثواني للتأكد من تصريح الدخول.</p>
-        </div>
+    <div class="auth-screen" id="authScreen">
+        <h1 style="color: var(--primary);">🔐 جاري التحقق من هوية المستر...</h1>
     </div>
 
-    <div class="container" id="adminPanelMain" style="display: none;">
-        
-        <div class="stats-grid">
-            <div class="stat-card exams">
-                <div class="stat-info">
-                    <h3 id="totalSubmissions">0</h3>
-                    <p>إجمالي الامتحانات المحلولة</p>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>👑 أكاديمية الحسيني</h2>
+            <p>غرفة التحكم (Admin Panel)</p>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" onclick="switchView('resultsView', this, 'نتائج الطلاب')">📊 نتائج الطلاب</li>
+            <li class="nav-item" onclick="switchView('examsManagerView', this, 'إدارة الاختبارات')">📚 إدارة الاختبارات</li>
+            <li class="nav-item" onclick="switchView('createExamView', this, 'إنشاء اختبار جديد')">✨ إنشاء اختبار جديد</li>
+            <li class="nav-item" onclick="alert('سيتم تفعيل الإحصائيات قريباً')">📈 الإحصائيات والرادار</li>
+            <li class="nav-item" onclick="alert('سيتم تفعيل إدارة الكورسات قريباً')">🛒 إدارة الكورسات</li>
+        </ul>
+        <div class="logout-btn-side" onclick="logout()">تسجيل الخروج 🚪</div>
+    </aside>
+
+    <main class="main-content">
+        <div class="top-navbar">
+            <h2 id="topNavTitle">📊 نتائج الطلاب</h2>
+            <div style="font-weight: bold; color: var(--teal);">مرحباً يا مستر! 👋</div>
+        </div>
+
+        <div class="content-wrapper">
+            
+            <section id="resultsView" class="view-section active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div><h3 id="totalSubmissions">0</h3><p>امتحان محلول</p></div><div style="font-size: 30px;">📝</div></div>
+                    <div class="stat-card"><div><h3 id="totalUniqueStudents">0</h3><p>طالب متفاعل</p></div><div style="font-size: 30px;">👨‍🎓</div></div>
                 </div>
-                <div class="stat-icon">📝</div>
-            </div>
-            <div class="stat-card students">
-                <div class="stat-info">
-                    <h3 id="totalUniqueStudents">0</h3>
-                    <p>عدد الطلاب المتفاعلين</p>
+                <div class="card">
+                    <input type="text" id="searchBar" placeholder="🔍 ابحث باسم الطالب أو الإيميل..." oninput="filterResults()">
+                    <div style="overflow-x: auto;">
+                        <table id="resultsTable">
+                            <thead><tr><th>الطالب</th><th>الاختبار</th><th>التاريخ</th><th>الدرجة</th></tr></thead>
+                            <tbody id="adminTableBody"><tr><td colspan="4" style="text-align:center;">جاري الجلب...</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="stat-icon">👨‍🎓</div>
-            </div>
-        </div>
+            </section>
 
-        <div class="controls-row">
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 ابحث باسم الطالب أو الإيميل أو اسم الامتحان..." oninput="filterResults()">
-        </div>
+            <section id="examsManagerView" class="view-section">
+                <div class="card">
+                    <p style="color: #7f8c8d; margin-top: 0;">هنا تظهر جميع الاختبارات المتاحة للطلاب حالياً. (واجهة مبدئية UI)</p>
+                    <table style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>اسم الاختبار</th>
+                                <th>الصف الدراسي</th>
+                                <th>الوحدة / التصنيف</th>
+                                <th>الحالة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="color: var(--primary);">Unit 7: Reviving Civilization</td>
+                                <td>الصف الأول الإعدادي</td>
+                                <td>الوحدة 7</td>
+                                <td><span class="badge">منشور ✅</span></td>
+                                <td>
+                                    <button class="action-btn btn-view">👁️ معاينة</button>
+                                    <button class="action-btn btn-edit">✏️ تعديل</button>
+                                    <button class="action-btn btn-delete">🗑️ حذف</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--primary);">Unit 10: Storytelling</td>
+                                <td>الصف الثاني الإعدادي</td>
+                                <td>الوحدة 10</td>
+                                <td><span class="badge" style="background: #fcf3cf; color: #f39c12;">مسودة ⏳</span></td>
+                                <td>
+                                    <button class="action-btn btn-view">👁️ معاينة</button>
+                                    <button class="action-btn btn-edit">✏️ تعديل</button>
+                                    <button class="action-btn btn-delete">🗑️ حذف</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-        <div class="table-container">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>بيانات الطالب</th>
-                        <th>الاختبار</th>
-                        <th>التاريخ والوقت</th>
-                        <th>النتيجة الكلية</th>
-                    </tr>
-                </thead>
-                <tbody id="adminTableBody">
-                    <tr><td colspan="4" style="text-align:center;">جاري جلب أوراق الإجابات من الخزنة... ⏳</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+            <section id="createExamView" class="view-section">
+                <div class="card">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="switchInnerTab('manualTab', this)">✍️ إنشاء يدوي</button>
+                        <button class="tab-btn" onclick="switchInnerTab('aiTab', this)">🤖 توليد بالذكاء الاصطناعي</button>
+                    </div>
 
-    <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
+                    <div id="manualTab" class="tab-content active">
+                        <div class="form-label">اسم الاختبار (مثال: Unit 1 Quiz)</div>
+                        <input type="text" placeholder="اكتب اسم الاختبار هنا...">
+                        
+                        <div style="display: flex; gap: 15px;">
+                            <div style="flex: 1;">
+                                <div class="form-label">الصف الدراسي</div>
+                                <select><option>الصف الأول الإعدادي</option><option>الصف الثاني الإعدادي</option><option>الصف الثالث الإعدادي</option></select>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="form-label">حالة الاختبار</div>
+                                <select><option>نشر فوراً للطلاب ✅</option><option>حفظ كمسودة ⏳</option></select>
+                            </div>
+                        </div>
+
+                        <hr style="border: 1px solid #eee; margin: 20px 0;">
+                        <h3 style="color: var(--teal); margin-top: 0;">📝 إضافة سؤال جديد</h3>
+                        <div class="form-label">نوع السؤال</div>
+                        <select>
+                            <option>اختيار من متعدد (MCQ)</option>
+                            <option>أكمل الفراغات (Fill in)</option>
+                            <option>سؤال مقالي / براجراف</option>
+                        </select>
+                        <div class="form-label">نص السؤال</div>
+                        <textarea rows="3" placeholder="اكتب سؤالك هنا..."></textarea>
+                        
+                        <button class="btn-primary" style="width: auto; background: var(--secondary);">➕ أضف السؤال للاختبار</button>
+                        
+                        <div style="margin-top: 30px; text-align: left;">
+                            <button class="btn-primary" style="width: 200px;">💾 حفظ الاختبار بالكامل</button>
+                        </div>
+                    </div>
+
+                    <div id="aiTab" class="tab-content">
+                        <div class="ai-box">
+                            <h3 style="margin-top: 0; color: var(--secondary);">المعلم الآلي المساعد 🤖</h3>
+                            <p style="color: #7f8c8d; font-size: 14px;">اكتب وصفاً دقيقاً للامتحان الذي تريده، وسيقوم الذكاء الاصطناعي بتوليد الأسئلة ونقلها للتبويب اليدوي لتراجعها قبل الحفظ.</p>
+                            
+                            <div class="form-label" style="text-align: right;">اكتب أمر التوليد (Prompt):</div>
+                            <textarea rows="4" placeholder="مثال: قم بإنشاء اختبار للصف الثالث الإعدادي عن الوحدة الأولى، يتكون من 5 أسئلة اختياري وسؤال براجراف عن الرياضة..."></textarea>
+                            
+                            <button class="btn-primary" onclick="alert('سيتم ربط هذه الخاصية بـ API الذكاء الاصطناعي قريباً!')">✨ توليد الاختبار السحري</button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
 
     <script>
-        // ======= نفس مفتاح مشروعك مضبوط وجاهز =======
         const firebaseConfig = {
             apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
             authDomain: "alhusseiny-academy.firebaseapp.com",
@@ -124,122 +235,91 @@
             messagingSenderId: "1048097240090",
             appId: "1:1048097240090:web:931635cccdb05213fd4da3"
         };
-        // ==========================================
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        const ALLOWED_ADMIN = "h.y.s249.hy@gmail.com"; // الإيميل الوحيد المسموح له بالدخول
-        var allRecords = []; // مصفوفة لحفظ البيانات محلياً للبحث والترتيب السريع
+        const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
+        var allRecords = []; 
 
-        // نظام التحقق الصارم من هوية المستر
         auth.onAuthStateChanged((user) => {
-            if (user) {
-                if (user.email === ALLOWED_ADMIN) {
-                    // إيميل المستر صحيح! افتح اللوحة فوراً وابدأ سحب البيانات
-                    document.getElementById("authStatusScreen").style.display = "none";
-                    document.getElementById("adminPanelMain").style.display = "block";
-                    loadAllStudentResults();
-                } else {
-                    // طالب حاول يدخل! اطرده برة واقفل الشاشة
-                    showAccessDenied("🛑 خطأ أمني: غير مسموح لك بالدخول!", "هذه اللوحة سرية ومخصصة لإدارة الأكاديمية ومستر الحسيني فقط.");
-                }
+            if (user && user.email === ADMIN_EMAIL) {
+                document.getElementById("authScreen").style.display = "none";
+                loadAllStudentResults();
             } else {
-                // مش مسجل دخول أصلاً؟ واديه لبوابة تسجيل الدخول
                 window.location.href = "login.html";
             }
         });
 
-        function showAccessDenied(title, desc) {
-            document.getElementById("statusTitle").innerText = title;
-            document.getElementById("statusTitle").style.color = "#c0392b";
-            document.getElementById("statusDesc").innerText = desc;
+        // نظام التنقل السريع (SPA Logic)
+        function switchView(viewId, element, title) {
+            // إخفاء كل الشاشات
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            // إزالة اللون من كل زراير القائمة
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            
+            // تفعيل الشاشة المطلوبة والزرار
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+            document.getElementById('topNavTitle').innerText = title;
         }
 
-        // دالة سحب كل نتائج الطلاب من Firestore وترتيبها
+        // نظام التنقل بين التبويبات الداخلية (يدوي / ذكاء اصطناعي)
+        function switchInnerTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
         function loadAllStudentResults() {
-            db.collection("exam_results").get()
-            .then((querySnapshot) => {
+            db.collection("exam_results").get().then((querySnapshot) => {
                 const tbody = document.getElementById("adminTableBody");
                 if (querySnapshot.empty) {
-                    tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>لا توجد أي نتائج مسجلة في الخزنة حتى الآن! 📭</td></tr>";
+                    tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>لا توجد نتائج مسجلة حتى الآن</td></tr>";
                     return;
                 }
-
                 allRecords = [];
-                let studentEmails = new Set(); // لحساب عدد الطلاب الفريدين بدون تكرار
-
+                let studentEmails = new Set();
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
                     allRecords.push(data);
                     if(data.email) studentEmails.add(data.email);
                 });
-
-                // ترتيب السجلات برمجياً من الأحدث للأقدم لتجنب مشكلة الفهرس
                 allRecords.sort((a, b) => {
                     let timeA = a.timestamp ? a.timestamp.toMillis() : 0;
                     let timeB = b.timestamp ? b.timestamp.toMillis() : 0;
                     return timeB - timeA;
                 });
-
-                // تحديث العدادات الذكية فوق
                 document.getElementById("totalSubmissions").innerText = allRecords.length;
                 document.getElementById("totalUniqueStudents").innerText = studentEmails.size;
-
-                // عرض البيانات في الجدول
                 displayRows(allRecords);
-            })
-            .catch((err) => {
-                console.error(err);
-                document.getElementById("adminTableBody").innerHTML = "<tr><td colspan='4' style='text-align:center; color:red;'>حدث خطأ أثناء جلب البيانات من السيرفر.</td></tr>";
-            });
+            }).catch(err => console.log(err));
         }
 
-        // دالة رسم السطور في الجدول
         function displayRows(dataArray) {
             const tbody = document.getElementById("adminTableBody");
             tbody.innerHTML = dataArray.map(data => {
                 let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                // تنسيق الوقت والتاريخ بشكل عربي أنيق جداً لسهولة القراءة
-                let formattedDate = dateObj.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                let formattedTime = dateObj.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-
-                return `
-                    <tr>
-                        <td>
-                            <span class="student-name">${data.name || 'طالب مجهول'}</span>
-                            <span class="student-email">${data.email || 'بدون بريد'}</span>
-                        </td>
-                        <td class="exam-title">📘 ${data.examName || 'اختبار عام'}</td>
-                        <td style="color:#7f8c8d; font-size:13px;">${formattedDate} <br> ⏰ ${formattedTime}</td>
-                        <td><span class="score-badge">${data.score}</span></td>
-                    </tr>
-                `;
+                let formattedDate = dateObj.toLocaleDateString('ar-EG');
+                return `<tr>
+                    <td><div style="font-weight:900;color:#2c3e50;">${data.name}</div><div style="font-size:11px;color:#95a5a6;">${data.email}</div></td>
+                    <td style="font-weight:bold;">${data.examName}</td>
+                    <td style="color:#7f8c8d;">${formattedDate}</td>
+                    <td><span class="badge">${data.score}</span></td>
+                </tr>`;
             }).join('');
         }
 
-        // دالة الفلترة والبحث الفوري (Real-time Filter)
         function filterResults() {
-            let keyword = document.getElementById("searchBar").value.toLowerCase().trim();
-            if (!keyword) {
-                displayRows(allRecords); // لو الخانة فاضية اعرض كله
-                return;
-            }
-
-            let filtered = allRecords.filter(r => {
-                let name = (r.name || "").toLowerCase();
-                let email = (r.email || "").toLowerCase();
-                let exam = (r.examName || "").toLowerCase();
-                return name.includes(keyword) || email.includes(keyword) || exam.includes(keyword);
-            });
-
+            let kw = document.getElementById("searchBar").value.toLowerCase().trim();
+            if(!kw) return displayRows(allRecords);
+            let filtered = allRecords.filter(r => (r.name||"").toLowerCase().includes(kw) || (r.email||"").toLowerCase().includes(kw) || (r.examName||"").toLowerCase().includes(kw));
             displayRows(filtered);
         }
 
-        function logout() {
-            auth.signOut().then(() => { window.location.href = "index.html"; });
-        }
+        function logout() { auth.signOut().then(() => { window.location.href = "index.html"; }); }
     </script>
 </body>
 </html>
