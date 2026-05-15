@@ -166,17 +166,33 @@
             const resultsBody = document.getElementById('resultsBody');
             resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>جاري سحب درجاتك... ⏳</td></tr>";
 
-            db.collection("exam_results").where("email", "==", studentEmail).orderBy("timestamp", "desc").get()
+            // السحب بدون OrderBy عشان نتجنب خطأ الفهرس الخاص بـ جوجل
+            db.collection("exam_results").where("email", "==", studentEmail).get()
             .then((querySnapshot) => {
                 if (querySnapshot.empty) {
                     resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>لم تقم بحل أي اختبارات بعد! ابدأ الآن 🚀</td></tr>";
                     return;
                 }
+                
                 resultsBody.innerHTML = ""; 
+                
+                let examsArray = [];
                 querySnapshot.forEach((doc) => {
-                    let data = doc.data();
+                    examsArray.push(doc.data());
+                });
+
+                // ترتيب النتائج برمجياً من الأحدث للأقدم
+                examsArray.sort((a, b) => {
+                    let timeA = a.timestamp ? a.timestamp.toMillis() : 0;
+                    let timeB = b.timestamp ? b.timestamp.toMillis() : 0;
+                    return timeB - timeA;
+                });
+                
+                // عرض النتائج المترتبة في الجدول
+                examsArray.forEach((data) => {
                     let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
                     let formattedDate = dateObj.toLocaleDateString('ar-EG');
+                    
                     resultsBody.innerHTML += `
                         <tr>
                             <td>${data.examName}</td>
@@ -188,7 +204,7 @@
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
-                resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:red;'>حدث خطأ في جلب الدرجات.</td></tr>";
+                resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:red;'>حدث خطأ في جلب الدرجات. تأكد من اتصالك بالإنترنت.</td></tr>";
             });
         }
 
