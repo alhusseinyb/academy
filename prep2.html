@@ -33,6 +33,28 @@
         .footer-links a { color: #fff; text-decoration: none; font-weight: bold; padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2); font-size: 14px;}
         .footer-links a:hover { background: var(--accent); transform: translateY(-3px); }
     </style>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script>
+        // ⚠️ ضع كود الـ firebaseConfig الخاص بك هنا
+        const firebaseConfig = {
+          apiKey: "const firebaseConfig = {
+  apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+  authDomain: "alhusseiny-academy.firebaseapp.com",
+  projectId: "alhusseiny-academy",
+  storageBucket: "alhusseiny-academy.firebasestorage.app",
+  messagingSenderId: "1048097240090",
+  appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+};
+        firebase.initializeApp(firebaseConfig);
+
+        // حارس الأمن: طرد أي شخص غير مسجل
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = "login.html"; // تحويله لبوابة الدخول فوراً
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -78,16 +100,15 @@
 </div>
 
 <footer>
-    <h3>🔗 روابط هامة للطلاب</h3>
-    <div class="footer-links">
-        <a href="https://alhusseinyb.github.io/golden-worksheet/" target="_blank">📝 دليلك الذهبي للإجابة</a>
-        <a href="prep1.html" style="background: #27ae60; border-color: #2ecc71;">🌐 منصة الصف الأول الإعدادي</a>
-        <a href="prep3.html" style="background: #c0392b; border-color: #e74c3c;">🌐 منصة الشهادة الإعدادية</a>
-        <a href="https://www.facebook.com/Alhusseiny.badawy" target="_blank">📘 فيسبوك مستر الحسيني</a>
-        <a href="https://wa.me/201003124783" target="_blank">💬 تواصل واتساب</a>
-    </div>
-    <p>© 2024 مستر الحسيني يحيى | الإنجليزية بشكل مختلف</p>
-</footer>
+        <h3 style="margin: 0;">🔗 روابط الأكاديمية</h3>
+        <div class="footer-links" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
+            <a href="index.html" style="color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px;">🏠 الرئيسية</a>
+            <a href="golden.html" style="color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; background: rgba(212, 160, 23, 0.2); border-color: #d4a017; border: 1px solid; border-radius: 8px; font-size: 14px;">📝 الورقة الذهبية 2026</a>
+            <a href="ai-tutor.html" style="color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; background: rgba(142, 68, 173, 0.2); border-color: #8e44ad; border: 1px solid; border-radius: 8px; font-size: 14px;">🤖 المعلم الذكي</a>
+            <a href="https://www.facebook.com/Alhusseiny.badawy" target="_blank" style="color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px;">📘 فيسبوك</a>
+        </div>
+        <p style="margin-top: 15px; font-size: 13px; opacity: 0.7;">جميع الحقوق محفوظة © 2026 مستر الحسيني يحيى</p>
+    </footer>
 
 <script>
     // ==========================================
