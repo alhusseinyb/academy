@@ -8,9 +8,22 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+            authDomain: "alhusseiny-academy.firebaseapp.com",
+            projectId: "alhusseiny-academy",
+            storageBucket: "alhusseiny-academy.firebasestorage.app",
+            messagingSenderId: "1048097240090",
+            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+    </script>
 
     <style>
-        /* شريط المستخدم العلوي */
         .top-bar { background: #0d1f1a; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
         .user-info { font-weight: bold; color: #f5c842; }
         .auth-btn { background: #e67e22; color: white; text-decoration: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-family: 'Tajawal'; }
@@ -18,7 +31,6 @@
         .auth-btn.logout { background: #c0392b; }
         .auth-btn.logout:hover { background: #922b21; }
 
-        /* ألوان الصف الثاني الإعدادي (الأزرق) */
         :root { --primary: #2980b9; --secondary: #3498db; --accent: #e67e22; --success: #27ae60; --danger: #c0392b; --bg: #ecf0f1; --card-bg: #ffffff; --text: #2c3e50; }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         header { background: linear-gradient(to right, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
@@ -97,27 +109,11 @@
     </footer>
 
 <script>
-    // ==========================================
-    // تهيئة Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-      authDomain: "alhusseiny-academy.firebaseapp.com",
-      projectId: "alhusseiny-academy",
-      storageBucket: "alhusseiny-academy.firebasestorage.app",
-      messagingSenderId: "1048097240090",
-      appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    // ==========================================
-
-    // ⚠️ رابط جوجل الخاص بـ (ثانية إعدادي)
     var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyN3rm-rW0_S7q1xnLOwcFWtOTtuoNZ0Gf27pyNXqOuSouqcAh9BkiunDRJonUGiwz2/exec";
     
     var currentStudent = "";
     var activeExam = null;
 
-    // حارس الأمن - Security Guard
     auth.onAuthStateChanged((user) => {
         if (!user) {
             window.location.href = "login.html";
@@ -197,6 +193,7 @@
     }
 
     function checkResult() {
+        if(GOOGLE_SCRIPT_URL.includes("ضع_الرابط")) { alert("تنبيه: ضع رابط السكربت في الكود أولاً."); return; }
         alert("جاري البحث عن نتيجتك...");
         fetch(GOOGLE_SCRIPT_URL + "?name=" + encodeURIComponent(currentStudent))
         .then(r => r.text()).then(d => alert("🎓 نتيجتك:\n\n" + d)).catch(e => alert("خطأ في الاتصال."));
@@ -216,7 +213,7 @@
             html += `<p>${i+1}. ${q.q}</p><div class="options-grid req-radio" data-name="l_mcq_${i}">` + 
                     opts.map(o => `<label class="option-label"><input type="radio" name="l_mcq_${i}" value="${o.idx}"> ${o.t}</label>`).join('') + `</div>`;
         });
-        activeExam.listening.open.forEach((q, i) => { html += `<p>${i+3}. ${q.q}</p><input type="text" class="req-input" data-q="${q.q}" data-model="${q.a}" placeholder="Write your answer...">`; });
+        activeExam.listening.open.forEach((q, i) => { html += `<p>${i+3}. ${q.q}</p><input type="text" class="req-input" data-q="${q.q}" data-model="${q.a}">`; });
         html += `</div>`;
 
         html += `<div class="question-section"><h3>B. Reading</h3>`;
@@ -225,8 +222,8 @@
             html += `<p>${i+1}. ${q.q}</p><div class="options-grid req-radio" data-name="v_mcq_${i}">` + 
                     opts.map(o => `<label class="option-label"><input type="radio" name="v_mcq_${i}" value="${o.idx}"> ${o.t}</label>`).join('') + `</div>`;
         });
-        html += `<p>Complete: ${activeExam.reading.fill_in.words.map(w=>`[${w}]`).join(' ')}</p><p>${activeExam.reading.fill_in.text}</p><div style="display:flex; gap:10px; flex-wrap:wrap;">`;
-        activeExam.reading.fill_in.answers.forEach((a, i) => { html += `<input type="text" class="req-input" data-q="Fill in ${i+1}" data-model="${a}" placeholder="(${i+1})" style="width:calc(50% - 5px);">`; });
+        html += `<p>Fill in: ${activeExam.reading.fill_in.words.map(w=>`[${w}]`).join(' ')}</p><p>${activeExam.reading.fill_in.text}</p><div style="display:flex; gap:10px;">`;
+        activeExam.reading.fill_in.answers.forEach((a, i) => { html += `<input type="text" class="req-input" data-q="Fill in ${i+1}" data-model="${a}" placeholder="(${i+1})">`; });
         html += `</div>`;
         html += `<h4 style="margin-top:20px;">Comprehension</h4><p style="background:#f9f9f9; padding:15px; border-radius:8px;">${activeExam.reading.comprehension.text}</p>`;
         activeExam.reading.comprehension.mcq.forEach((q, i) => {
@@ -258,7 +255,7 @@
         ut.lang = 'en-US'; window.speechSynthesis.speak(ut);
     }
 
-    function finishExam() {
+  function finishExam() {
         let valid = true;
         document.querySelectorAll(".req-radio").forEach(g => {
             if(!document.querySelector(`input[name="${g.dataset.name}"]:checked`)) { g.style.border="2px solid red"; g.style.background="#fdedec"; valid=false; }
@@ -311,6 +308,17 @@
 
         var btn = document.getElementById("submitBtn");
         btn.innerText = "جاري الإرسال لتقييم المستر..."; btn.disabled = true;
+
+        if (firebase.auth().currentUser) {
+            firebase.firestore().collection("exam_results").add({
+                name: currentStudent,
+                email: firebase.auth().currentUser.email,
+                examName: activeExam.title,
+                score: score + " / " + total,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => console.log("تم إرسال النتيجة للوحة التحكم"))
+              .catch((e) => console.log("خطأ في حفظ النتيجة:", e));
+        }
 
         fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({name: currentStudent, exam: activeExam.title, score: score+"/"+total, report: reportForDocs}) })
         .then(() => {

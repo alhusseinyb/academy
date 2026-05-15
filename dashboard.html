@@ -8,6 +8,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
 
     <style>
         :root { 
@@ -16,7 +17,6 @@
         }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
 
-        /* الهيدر */
         header { background: var(--primary); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { font-weight: 900; font-size: 1.5em; display: flex; align-items: center; gap: 10px; }
         .nav-links a { color: white; text-decoration: none; margin-right: 20px; font-weight: bold; font-size: 14px; opacity: 0.8; transition: 0.3s; }
@@ -24,7 +24,6 @@
 
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; }
 
-        /* الترحيب والملف الشخصي */
         .welcome-section { background: white; border-radius: 20px; padding: 30px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-right: 8px solid var(--teal); }
         .user-card { display: flex; align-items: center; gap: 20px; }
         .user-avatar { width: 80px; height: 80px; background: var(--bg); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 40px; border: 3px solid var(--teal); }
@@ -35,22 +34,17 @@
         .btn-edit { background: var(--bg); color: var(--primary); }
         .btn-logout { background: #fdedec; color: #c0392b; }
 
-        /* شبكة الأقسام */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
         @media (max-width: 850px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
         .section-title { font-size: 1.4em; font-weight: 900; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        
-        /* قسم الكورسات والنتائج */
         .content-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; }
 
-        /* جدول النتائج */
         .results-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .results-table th { text-align: right; padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; }
         .results-table td { padding: 15px 12px; border-bottom: 1px solid #eee; font-weight: bold; }
         .score-badge { background: #eafaf1; color: #27ae60; padding: 4px 10px; border-radius: 6px; font-size: 14px; }
 
-        /* قسم المتجر والكورسات */
         .course-card { display: flex; gap: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 12px; padding: 15px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; }
         .course-card:hover { transform: scale(1.02); box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
         .course-img { width: 70px; height: 70px; border-radius: 10px; background: var(--teal); display: flex; justify-content: center; align-items: center; font-size: 30px; color: white; }
@@ -100,16 +94,7 @@
                             </tr>
                         </thead>
                         <tbody id="resultsBody">
-                            <tr>
-                                <td>Unit 7 Quiz (Prep 1)</td>
-                                <td>2026/05/10</td>
-                                <td><span class="score-badge">18 / 20</span></td>
-                            </tr>
-                            <tr>
-                                <td>Final Exam Prep 2</td>
-                                <td>2026/05/01</td>
-                                <td><span class="score-badge">45 / 50</span></td>
-                            </tr>
+                            <tr><td colspan='3' style='text-align:center;'>جاري سحب درجاتك... ⏳</td></tr>
                         </tbody>
                     </table>
                     <p style="text-align: center; color: #95a5a6; font-size: 13px; margin-top: 20px;">يتم تحديث الدرجات بمجرد مراجعة المستر للمقالي.</p>
@@ -119,7 +104,6 @@
             <div>
                 <div class="section-title">🛒 متجر الأكاديمية</div>
                 <div class="content-card">
-                    
                     <div class="course-card">
                         <div class="course-img" style="background: var(--accent);">🎧</div>
                         <div class="course-info">
@@ -130,7 +114,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="course-card">
                         <div class="course-img">🔥</div>
                         <div class="course-info">
@@ -138,7 +121,6 @@
                             <div class="price">مجاني <span style="color: #c0392b; font-size: 11px;">(لأول 50 مشترك فقط!)</span></div>
                         </div>
                     </div>
-
                     <div class="course-card">
                         <div class="course-img" style="background: var(--secondary);">📝</div>
                         <div class="course-info">
@@ -146,7 +128,6 @@
                             <div class="price">150 ج.م</div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -155,8 +136,6 @@
     <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
 
     <script>
-        // ==========================================
-        // ⚠️ ضع كود الـ firebaseConfig الخاص بك هنا بالكامل!
         const firebaseConfig = {
             apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
             authDomain: "alhusseiny-academy.firebaseapp.com",
@@ -165,25 +144,53 @@
             messagingSenderId: "1048097240090",
             appId: "1:1048097240090:web:931635cccdb05213fd4da3"
         };
-        // ==========================================
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore(); 
 
-        // حارس الأمن والتحقق من البيانات
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // عرض بيانات الطالب
                 document.getElementById('userName').innerText = user.displayName || "طالب الأكاديمية";
                 document.getElementById('userEmail').innerText = user.email;
                 if(user.displayName) {
                     document.getElementById('userInitial').innerText = user.displayName.charAt(0).toUpperCase();
                 }
+                fetchMyResults(user.email);
             } else {
-                // لو مش مسجل دخول، اطرده لصفحة الدخول
                 window.location.href = "login.html";
             }
         });
+
+        function fetchMyResults(studentEmail) {
+            const resultsBody = document.getElementById('resultsBody');
+            resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>جاري سحب درجاتك... ⏳</td></tr>";
+
+            db.collection("exam_results").where("email", "==", studentEmail).orderBy("timestamp", "desc").get()
+            .then((querySnapshot) => {
+                if (querySnapshot.empty) {
+                    resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>لم تقم بحل أي اختبارات بعد! ابدأ الآن 🚀</td></tr>";
+                    return;
+                }
+                resultsBody.innerHTML = ""; 
+                querySnapshot.forEach((doc) => {
+                    let data = doc.data();
+                    let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
+                    let formattedDate = dateObj.toLocaleDateString('ar-EG');
+                    resultsBody.innerHTML += `
+                        <tr>
+                            <td>${data.examName}</td>
+                            <td>${formattedDate}</td>
+                            <td><span class="score-badge">${data.score}</span></td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+                resultsBody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:red;'>حدث خطأ في جلب الدرجات.</td></tr>";
+            });
+        }
 
         function logout() {
             auth.signOut().then(() => {

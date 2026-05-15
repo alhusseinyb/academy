@@ -12,45 +12,34 @@
     <style>
         :root { --primary: #1a252f; --secondary: #2c3e50; --accent: #e67e22; --teal: #0a7c6e; --bg: #ecf0f1; --text: #2c3e50; }
         body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--text); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
         .auth-container { background: white; width: 100%; max-width: 420px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden; position: relative; margin: 20px;}
         .auth-header { background: var(--teal); color: white; text-align: center; padding: 30px 20px; transition: 0.3s; }
         .auth-header h2 { margin: 0; font-size: 2em; }
         .auth-header p { margin: 10px 0 0 0; opacity: 0.9; }
-        
         .form-box { padding: 30px; display: none; animation: fadeIn 0.5s; }
         .form-box.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        
         .input-group { margin-bottom: 18px; }
         .input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--secondary); font-size: 14px;}
         .input-group input { width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 15px; font-family: 'Tajawal'; box-sizing: border-box; transition: 0.3s; }
         .input-group input:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 8px rgba(10, 124, 110, 0.2); }
-        
         .btn-submit { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-submit:hover { background: #d35400; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3); }
-        
         .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #7f8c8d; font-size: 14px; }
         .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #ddd; }
         .divider:not(:empty)::before { margin-left: 10px; }
         .divider:not(:empty)::after { margin-right: 10px; }
-
         .btn-google { width: 100%; padding: 12px; background: white; color: #333; border: 2px solid #eee; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-google:hover { background: #f8f9fa; border-color: #ddd; transform: translateY(-2px); }
-        
         .message { margin-top: 15px; text-align: center; font-size: 14px; font-weight: bold; line-height: 1.5; }
         .msg-error { color: #c0392b; }
         .msg-success { color: #27ae60; }
-        
-        /* تصميم شروط الباسورد التفاعلية */
         .password-criteria { list-style: none; padding: 0; margin-top: 8px; font-size: 12.5px; color: #7f8c8d; background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px dashed #ccc;}
         .password-criteria li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; transition: 0.3s; color: #c0392b; }
         .password-criteria li.valid { color: #27ae60; }
-
         .toggle-text { text-align: center; margin-top: 20px; font-size: 15px; color: #34495e; font-weight: bold;}
         .toggle-text span { color: var(--teal); cursor: pointer; text-decoration: underline; transition: 0.3s; }
         .toggle-text span:hover { color: var(--accent); }
-
         .back-home { display: block; text-align: center; margin-top: 10px; color: #95a5a6; text-decoration: none; font-size: 14px; transition: 0.3s; padding-bottom: 25px;}
         .back-home:hover { color: var(--primary); }
     </style>
@@ -69,9 +58,7 @@
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
             الدخول السريع باستخدام جوجل
         </button>
-        
         <div class="divider">أو عبر الإيميل</div>
-
         <div class="input-group">
             <label>البريد الإلكتروني</label>
             <input type="email" id="loginEmail" placeholder="example@gmail.com">
@@ -82,7 +69,6 @@
         </div>
         <button class="btn-submit" onclick="loginUser()" id="loginBtn">دخول</button>
         <div id="loginMsg" class="message"></div>
-        
         <p class="toggle-text">ليس لديك حساب؟ <span onclick="switchTab('register')">أنشئ حساباً جديداً الآن</span></p>
     </div>
 
@@ -91,9 +77,7 @@
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
             التسجيل السريع باستخدام جوجل
         </button>
-
         <div class="divider">أو التسجيل بالإيميل</div>
-
         <div class="input-group">
             <label>الاسم الثلاثي (سيظهر للمستر)</label>
             <input type="text" id="regName" placeholder="اكتب اسمك الحقيقي...">
@@ -105,7 +89,6 @@
         <div class="input-group">
             <label>كلمة المرور</label>
             <input type="password" id="regPassword" placeholder="********" oninput="checkPasswordStrength()">
-            
             <ul class="password-criteria">
                 <li id="req-length"><span class="icon">❌</span> 8 أحرف على الأقل</li>
                 <li id="req-upper"><span class="icon">❌</span> حرف إنجليزي كبير (A-Z)</li>
@@ -114,19 +97,14 @@
                 <li id="req-symbol"><span class="icon">❌</span> رمز خاص (مثل @ أو # أو _ )</li>
             </ul>
         </div>
-
         <button class="btn-submit" style="background: var(--teal);" onclick="registerUser()" id="regBtn">إنشاء حسابي</button>
         <div id="regMsg" class="message"></div>
-
         <p class="toggle-text">لديك حساب بالفعل؟ <span onclick="switchTab('login')">سجل دخولك من هنا</span></p>
     </div>
-    
     <a href="index.html" class="back-home">🏠 العودة للصفحة الرئيسية</a>
 </div>
 
 <script>
-    // ==========================================
-    // مفتاحك السري (مضبوط وجاهز)
     const firebaseConfig = {
       apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
       authDomain: "alhusseiny-academy.firebaseapp.com",
@@ -135,15 +113,12 @@
       messagingSenderId: "1048097240090",
       appId: "1:1048097240090:web:931635cccdb05213fd4da3"
     };
-    // ==========================================
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // التبديل بين الدخول وإنشاء الحساب
     function switchTab(tab) {
         document.querySelectorAll('.form-box').forEach(f => f.classList.remove('active'));
-        
         if(tab === 'login') {
             document.getElementById('loginForm').classList.add('active');
             document.getElementById('formTitle').innerText = "تسجيل الدخول";
@@ -157,17 +132,11 @@
         }
     }
 
-    // التحقق من قوة الباسورد
     function updateCrit(id, isValid) {
         const li = document.getElementById(id);
         const icon = li.querySelector('.icon');
-        if(isValid) {
-            li.classList.add('valid');
-            icon.innerText = "✅";
-        } else {
-            li.classList.remove('valid');
-            icon.innerText = "❌";
-        }
+        if(isValid) { li.classList.add('valid'); icon.innerText = "✅"; } 
+        else { li.classList.remove('valid'); icon.innerText = "❌"; }
         return isValid;
     }
 
@@ -178,23 +147,15 @@
         const v3 = updateCrit('req-lower', /[a-z]/.test(val));
         const v4 = updateCrit('req-number', /[0-9]/.test(val));
         const v5 = updateCrit('req-symbol', /[^a-zA-Z0-9]/.test(val));
-        
         return (v1 && v2 && v3 && v4 && v5);
     }
 
-    // الدخول بواسطة جوجل
     function loginWithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider)
-        .then((result) => {
-            window.location.href = "index.html"; 
-        })
-        .catch((error) => {
-            alert("حدث خطأ أثناء الدخول بجوجل: " + error.message);
-        });
+        auth.signInWithPopup(provider).then((result) => { window.location.href = "index.html"; })
+        .catch((error) => { alert("حدث خطأ أثناء الدخول بجوجل: " + error.message); });
     }
 
-    // إنشاء حساب جديد وإرسال التفعيل
     function registerUser() {
         const name = document.getElementById('regName').value.trim();
         const email = document.getElementById('regEmail').value.trim();
@@ -202,67 +163,44 @@
         const msgDiv = document.getElementById('regMsg');
         const btn = document.getElementById('regBtn');
 
-        if(!name || !email || !password) {
-            msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى ملء جميع البيانات!</span>";
-            return;
-        }
-
-        if(!checkPasswordStrength()) {
-            msgDiv.innerHTML = "<span class='msg-error'>❌ يرجى إكمال جميع شروط كلمة المرور الموضحة بالأعلى!</span>";
-            return;
-        }
+        if(!name || !email || !password) { msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى ملء جميع البيانات!</span>"; return; }
+        if(!checkPasswordStrength()) { msgDiv.innerHTML = "<span class='msg-error'>❌ يرجى إكمال جميع شروط كلمة المرور!</span>"; return; }
 
         btn.innerText = "جاري إنشاء الحساب..."; btn.disabled = true;
 
         auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // تحديث اسم المستخدم
             return userCredential.user.updateProfile({ displayName: name })
-            .then(() => {
-                // إرسال رسالة التحقق للإيميل
-                return userCredential.user.sendEmailVerification();
-            });
+            .then(() => { return userCredential.user.sendEmailVerification(); });
         })
         .then(() => {
-            // تسجيل الخروج فوراً حتى لا يدخل قبل التفعيل
             auth.signOut(); 
-            msgDiv.innerHTML = "<span class='msg-success'>✅ تم الحساب بنجاح! تم إرسال رابط تفعيل إلى إيميلك. يرجى تفعيل الحساب ثم تسجيل الدخول.</span>";
+            msgDiv.innerHTML = "<span class='msg-success'>✅ تم الحساب! تم إرسال رابط تفعيل إلى إيميلك. يرجى تفعيل الحساب ثم تسجيل الدخول.</span>";
             btn.innerText = "إنشاء حسابي"; btn.disabled = false;
-            setTimeout(() => { switchTab('login'); }, 5000); // إعادته لصفحة الدخول بعد 5 ثواني
+            setTimeout(() => { switchTab('login'); }, 4000); 
         })
         .catch((error) => {
             btn.innerText = "إنشاء حسابي"; btn.disabled = false;
             let errorText = "حدث خطأ!";
-            if(error.code === 'auth/email-already-in-use') errorText = "هذا الإيميل مسجل مسبقاً! قم بتسجيل الدخول.";
+            if(error.code === 'auth/email-already-in-use') errorText = "هذا الإيميل مسجل مسبقاً!";
             msgDiv.innerHTML = `<span class='msg-error'>❌ ${errorText}</span>`;
         });
     }
 
-    // تسجيل الدخول العادي
     function loginUser() {
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
         const msgDiv = document.getElementById('loginMsg');
         const btn = document.getElementById('loginBtn');
 
-        if(!email || !password) {
-            msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى إدخال الإيميل والباسورد!</span>";
-            return;
-        }
+        if(!email || !password) { msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى إدخال الإيميل والباسورد!</span>"; return; }
 
         btn.innerText = "جاري الدخول..."; btn.disabled = true;
 
         auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // التحقق هل الإيميل مفعل أم لا (لا ينطبق على حسابات جوجل)
-            if(!userCredential.user.emailVerified) {
-                auth.signOut(); // طرده لو مفعلش
-                msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى تفعيل حسابك أولاً من الرابط الذي أرسلناه إلى إيميلك!</span>";
-                btn.innerText = "دخول"; btn.disabled = false;
-            } else {
-                msgDiv.innerHTML = "<span class='msg-success'>✅ أهلاً بك من جديد! جاري التحويل...</span>";
-                setTimeout(() => { window.location.href = "index.html"; }, 1500);
-            }
+            msgDiv.innerHTML = "<span class='msg-success'>✅ أهلاً بك من جديد! جاري التحويل...</span>";
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
         })
         .catch((error) => {
             btn.innerText = "دخول"; btn.disabled = false;

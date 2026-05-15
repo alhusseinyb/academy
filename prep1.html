@@ -8,9 +8,22 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+            authDomain: "alhusseiny-academy.firebaseapp.com",
+            projectId: "alhusseiny-academy",
+            storageBucket: "alhusseiny-academy.firebasestorage.app",
+            messagingSenderId: "1048097240090",
+            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+    </script>
 
     <style>
-        /* شريط المستخدم العلوي */
         .top-bar { background: #0d1f1a; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
         .user-info { font-weight: bold; color: #f5c842; }
         .auth-btn { background: #e67e22; color: white; text-decoration: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-family: 'Tajawal'; }
@@ -95,37 +108,19 @@
     </footer>
 
 <script>
-    // ==========================================
-    // تهيئة Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-      authDomain: "alhusseiny-academy.firebaseapp.com",
-      projectId: "alhusseiny-academy",
-      storageBucket: "alhusseiny-academy.firebasestorage.app",
-      messagingSenderId: "1048097240090",
-      appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    // ==========================================
-
-    // ⚠️ ضع رابط جوجل الخاص بـ (أولى إعدادي) هنا
     var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyE_8XLjEXkZWkQRAVkOKRzmQUx9AWLAQVdRVGYbFukgr6eTa6pdNYXB8uSemHmxv-5/exec";
     
     var currentStudent = "";
     var activeExam = null;
 
-    // حارس الأمن - Security Guard
     auth.onAuthStateChanged((user) => {
         if (!user) {
-            // غير مسجل دخول؟ اطرد لصفحة البوابة
             window.location.href = "login.html";
         } else {
-            // مسجل دخول؟ اسحب اسمه، أظهر القائمة، واكتبه في الهيدر
             currentStudent = user.displayName || "طالب الأكاديمية";
             document.getElementById('userInfo').innerHTML = `👋 أهلاً بك، ${currentStudent}`;
             document.getElementById("mainMenu").style.display = "block";
-            renderMenu(); // بناء أزرار الامتحانات
+            renderMenu(); 
         }
     });
 
@@ -297,34 +292,38 @@
                 let studentAns = q.options[parseInt(sel.value)];
                 let modelAns = q.options[q.ans];
 
-                // لشاشة الطالب
                 reviewHtml += `<div class="review-item ${isCorrect?'review-correct':'review-wrong'}"><b>س: ${q.q}</b><br>إجابتك: ${studentAns}<br>${isCorrect?'':'<span class="correct-ans-text">النموذج: '+modelAns+'</span>'}</div>`;
-                // لملف المستر
                 reportForDocs += (isCorrect ? "✅ [1/1] " : "❌ [0/1] ") + "س: " + q.q + "\n   - إجابة الطالب: " + studentAns + "\n   - الإجابة الصحيحة: " + modelAns + "\n\n";
             });
         }
         
-        // تصحيح الاختياري 
         if(activeExam.listening && activeExam.listening.mcq) gradeMCQ('l_mcq', activeExam.listening.mcq);
         if(activeExam.reading && activeExam.reading.vocab_mcq) gradeMCQ('v_mcq', activeExam.reading.vocab_mcq);
         if(activeExam.reading && activeExam.reading.comprehension && activeExam.reading.comprehension.mcq) gradeMCQ('c_mcq', activeExam.reading.comprehension.mcq);
 
-        // تصحيح المقالي
         document.querySelectorAll(".req-input").forEach(inp => {
             total++;
             let isCorrect = check(inp.value, inp.dataset.model);
             if(isCorrect) score++;
             
-            // لشاشة الطالب
             reviewHtml += `<div class="review-item ${isCorrect?'review-correct':'review-wrong'}"><b>س: ${inp.dataset.q}</b><br>إجابتك: ${inp.value}<br>${isCorrect?'':'<span class="correct-ans-text">النموذج: '+inp.dataset.model+'</span>'}</div>`;
-            // لملف المستر
             reportForDocs += (isCorrect ? "✅ [1/1] " : "❌ [0/1] ") + "س: " + inp.dataset.q + "\n   - إجابة الطالب: " + inp.value + "\n   - الإجابة النموذجية: " + inp.dataset.model + "\n\n";
         });
 
         var btn = document.getElementById("submitBtn");
         btn.innerText = "جاري الإرسال لتقييم المستر..."; btn.disabled = true;
 
-        // إرسال التقرير التفصيلي بدلاً من الجملة الثابتة
+        if (firebase.auth().currentUser) {
+            firebase.firestore().collection("exam_results").add({
+                name: currentStudent,
+                email: firebase.auth().currentUser.email,
+                examName: activeExam.title,
+                score: score + " / " + total,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => console.log("تم إرسال النتيجة للوحة التحكم"))
+              .catch((e) => console.log("خطأ في حفظ النتيجة:", e));
+        }
+
         fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({name: currentStudent, exam: activeExam.title, score: score+"/"+total, report: reportForDocs}) })
         .then(() => {
             document.getElementById("quizScreen").style.display="none";

@@ -9,9 +9,22 @@
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+            authDomain: "alhusseiny-academy.firebaseapp.com",
+            projectId: "alhusseiny-academy",
+            storageBucket: "alhusseiny-academy.firebasestorage.app",
+            messagingSenderId: "1048097240090",
+            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
 
     <style>
-        /* شريط المستخدم العلوي */
         .top-bar { background: #0d1f1a; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
         .user-info { font-weight: bold; color: #f5c842; }
         .auth-btn { background: #e67e22; color: white; text-decoration: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-family: 'Tajawal'; }
@@ -42,7 +55,6 @@
         .option-label { background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #dee2e6; cursor: pointer; }
         .words-box { display: flex; flex-wrap: wrap; gap: 10px; background: #eaf2f8; padding: 15px; border-radius: 8px; border: 2px dashed var(--secondary); justify-content: center; margin-bottom: 15px; font-weight: bold; }
         
-        /* شاشة المراجعة */
         .review-item { padding: 15px; margin-bottom: 15px; border-radius: 8px; background: #f9f9f9; border-left: 5px solid #ccc; }
         .review-correct { border-left-color: var(--success); background: #eafaf1; }
         .review-wrong { border-left-color: var(--danger); background: #fdedec; }
@@ -105,27 +117,11 @@
     </footer>
 
 <script>
-    // ==========================================
-    // تهيئة Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-      authDomain: "alhusseiny-academy.firebaseapp.com",
-      projectId: "alhusseiny-academy",
-      storageBucket: "alhusseiny-academy.firebasestorage.app",
-      messagingSenderId: "1048097240090",
-      appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    // ==========================================
-
-    // ⚠️ رابط Google Apps Script الخاص بثالثة إعدادي
     var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQF84wpd6D6NdeRi9uSmumIVVOvRZBz5FAs5KA19N0Iwm3Iaa2M3QxpL3SFXp2_76JfQ/exec";
     
     var currentStudent = "";
     var activeExam = null;
 
-    // حارس الأمن - Security Guard
     auth.onAuthStateChanged((user) => {
         if (!user) {
             window.location.href = "login.html";
@@ -319,9 +315,7 @@
                 let studentAns = q.options[parseInt(sel.value)];
                 let modelAns = q.options[q.ans];
 
-                // لشاشة الطالب
                 reviewHtml += `<div class="review-item ${isCorrect?'review-correct':'review-wrong'}"><b>س: ${q.q}</b><br>إجابتك: ${studentAns}<br>${isCorrect?'':'<span class="correct-ans-text">النموذج: '+modelAns+'</span>'}</div>`;
-                // لملف المستر
                 reportForDocs += (isCorrect ? "✅ [1/1] " : "❌ [0/1] ") + "س: " + q.q + "\n   - إجابة الطالب: " + studentAns + "\n   - الإجابة الصحيحة: " + modelAns + "\n\n";
             });
         }
@@ -336,14 +330,13 @@
             let isCorrect = check(inp.value, inp.dataset.model);
             if(isCorrect) score++;
             
-            // لشاشة الطالب
             reviewHtml += `<div class="review-item ${isCorrect?'review-correct':'review-wrong'}"><b>س: ${inp.dataset.q}</b><br>إجابتك: ${inp.value}<br>${isCorrect?'':'<span class="correct-ans-text">النموذج: '+inp.dataset.model+'</span>'}</div>`;
-            // لملف المستر
             reportForDocs += (isCorrect ? "✅ [1/1] " : "❌ [0/1] ") + "س: " + inp.dataset.q + "\n   - إجابة الطالب: " + inp.value + "\n   - الإجابة النموذجية: " + inp.dataset.model + "\n\n";
         });
 
         var btn = document.getElementById("submitBtn");
         btn.innerText = "جاري الإرسال لتقييم المستر..."; btn.disabled = true;
+
         // ======= كود إرسال الدرجة للوحة تحكم الطالب =======
         if (firebase.auth().currentUser) {
             firebase.firestore().collection("exam_results").add({
@@ -357,7 +350,6 @@
         }
         // ====================================================
 
-        // إرسال التقرير التفصيلي بدلاً من الجملة الثابتة
         fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({name: currentStudent, exam: activeExam.title, score: score+"/"+total, report: reportForDocs}) })
         .then(() => {
             document.getElementById("quizScreen").style.display="none";
