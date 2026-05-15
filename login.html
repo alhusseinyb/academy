@@ -111,7 +111,7 @@
                 <li id="req-upper"><span class="icon">❌</span> حرف إنجليزي كبير (A-Z)</li>
                 <li id="req-lower"><span class="icon">❌</span> حرف إنجليزي صغير (a-z)</li>
                 <li id="req-number"><span class="icon">❌</span> رقم (0-9)</li>
-                <li id="req-symbol"><span class="icon">❌</span> رمز خاص (!@#$%^&*)</li>
+                <li id="req-symbol"><span class="icon">❌</span> رمز خاص (مثل @ أو # أو _ )</li>
             </ul>
         </div>
 
@@ -177,7 +177,7 @@
         const v2 = updateCrit('req-upper', /[A-Z]/.test(val));
         const v3 = updateCrit('req-lower', /[a-z]/.test(val));
         const v4 = updateCrit('req-number', /[0-9]/.test(val));
-        const v5 = updateCrit('req-symbol', /[!@#\$%\^&\*]/.test(val));
+        const v5 = updateCrit('req-symbol', /[^a-zA-Z0-9]/.test(val));
         
         // إرجاع true فقط إذا تحققت كل الشروط
         return (v1 && v2 && v3 && v4 && v5);
