@@ -73,6 +73,14 @@
         .btn-primary { background: var(--teal); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: 'Tajawal'; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; box-shadow: 0 3px 10px rgba(22, 160, 133, 0.2); }
         .btn-primary:hover { background: #117a65; transform: translateY(-1px); }
 
+        /* تصميم شاشة إنشاء الاختبار */
+        .tabs-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .tab-btn { padding: 10px 20px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; border-radius: 8px 8px 0 0; transition: 0.3s; }
+        .tab-btn.active { background: var(--teal); color: white; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         /* شاشة التحقق */
         .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; }
     </style>
@@ -93,6 +101,8 @@
             <li class="nav-item" onclick="switchView('gradesManagerView', this, '🗂️ إدارة المراحل والصفوف الدراسية')">🗂️ إدارة الصفوف الدراسية</li>
             <li class="nav-item" onclick="switchView('addContentView', this, '✨ إضافة محتوى تعليمي جديد')">✨ إضافة محتوى جديد</li>
             <li class="nav-item" onclick="switchView('contentListView', this, '📚 استعراض وإدارة المحتوى الحالي')">📚 إدارة المحتوى الحالي</li>
+            <li class="nav-item" onclick="switchView('examsManagerView', this, '🗂️ إدارة الاختبارات الإلكترونية الكلية')">🗂️ إدارة الاختبارات</li>
+            <li class="nav-item" onclick="switchView('createExamView', this, '📝 إنشاء اختبار إلكتروني ذكي')">📝 إنشاء اختبار جديد</li>
         </ul>
         <div class="logout-btn-side" onclick="logout()">تسجيل الخروج 🚪</div>
     </aside>
@@ -142,7 +152,6 @@
             <section id="addContentView" class="view-section">
                 <div class="card">
                     <h3 style="margin-top:0; color: var(--teal);">✨ إضافة درس أو محتوى تعليمي ديناميكي</h3>
-                    
                     <div class="flex-row">
                         <div class="flex-child">
                             <div class="form-label">اختر الصف الدراسي الموجه له المحتوى</div>
@@ -153,27 +162,23 @@
                             <input type="text" id="contentUnit" placeholder="مثال: Unit 7، مراجعة ليلة الامتحان...">
                         </div>
                     </div>
-
                     <div class="flex-row">
                         <div class="flex-child">
                             <div class="form-label">عنوان الدرس أو المحتوى</div>
-                            <input type="text" id="contentTitle" placeholder="مثال: شرح كلمات الدرس الأول، اختبار الوحدة السابعة...">
+                            <input type="text" id="contentTitle" placeholder="مثال: شرح كلمات الدرس الأول، ملزمة المراجعة...">
                         </div>
                         <div class="flex-child">
                             <div class="form-label">نوع المحتوى المضاف</div>
                             <select id="contentTypeSelect" onchange="toggleContentFormFields()">
                                 <option value="video">🎥 محاضرة مرئية (فيديو شرح)</option>
                                 <option value="pdf">📄 ملزمة ومرفقات (PDF Material)</option>
-                                <option value="quiz" disabled>📝 اختبار إلكتروني ذكي (سنربطه الخطوة القادمة)</option>
                             </select>
                         </div>
                     </div>
-
                     <div id="mediaUrlFieldBox">
                         <div class="form-label" id="mediaUrlLabel">رابط الفيديو (YouTube Unlisted أو Vimeo)</div>
                         <input type="text" id="contentMediaUrl" placeholder="https://...">
                     </div>
-
                     <button class="btn-primary" onclick="saveContentToFirestore()">🚀 نشر المحتوى فوراً في حسابات الطلاب</button>
                 </div>
             </section>
@@ -183,19 +188,114 @@
                     <h3 style="margin-top: 0; color: var(--secondary);">📚 أرشيف المحتوى التعليمي المنشور</h3>
                     <div style="overflow-x: auto;">
                         <table>
+                            <thead><tr><th>الصف الدراسي</th><th>الوحدة</th><th>العنوان</th><th>النوع</th><th>إجراءات</th></tr></thead>
+                            <tbody id="contentTableBody"><tr><td colspan="5" style="text-align:center;">جاري جلب الدروس والملازم... ⏳</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="examsManagerView" class="view-section">
+                <div class="card">
+                    <h3 style="margin-top: 0; color: var(--secondary);">📚 الاختبارات الإلكترونية المخزنة والنشطة</h3>
+                    <div style="overflow-x: auto;">
+                        <table>
                             <thead>
                                 <tr>
+                                    <th>اسم الاختبار</th>
                                     <th>الصف الدراسي</th>
-                                    <th>الوحدة</th>
-                                    <th>العنوان</th>
-                                    <th>النوع</th>
+                                    <th>الوحدة / التصنيف</th>
+                                    <th>الحالة</th>
                                     <th>إجراءات</th>
                                 </tr>
                             </thead>
-                            <tbody id="contentTableBody">
-                                <tr><td colspan="5" style="text-align:center;">جاري جلب الدروس والملازم من السيرفر... ⏳</td></tr>
+                            <tbody id="examsTableBody">
+                                <tr><td colspan="5" style="text-align:center;">جاري جلب الاختبارات من السيرفر... ⏳</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="createExamView" class="view-section">
+                <div class="card">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="switchInnerTab('manualTab', this)">✍️ إنشاء يدوي</button>
+                        <button class="tab-btn" onclick="switchInnerTab('aiTab', this)">🤖 توليد بالذكاء الاصطناعي</button>
+                    </div>
+
+                    <div id="manualTab" class="tab-content active">
+                        <div class="flex-row">
+                            <div class="flex-child">
+                                <div class="form-label">اسم الاختبار (مثال: Unit 7 Quiz)</div>
+                                <input type="text" id="examTitleInput" placeholder="اكتب اسم الاختبار هنا...">
+                            </div>
+                            <div class="flex-child">
+                                <div class="form-label">الوحدة / التصنيف</div>
+                                <input type="text" id="examUnitInput" placeholder="مثال: Unit 7, مراجعة شهر أكتوبر...">
+                            </div>
+                        </div>
+                        
+                        <div class="form-label">اختر الصف الدراسي الموجه له الاختبار</div>
+                        <select id="examGradeSelect"><option value="">-- جاري تحميل الصفوف --</option></select>
+
+                        <hr style="border: 1px solid #eee; margin: 25px 0;">
+                        
+                        <div style="background: #fdfefe; border: 1px solid #e5e8e8; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.01);">
+                            <h3 style="color: var(--teal); margin-top: 0; display:flex; align-items:center; gap:5px;">📝 بناء سؤال جديد</h3>
+                            
+                            <div class="form-label">نوع السؤال</div>
+                            <select id="qTypeSelect" onchange="toggleQuestionFields()">
+                                <option value="mcq">🔠 اختيار من متعدد (MCQ)</option>
+                                <option value="fill">✏️ أكمل الفراغات (Fill in)</option>
+                                <option value="text">✍️ سؤال مقالي / براجراف / استماع</option>
+                            </select>
+
+                            <div class="form-label">نص السؤال نفسه</div>
+                            <textarea id="qTextInput" rows="2" placeholder="اكتب نص السؤال بالإنجليزية هنا..."></textarea>
+                            
+                            <div id="mcqOptionsBox" style="display: block; margin-bottom: 15px; background: #fafbfc; padding: 15px; border: 1px dashed #ccc; border-radius: 8px;">
+                                <div class="form-label" style="color:var(--secondary); margin-bottom:5px;">خيارات الإجابة:</div>
+                                <div class="flex-row" style="margin-bottom: 10px;">
+                                    <input type="text" id="opt1" placeholder="الخيار الأول (A)" style="margin:0; flex:1;">
+                                    <input type="text" id="opt2" placeholder="الخيار الثاني (B)" style="margin:0; flex:1;">
+                                </div>
+                                <div class="flex-row" style="margin-top:10px;">
+                                    <input type="text" id="opt3" placeholder="الخيار الثالث (C)" style="margin:0; flex:1;">
+                                    <input type="text" id="opt4" placeholder="الخيار الرابع (D)" style="margin:0; flex:1;">
+                                </div>
+                            </div>
+
+                            <div class="form-label" id="correctAnswerLabel">اختر الإجابة الصحيحة من الخيارات أعلاه:</div>
+                            <select id="qMcqCorrectSelect" style="margin-bottom:5px;">
+                                <option value="0">الخيار الأول (A)</option>
+                                <option value="1">الخيار الثاني (B)</option>
+                                <option value="2">الخيار الثالث (C)</option>
+                                <option value="3">الخيار الرابع (D)</option>
+                            </select>
+                            <input type="text" id="qAnswerInput" placeholder="اكتب الإجابة النموذجية للفراغ هنا..." style="display:none; margin-bottom:5px;">
+                            
+                            <button class="btn-primary" onclick="addQuestionToCurrentExam()" style="background: var(--secondary); margin-top: 15px; box-shadow:none;">➕ أضف هذا السؤال لقائمة الاختبار</button>
+                        </div>
+
+                        <h4 style="color: var(--secondary); margin-bottom: 10px; border-bottom: 2px solid #f4f7f6; padding-bottom: 5px;">📋 الأسئلة المضافة في هذا الاختبار حتى الآن:</h4>
+                        <div id="addedQuestionsList" style="margin-bottom: 25px;">
+                            <p style="color:#95a5a6; font-size:13px;">لم تقم بإضافة أي أسئلة لهذا الاختبار بعد.</p>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="saveFullExamToFirestore()">💾 اعتماد ونشر الاختبار بالكامل للطلاب</button>
+                    </div>
+
+                    <div id="aiTab" class="tab-content">
+                        <div class="ai-box">
+                            <h3 style="margin-top: 0; color: var(--secondary);">المعلم الآلي المساعد 🤖</h3>
+                            <p style="color: #7f8c8d; font-size: 14px;">اكتب وصفاً دقيقاً للامتحان الذي تريده، وسيقوم الذكاء الاصطناعي بتوليد الأسئلة ونقلها للتبويب اليدوي لتراجعها وتعديلها قبل الحفظ.</p>
+                            
+                            <div class="form-label" style="text-align: right;">اكتب أمر التوليد (Prompt):</div>
+                            <textarea id="aiPromptTextarea" rows="4" placeholder="مثال: قم بإنشاء اختبار عن الوحدة الأولى، يتكون من سؤالين اختياري وسؤال أكمل وبراجراف..."></textarea>
+                            
+                            <button class="btn-primary" id="aiGenBtn" onclick="generateExamWithAISimulation()">✨ توليد الاختبار السحري</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -204,7 +304,6 @@
     </main>
 
     <script>
-        // ======= كود الربط بالخزنة الخاصة بك =======
         const firebaseConfig = {
             apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
             authDomain: "alhusseiny-academy.firebaseapp.com",
@@ -219,20 +318,20 @@
 
         const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
         var allRecords = []; 
+        var currentExamQuestions = []; // مصفوفة لتخزين أسئلة الامتحان الحالي في الذاكرة
 
-        // حارس الأمن الصارم للمستر
         auth.onAuthStateChanged((user) => {
             if (user && user.email === ADMIN_EMAIL) {
                 document.getElementById("authScreen").style.display = "none";
                 loadAllStudentResults();
                 loadAllGrades();
                 loadAllContents();
+                loadAllExams(); // تشغيل جلب أوراق الاختبارات
             } else {
                 window.location.href = "login.html";
             }
         });
 
-        // نظام التنقل الصاروخي SPA
         function switchView(viewId, element, title) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
@@ -241,7 +340,13 @@
             document.getElementById('topNavTitle').innerText = title;
         }
 
-        // تحويل مدخلات الفورم حسب نوع المحتوى (فيديو أو ملزمة)
+        function switchInnerTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
         function toggleContentFormFields() {
             const type = document.getElementById("contentTypeSelect").value;
             const label = document.getElementById("mediaUrlLabel");
@@ -255,38 +360,54 @@
             }
         }
 
-        // ==========================================
-        // 🗂️ عمليات السحب والحفظ وإدارة الصفوف (Firestore)
-        // ==========================================
+        // تحويل حقول الأسئلة في منشئ الامتحانات
+        function toggleQuestionFields() {
+            const type = document.getElementById("qTypeSelect").value;
+            const mcqBox = document.getElementById("mcqOptionsBox");
+            const answerLabel = document.getElementById("correctAnswerLabel");
+            
+            if (type === "mcq") {
+                mcqBox.style.display = "block";
+                answerLabel.innerText = "اختر الإجابة الصحيحة من الخيارات أعلاه:";
+                document.getElementById("qAnswerInput").style.display = "none";
+                document.getElementById("qMcqCorrectSelect").style.display = "block";
+            } else {
+                mcqBox.style.display = "none";
+                document.getElementById("qAnswerInput").style.display = "block";
+                document.getElementById("qMcqCorrectSelect").style.display = "none";
+                if (type === "fill") {
+                    answerLabel.innerText = "الكلمة النموذجية الصحيحة للفراغ:";
+                } else {
+                    answerLabel.innerText = "الإجابة النموذجية الاسترشادية (أو اتركها فارغة لتقييم المستر البراجراف):";
+                }
+            }
+        }
 
+        // ==========================================
+        // 🗂️ إدارة الصفوف والدراسات والمراحل
+        // ==========================================
         function loadAllGrades() {
             db.collection("grades").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
                 const tbody = document.getElementById("gradesTableBody");
-                const select = document.getElementById("contentGradeSelect");
+                const select1 = document.getElementById("contentGradeSelect");
+                const select2 = document.getElementById("examGradeSelect");
                 
                 if(snapshot.empty) {
                     tbody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>لم تقم بإضافة أي صف دراسي بعد!</td></tr>";
-                    select.innerHTML = "<option value=''>-- لا توجد صفوف، أضف صفاً أولاً --</option>";
+                    select1.innerHTML = "<option value=''>-- لا توجد صفوف، أضف صفاً أولاً --</option>";
+                    select2.innerHTML = "<option value=''>-- لا توجد صفوف، أضف صفاً أولاً --</option>";
                     return;
                 }
-
                 let tableHtml = "";
-                let selectHtml = "<option value=''>-- اختر الصف الموجه له الدرس --</option>";
-
+                let selectHtml = "<option value=''>-- اختر الصف الدراسي --</option>";
                 snapshot.forEach((doc) => {
                     let grade = doc.data();
-                    tableHtml += `
-                        <tr>
-                            <td style="color:var(--teal); font-size:15px;">📁 ${grade.name}</td>
-                            <td style="font-size:11px; color:#95a5a6;">${doc.id}</td>
-                            <td><button class="action-btn btn-delete" onclick="deleteGrade('${doc.id}')">🗑️ حذف</button></td>
-                        </tr>
-                    `;
+                    tableHtml += `<tr><td>📁 ${grade.name}</td><td>${doc.id}</td><td><button class="action-btn btn-delete" onclick="deleteGrade('${doc.id}')">🗑️ حذف</button></td></tr>`;
                     selectHtml += `<option value="${doc.id}">${grade.name}</option>`;
                 });
-
                 tbody.innerHTML = tableHtml;
-                select.innerHTML = selectHtml;
+                select1.innerHTML = selectHtml;
+                select2.innerHTML = selectHtml;
             });
         }
 
@@ -294,26 +415,16 @@
             const nameInput = document.getElementById("newGradeName");
             const name = nameInput.value.trim();
             if(!name) { alert("⚠️ من فضلك اكتب اسم الصف الدراسي أولاً!"); return; }
-
-            db.collection("grades").add({
-                name: name,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("✅ تم اعتماد وحفظ الصف الدراسي الجديد بنجاح في قاعدة البيانات!");
-                nameInput.value = "";
-            }).catch(e => alert("خطأ في الحفظ: " + e.message));
+            db.collection("grades").add({ name: name, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => {
+                alert("✅ تم الحفظ بنجاح!"); nameInput.value = "";
+            });
         }
 
-        function deleteGrade(id) {
-            if(confirm("⚠️ هل أنت متأكد من حذف هذا الصف بالكامل؟ (سيؤدي ذلك لحذفه من عند الطلاب أيضاً)")) {
-                db.collection("grades").doc(id).delete();
-            }
-        }
+        function deleteGrade(id) { if(confirm("⚠️ هل تريد الحذف؟")) { db.collection("grades").doc(id).delete(); } }
 
         // ==========================================
-        // ✨ عمليات إدارة وحفظ المحتوى التعليمي المنشور
+        // ✨ إدارة المحاضرات المرئية والـ PDF
         // ==========================================
-
         function saveContentToFirestore() {
             const gradeId = document.getElementById("contentGradeSelect").value;
             const gradeName = document.getElementById("contentGradeSelect").options[document.getElementById("contentGradeSelect").selectedIndex].text;
@@ -322,56 +433,136 @@
             const type = document.getElementById("contentTypeSelect").value;
             const url = document.getElementById("contentMediaUrl").value.trim();
 
-            if(!gradeId || !unit || !title || !url) { alert("⚠️ يرجى ملء جميع الخانات المطلوبة قبل النشر!"); return; }
-
-            db.collection("contents").add({
-                gradeId: gradeId,
-                gradeName: gradeName,
-                unit: unit,
-                title: title,
-                type: type,
-                url: url,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("🚀 عظيييم! تم نشر المحتوى وظهر حالياً في حسابات الطلاب بنجاح!");
-                document.getElementById("contentUnit").value = "";
-                document.getElementById("contentTitle").value = "";
-                document.getElementById("contentMediaUrl").value = "";
-            }).catch(e => alert("خطأ أثناء النشر: " + e.message));
+            if(!gradeId || !unit || !title || !url) { alert("⚠️ يرجى ملء جميع الخانات!"); return; }
+            db.collection("contents").add({ gradeId, gradeName, unit, title, type, url, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => {
+                alert("🚀 تم النشر بنجاح!");
+                document.getElementById("contentTitle").value = ""; document.getElementById("contentMediaUrl").value = "";
+            });
         }
 
         function loadAllContents() {
             db.collection("contents").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
                 const tbody = document.getElementById("contentTableBody");
-                if(snapshot.empty) {
-                    tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>أرشيف المحتوى فارغ، لم تنشر أي دروس أو ملازم بعد!</td></tr>";
-                    return;
-                }
-
+                if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>الأرشيف فارغ</td></tr>"; return; }
                 tbody.innerHTML = snapshot.docs.map(doc => {
                     let c = doc.data();
-                    let icon = c.type === 'video' ? '🎥 فيديو شرح' : '📄 ملزمة PDF';
-                    return `
-                        <tr>
-                            <td>${c.gradeName}</td>
-                            <td style="color:var(--accent);">${c.unit}</td>
-                            <td style="color:var(--secondary);">${c.title}</td>
-                            <td><span class="badge badge-type">${icon}</span></td>
-                            <td><button class="action-btn btn-delete" onclick="deleteContent('${doc.id}')">🗑️ حذف</button></td>
-                        </tr>
-                    `;
+                    return `<tr><td>${c.gradeName}</td><td>${c.unit}</td><td>${c.title}</td><td><span class="badge badge-type">${c.type==='video'?'🎥 فيديو':'📄 ملزمة'}</span></td><td><button class="action-btn btn-delete" onclick="deleteContent('${doc.id}')">🗑️ حذف</button></td></tr>`;
                 }).join('');
             });
         }
+        function deleteContent(id) { if(confirm("⚠️ متأكد؟")) { db.collection("contents").doc(id).delete(); } }
 
-        function deleteContent(id) {
-            if(confirm("⚠️ هل تريد حذف هذا الدرس/الملزمة نهائياً من الأرشيف؟")) {
-                db.collection("contents").doc(id).delete();
+        // ==========================================
+        // 📝 إدارة وبناء الاختبارات الإلكترونية ذكياً ويدوياً
+        // ==========================================
+        function addQuestionToCurrentExam() {
+            const text = document.getElementById("qTextInput").value.trim();
+            const type = document.getElementById("qTypeSelect").value;
+            if(!text) { alert("⚠️ اكتب نص السؤال أولاً!"); return; }
+
+            let questionObj = { type: type, questionText: text };
+
+            if(type === "mcq") {
+                const o1 = document.getElementById("opt1").value.trim();
+                const o2 = document.getElementById("opt2").value.trim();
+                const o3 = document.getElementById("opt3").value.trim();
+                const o4 = document.getElementById("opt4").value.trim();
+                const ans = parseInt(document.getElementById("qMcqCorrectSelect").value);
+                if(!o1 || !o2) { alert("⚠️ أدخل خيارين على الأقل للاختياري!"); return; }
+                questionObj.options = [o1, o2, o3, o4].filter(o => o !== "");
+                questionObj.ans = ans;
+            } else {
+                const ans = document.getElementById("qAnswerInput").value.trim();
+                questionObj.ans = ans || "Review by Master";
             }
+
+            currentExamQuestions.push(questionObj);
+            renderAddedQuestionsList();
+
+            // تفريغ المدخلات للسؤال القادم
+            document.getElementById("qTextInput").value = "";
+            document.getElementById("opt1").value = ""; document.getElementById("opt2").value = "";
+            document.getElementById("opt3").value = ""; document.getElementById("opt4").value = "";
+            document.getElementById("qAnswerInput").value = "";
+        }
+
+        function renderAddedQuestionsList() {
+            const container = document.getElementById("addedQuestionsList");
+            if(currentExamQuestions.length === 0) {
+                container.innerHTML = "<p style='color:#95a5a6; font-size:13px;'>لم تقم بإضافة أي أسئلة لهذا الاختبار بعد.</p>";
+                return;
+            }
+            container.innerHTML = currentExamQuestions.map((q, idx) => `
+                <div style="background:#f8f9fa; padding:12px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid var(--teal);">
+                    <div>
+                        <strong>سؤال ${idx+1} (${q.type==='mcq'?'اختياري':q.type==='fill'?'أكمل':'مقالي'}):</strong> ${q.questionText}
+                    </div>
+                    <button class="action-btn btn-delete" onclick="removeQuestion(${idx})" style="padding:4px 8px;">❌</button>
+                </div>
+            `).join('');
+        }
+
+        function removeQuestion(idx) { currentExamQuestions.splice(idx, 1); renderAddedQuestionsList(); }
+
+        function saveFullExamToFirestore() {
+            const title = document.getElementById("examTitleInput").value.trim();
+            const gradeId = document.getElementById("examGradeSelect").value;
+            const gradeName = document.getElementById("examGradeSelect").options[document.getElementById("examGradeSelect").selectedIndex]?.text;
+            const unit = document.getElementById("examUnitInput").value.trim();
+
+            if(!title || !gradeId) { alert("⚠️ يرجى كتابة عنوان الامتحان واختيار الصف الدراسي!"); return; }
+            if(currentExamQuestions.length === 0) { alert("⚠️ أضف سؤالاً واحداً على الأقل قبل الحفظ!"); return; }
+
+            db.collection("exams").add({
+                title, gradeId, gradeName, unit,
+                questions: currentExamQuestions,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert("🎉 مبروك يا مستر! تم حفظ ونشر الاختبار الإلكتروني بنجاح في حسابات الطلاب!");
+                document.getElementById("examTitleInput").value = ""; document.getElementById("examUnitInput").value = "";
+                currentExamQuestions = []; renderAddedQuestionsList();
+                switchView('examsManagerView', document.querySelector('.nav-menu li:nth-child(5)'), '🗂️ إدارة الاختبارات الإلكترونية');
+            });
+        }
+
+        function loadAllExams() {
+            db.collection("exams").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                const tbody = document.getElementById("examsTableBody");
+                if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>لا توجد اختبارات منشورة حالياً!</td></tr>"; return; }
+                tbody.innerHTML = snapshot.docs.map(doc => {
+                    let e = doc.data();
+                    return `<tr><td>${e.title}</td><td>${e.gradeName}</td><td>${e.unit || 'عام'}</td><td><span class="badge">منشور ✅</span></td><td><button class="action-btn btn-delete" onclick="deleteExam('${doc.id}')">🗑️ حذف</button></td></tr>`;
+                }).join('');
+            });
+        }
+        function deleteExam(id) { if(confirm("⚠️ هل تريد حذف هذا الاختبار بالكامل؟")) { db.collection("exams").doc(id).delete(); } }
+
+        // محاكاة توليد الذكاء الاصطناعي ونقل الأسئلة للتبويب اليدوي
+        function generateExamWithAISimulation() {
+            const prompt = document.getElementById("aiPromptTextarea").value.trim();
+            if(!prompt) { alert("⚠️ يرجى كتابة وصف الاختبار أولاً!"); return; }
+            const btn = document.getElementById("aiGenBtn");
+            btn.innerText = "🤖 جاري التفكير وتوليد الأسئلة السحرية... ⏳"; btn.disabled = true;
+
+            setTimeout(() => {
+                let sampleAIQuestions = [
+                    { type: "mcq", questionText: "Choose: We can see valuable things in the ......", options: ["museum", "cinema", "park", "zoo"], ans: 0 },
+                    { type: "fill", questionText: "Complete: The Ancient Egyptians built the ......", ans: "pyramids" },
+                    { type: "text", questionText: "Write a paragraph on: 'A visit to the Grand Egyptian Museum'", ans: "Review by Master" }
+                ];
+                currentExamQuestions = currentExamQuestions.concat(sampleAIQuestions);
+                renderAddedQuestionsList();
+                if(!document.getElementById("examTitleInput").value) document.getElementById("examTitleInput").value = "AI Generated Quiz";
+                
+                alert("✨ نجاح! قام الذكاء الاصطناعي بتوليد 3 أسئلة نموذجية ونقلها لعلامة التبويب اليدوية بنجاح. راجعها الآن واعتمدها!");
+                btn.innerText = "✨ توليد الاختبار السحري"; btn.disabled = false;
+                document.getElementById("aiPromptTextarea").value = "";
+                switchInnerTab('manualTab', document.querySelector('.tab-btn'));
+            }, 2000);
         }
 
         // ==========================================
-        // 📊 الكود القديم الخاص بجلب نتائج الطلاب
+        // 📊 نتائج الطلاب القديمة
         // ==========================================
         function loadAllStudentResults() {
             db.collection("exam_results").get().then((querySnapshot) => {
@@ -393,13 +584,7 @@
             const tbody = document.getElementById("adminTableBody");
             tbody.innerHTML = dataArray.map(data => {
                 let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                let formattedDate = dateObj.toLocaleDateString('ar-EG');
-                return `<tr>
-                    <td><div style="font-weight:900;color:#2c3e50;">${data.name}</div><div style="font-size:11px;color:#95a5a6;">${data.email}</div></td>
-                    <td style="font-weight:bold;">${data.examName}</td>
-                    <td style="color:#7f8c8d;">${formattedDate}</td>
-                    <td><span class="badge">${data.score}</span></td>
-                </tr>`;
+                return `<tr><td><div style="font-weight:900;color:#2c3e50;">${data.name}</div><div style="font-size:11px;color:#95a5a6;">${data.email}</div></td><td style="font-weight:bold;">${data.examName}</td><td style="color:#7f8c8d;">${dateObj.toLocaleDateString('ar-EG')}</td><td><span class="badge">${data.score}</span></td></tr>`;
             }).join('');
         }
 
