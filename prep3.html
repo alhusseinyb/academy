@@ -8,6 +8,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
 
     <style>
         /* شريط المستخدم العلوي */
@@ -343,6 +344,18 @@
 
         var btn = document.getElementById("submitBtn");
         btn.innerText = "جاري الإرسال لتقييم المستر..."; btn.disabled = true;
+        // ======= كود إرسال الدرجة للوحة تحكم الطالب =======
+        if (firebase.auth().currentUser) {
+            firebase.firestore().collection("exam_results").add({
+                name: currentStudent,
+                email: firebase.auth().currentUser.email,
+                examName: activeExam.title,
+                score: score + " / " + total,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => console.log("تم إرسال النتيجة للوحة التحكم"))
+              .catch((e) => console.log("خطأ في حفظ النتيجة:", e));
+        }
+        // ====================================================
 
         // إرسال التقرير التفصيلي بدلاً من الجملة الثابتة
         fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({name: currentStudent, exam: activeExam.title, score: score+"/"+total, report: reportForDocs}) })
