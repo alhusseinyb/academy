@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كبسولة الترحيل | أكاديمية الحسيني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background: #2c3e50; color: white; padding: 40px; display: flex; justify-content: center; }
+        .container { background: white; color: #2c3e50; padding: 30px; border-radius: 15px; width: 100%; max-width: 700px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: #e74c3c; margin-top: 0; text-align: center; }
+        label { font-weight: bold; display: block; margin: 15px 0 5px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 2px solid #bdc3c7; border-radius: 8px; box-sizing: border-box; font-family: 'Tajawal'; font-size: 14px; direction: ltr; }
+        textarea { resize: vertical; }
+        .btn { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; font-weight: bold; font-family: 'Tajawal'; border-radius: 8px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn:hover { background: #2ecc71; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🚀 كبسولة الترحيل للامتحانات القديمة</h2>
+        <p style="text-align: center; color: #7f8c8d; font-size: 14px;">هذه الأداة مؤقتة لنقل امتحاناتك القديمة من كود JS إلى قاعدة بيانات Firestore.</p>
+
+        <label>1. اختر الصف الدراسي للامتحان:</label>
+        <select id="gradeSelect" dir="rtl"><option value="">جاري تحميل الصفوف...</option></select>
+
+        <label>2. اسم الامتحان (مثال: Unit 1 Quiz):</label>
+        <input type="text" id="examTitle" placeholder="Unit 1 Quiz" dir="rtl">
+
+        <label>3. الوحدة / التصنيف:</label>
+        <input type="text" id="examUnit" placeholder="Unit 1" dir="rtl">
+
+        <label>4. الصق مصفوفة الأسئلة القديمة هنا (الكود القديم):</label>
+        <p style="font-size: 12px; color: #95a5a6; margin-top: 0; direction: rtl;">مثال: [ {question: "...", a: "...", b: "...", c: "...", d: "...", correct: "a"} ]</p>
+        <textarea id="oldArrayData" rows="10" placeholder="[
+    {
+        question: 'What is the capital of Egypt?',
+        a: 'Cairo',
+        b: 'Alexandria',
+        c: 'Aswan',
+        d: 'Luxor',
+        correct: 'a'
+    }
+]"></textarea>
+
+        <button class="btn" onclick="migrateExam()">💾 ترحيل الامتحان للخزنة فوراً</button>
+        <div id="statusMsg" style="text-align: center; margin-top: 15px; font-weight: bold;"></div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+            authDomain: "alhusseiny-academy.firebaseapp.com",
+            projectId: "alhusseiny-academy",
+            storageBucket: "alhusseiny-academy.firebasestorage.app",
+            messagingSenderId: "1048097240090",
+            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // تحميل الصفوف
+        db.collection("grades").get().then((snapshot) => {
+            const select = document.getElementById("gradeSelect");
+            let html = "<option value=''>-- اختر الصف --</option>";
+            snapshot.forEach(doc => { html += `<option value="${doc.id}">${doc.data().name}</option>`; });
+            select.innerHTML = html;
+        });
+
+        function migrateExam() {
+            const gradeId = document.getElementById("gradeSelect").value;
+            const gradeName = document.getElementById("gradeSelect").options[document.getElementById("gradeSelect").selectedIndex]?.text;
+            const title = document.getElementById("examTitle").value.trim();
+            const unit = document.getElementById("examUnit").value.trim();
+            const rawData = document.getElementById("oldArrayData").value.trim();
+            const msg = document.getElementById("statusMsg");
+
+            if(!gradeId || !title || !rawData) {
+                msg.innerHTML = "<span style='color:#c0392b;'>⚠️ يرجى ملء جميع البيانات ولصق الكود!</span>"; return;
+            }
+
+            try {
+                // تحويل النص البرمجي القديم إلى مصفوفة فعلية باستخدام Function (آمن من eval نسبياً)
+                const getOldArray = new Function("return " + rawData);
+                const oldQuestions = getOldArray();
+
+                // عملية التحويل للنظام الجديد الذكي
+                const newQuestionsFormat = oldQuestions.map(q => {
+                    let ansIndex = 0;
+                    let correctVal = q.correct.toLowerCase().trim();
+                    if(correctVal === 'a') ansIndex = 0;
+                    else if(correctVal === 'b') ansIndex = 1;
+                    else if(correctVal === 'c') ansIndex = 2;
+                    else if(correctVal === 'd') ansIndex = 3;
+                    
+                    return {
+                        type: "mcq",
+                        questionText: q.question,
+                        options: [q.a, q.b, q.c, q.d],
+                        ans: ansIndex
+                    };
+                });
+
+                // الحفظ في الخزنة
+                db.collection("exams").add({
+                    title: title,
+                    gradeId: gradeId,
+                    gradeName: gradeName,
+                    unit: unit || "عام",
+                    questions: newQuestionsFormat,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    msg.innerHTML = "<span style='color:#27ae60;'>✅ تم ترحيل الامتحان بنجاح! يمكنك لصق الامتحان التالي.</span>";
+                    document.getElementById("examTitle").value = "";
+                    document.getElementById("oldArrayData").value = "";
+                });
+
+            } catch(e) {
+                msg.innerHTML = `<span style='color:#c0392b;'>❌ حدث خطأ في قراءة الكود. تأكد من نسخ المصفوفة بشكل صحيح: ${e.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
