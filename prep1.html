@@ -6,6 +6,13 @@
     <title>منصة الصف الأول الإعدادي | مستر الحسيني يحيى</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+/* شريط المستخدم العلوي */
+.top-bar { background: #0d1f1a; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+.user-info { font-weight: bold; color: #f5c842; }
+.auth-btn { background: #e67e22; color: white; text-decoration: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-family: 'Tajawal'; }
+.auth-btn:hover { background: #d35400; }
+.auth-btn.logout { background: #c0392b; }
+.auth-btn.logout:hover { background: #922b21; }
         :root { --primary: #27ae60; --secondary: #2ecc71; --accent: #e67e22; --success: #2980b9; --danger: #c0392b; --bg: #ecf0f1; --card-bg: #ffffff; --text: #2c3e50; }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         header { background: linear-gradient(to right, var(--primary), var(--secondary)); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
@@ -45,33 +52,42 @@
   messagingSenderId: "1048097240090",
   appId: "1:1048097240090:web:931635cccdb05213fd4da3"
 };
-        firebase.initializeApp(firebaseConfig);
+     let studentName = ""; // متغير لحفظ اسم الطالب
 
-        // حارس الأمن: طرد أي شخص غير مسجل
+        // حارس الأمن وجلب الاسم
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
-                window.location.href = "login.html"; // تحويله لبوابة الدخول فوراً
+                window.location.href = "login.html"; // طرد غير المسجل
+            } else {
+                // إذا كان مسجلاً، نأخذ اسمه ونعرضه في الهيدر
+                studentName = user.displayName || "طالب الأكاديمية";
+                document.getElementById('userInfo').innerHTML = `👋 أهلاً بك، ${studentName}`;
+                
+                // هنا تقوم بإخفاء شاشة التحميل وإظهار قائمة الامتحانات 
+                // (استدعِ الدالة التي كانت تعمل بعد ضغط زر "دخول المنصة" القديم)
+                // مثال: document.getElementById('exams-list').style.display = 'block';
             }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(() => { window.location.href = "index.html"; });
+        }
         });
     </script>
 </head>
 <body>
 
+<div class="top-bar">
+        <div id="userInfo" class="user-info">جاري التحميل...</div>
+        <button onclick="logout()" class="auth-btn logout">تسجيل الخروج</button>
+    </div>
 <header>
     <a href="index.html" class="home-btn">🏠 الرئيسية</a>
     <h1>الصف الأول الإعدادي - Prep 1</h1>
     <p style="background-color: var(--accent); display: inline-block; padding: 5px 20px; border-radius: 20px; font-weight: bold;">مستر الحسيني يحيى</p>
 </header>
 
-<div class="main-content">
-    <div class="container" id="loginScreen">
-        <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <h2>مرحباً بك يا بطل! 🚀</h2>
-            <p>أدخل اسمك الثلاثي لفتح الاختبارات:</p>
-            <input type="text" id="studentName" placeholder="اكتب اسمك هنا...">
-            <button onclick="startApp()">دخول المنصة</button>
-        </div>
-    </div>
+
 
     <div class="container" id="mainMenu" style="display: none;">
         <div style="background: #e8f8f5; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 2px dashed var(--secondary);">

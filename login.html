@@ -196,6 +196,7 @@
     }
 
     // إنشاء حساب إيميل يدوي
+  // إنشاء حساب إيميل يدوي مع إرسال رسالة تحقق
     function registerUser() {
         const name = document.getElementById('regName').value.trim();
         const email = document.getElementById('regEmail').value.trim();
@@ -207,6 +208,37 @@
             msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى ملء جميع البيانات!</span>";
             return;
         }
+
+        if(!checkPasswordStrength()) {
+            msgDiv.innerHTML = "<span class='msg-error'>❌ يرجى إكمال جميع شروط كلمة المرور!</span>";
+            return;
+        }
+
+        btn.innerText = "جاري إنشاء الحساب..."; btn.disabled = true;
+
+        auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // تحديث اسم المستخدم
+            return userCredential.user.updateProfile({ displayName: name })
+            .then(() => {
+                // إرسال رسالة التحقق للإيميل
+                return userCredential.user.sendEmailVerification();
+            });
+        })
+        .then(() => {
+            // تسجيل الخروج فوراً حتى لا يدخل قبل التفعيل
+            auth.signOut(); 
+            msgDiv.innerHTML = "<span class='msg-success'>✅ تم الحساب! تم إرسال رابط تفعيل إلى إيميلك. يرجى تفعيل الحساب ثم تسجيل الدخول.</span>";
+            btn.innerText = "إنشاء حسابي"; btn.disabled = false;
+            setTimeout(() => { switchTab('login'); }, 4000); // إعادته لصفحة الدخول
+        })
+        .catch((error) => {
+            btn.innerText = "إنشاء حسابي"; btn.disabled = false;
+            let errorText = "حدث خطأ!";
+            if(error.code === 'auth/email-already-in-use') errorText = "هذا الإيميل مسجل مسبقاً!";
+            msgDiv.innerHTML = `<span class='msg-error'>❌ ${errorText}</span>`;
+        });
+    }
 
         // استخدام الدالة التفاعلية للتأكد من قوة الباسورد قبل الإرسال
         if(!checkPasswordStrength()) {
