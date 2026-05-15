@@ -126,21 +126,21 @@
 
 <script>
     // ==========================================
-    // ⚠️ ضع كود الـ firebaseConfig الخاص بك هنا بالكامل!
-  const firebaseConfig = {
-  apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-  authDomain: "alhusseiny-academy.firebaseapp.com",
-  projectId: "alhusseiny-academy",
-  storageBucket: "alhusseiny-academy.firebasestorage.app",
-  messagingSenderId: "1048097240090",
-  appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-};
+    // مفتاحك السري (مضبوط وجاهز)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+      authDomain: "alhusseiny-academy.firebaseapp.com",
+      projectId: "alhusseiny-academy",
+      storageBucket: "alhusseiny-academy.firebasestorage.app",
+      messagingSenderId: "1048097240090",
+      appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+    };
     // ==========================================
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // التبديل بين الدخول وإنشاء الحساب بوضوح شديد
+    // التبديل بين الدخول وإنشاء الحساب
     function switchTab(tab) {
         document.querySelectorAll('.form-box').forEach(f => f.classList.remove('active'));
         
@@ -153,11 +153,11 @@
             document.getElementById('registerForm').classList.add('active');
             document.getElementById('formTitle').innerText = "إنشاء حساب جديد";
             document.getElementById('formDesc').innerText = "انضم إلينا الآن في أقل من دقيقة";
-            document.getElementById('headerBox').style.background = "var(--accent)"; // تغيير اللون لتمييز الشاشة
+            document.getElementById('headerBox').style.background = "var(--accent)"; 
         }
     }
 
-    // دالة التحقق التفاعلي من كلمة المرور (Real-time Validator)
+    // التحقق من قوة الباسورد
     function updateCrit(id, isValid) {
         const li = document.getElementById(id);
         const icon = li.querySelector('.icon');
@@ -179,7 +179,6 @@
         const v4 = updateCrit('req-number', /[0-9]/.test(val));
         const v5 = updateCrit('req-symbol', /[^a-zA-Z0-9]/.test(val));
         
-        // إرجاع true فقط إذا تحققت كل الشروط
         return (v1 && v2 && v3 && v4 && v5);
     }
 
@@ -195,8 +194,7 @@
         });
     }
 
-    // إنشاء حساب إيميل يدوي
-  // إنشاء حساب إيميل يدوي مع إرسال رسالة تحقق
+    // إنشاء حساب جديد وإرسال التفعيل
     function registerUser() {
         const name = document.getElementById('regName').value.trim();
         const email = document.getElementById('regEmail').value.trim();
@@ -210,7 +208,7 @@
         }
 
         if(!checkPasswordStrength()) {
-            msgDiv.innerHTML = "<span class='msg-error'>❌ يرجى إكمال جميع شروط كلمة المرور!</span>";
+            msgDiv.innerHTML = "<span class='msg-error'>❌ يرجى إكمال جميع شروط كلمة المرور الموضحة بالأعلى!</span>";
             return;
         }
 
@@ -228,33 +226,9 @@
         .then(() => {
             // تسجيل الخروج فوراً حتى لا يدخل قبل التفعيل
             auth.signOut(); 
-            msgDiv.innerHTML = "<span class='msg-success'>✅ تم الحساب! تم إرسال رابط تفعيل إلى إيميلك. يرجى تفعيل الحساب ثم تسجيل الدخول.</span>";
+            msgDiv.innerHTML = "<span class='msg-success'>✅ تم الحساب بنجاح! تم إرسال رابط تفعيل إلى إيميلك. يرجى تفعيل الحساب ثم تسجيل الدخول.</span>";
             btn.innerText = "إنشاء حسابي"; btn.disabled = false;
-            setTimeout(() => { switchTab('login'); }, 4000); // إعادته لصفحة الدخول
-        })
-        .catch((error) => {
-            btn.innerText = "إنشاء حسابي"; btn.disabled = false;
-            let errorText = "حدث خطأ!";
-            if(error.code === 'auth/email-already-in-use') errorText = "هذا الإيميل مسجل مسبقاً!";
-            msgDiv.innerHTML = `<span class='msg-error'>❌ ${errorText}</span>`;
-        });
-    }
-
-        // استخدام الدالة التفاعلية للتأكد من قوة الباسورد قبل الإرسال
-        if(!checkPasswordStrength()) {
-            msgDiv.innerHTML = "<span class='msg-error'>❌ يرجى إكمال جميع شروط كلمة المرور الموضحة بالأعلى!</span>";
-            return;
-        }
-
-        btn.innerText = "جاري إنشاء الحساب..."; btn.disabled = true;
-
-        auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            return userCredential.user.updateProfile({ displayName: name });
-        })
-        .then(() => {
-            msgDiv.innerHTML = "<span class='msg-success'>✅ تم إنشاء حسابك بنجاح! جاري تحويلك...</span>";
-            setTimeout(() => { window.location.href = "index.html"; }, 2000);
+            setTimeout(() => { switchTab('login'); }, 5000); // إعادته لصفحة الدخول بعد 5 ثواني
         })
         .catch((error) => {
             btn.innerText = "إنشاء حسابي"; btn.disabled = false;
@@ -280,8 +254,15 @@
 
         auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            msgDiv.innerHTML = "<span class='msg-success'>✅ أهلاً بك من جديد! جاري التحويل...</span>";
-            setTimeout(() => { window.location.href = "index.html"; }, 1500);
+            // التحقق هل الإيميل مفعل أم لا (لا ينطبق على حسابات جوجل)
+            if(!userCredential.user.emailVerified) {
+                auth.signOut(); // طرده لو مفعلش
+                msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى تفعيل حسابك أولاً من الرابط الذي أرسلناه إلى إيميلك!</span>";
+                btn.innerText = "دخول"; btn.disabled = false;
+            } else {
+                msgDiv.innerHTML = "<span class='msg-success'>✅ أهلاً بك من جديد! جاري التحويل...</span>";
+                setTimeout(() => { window.location.href = "index.html"; }, 1500);
+            }
         })
         .catch((error) => {
             btn.innerText = "دخول"; btn.disabled = false;
