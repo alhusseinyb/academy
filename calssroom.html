@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قاعة المحاضرات | أكاديمية مستر الحسيني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { 
+            --primary: #2c3e50; --secondary: #34495e; --accent: #e67e22; 
+            --teal: #0a7c6e; --bg: #f4f7f6; --white: #ffffff; --text: #2c3e50; 
+        }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: 900; font-size: 1.5em; display: flex; align-items: center; gap: 10px; }
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.5); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; cursor: pointer; }
+        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+        .user-greeting { font-weight: bold; color: #f1c40f; }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+
+        /* شاشات الـ SPA */
+        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* شاشة اختيار الصفوف */
+        .grades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .grade-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 5px solid var(--accent); cursor: pointer; transition: 0.3s; }
+        .grade-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .grade-card h3 { color: var(--primary); font-size: 1.5em; margin: 10px 0; }
+        .grade-icon { font-size: 50px; }
+
+        /* شاشة محتوى الصف */
+        .page-title-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .unit-box { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-right: 5px solid var(--teal); }
+        .unit-title { font-size: 1.3em; font-weight: 900; color: var(--secondary); margin-top: 0; margin-bottom: 15px; }
+        
+        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; text-decoration: none; color: var(--text); }
+        .content-item:hover { background: #f4f7f6; transform: translateX(-5px); }
+        .content-info { display: flex; align-items: center; gap: 15px; font-weight: bold; }
+        .icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; color: white; }
+        .bg-video { background: #e74c3c; } .bg-pdf { background: #3498db; } .bg-exam { background: #f39c12; }
+        
+        .btn-action { background: var(--teal); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Tajawal'; }
+
+        /* شاشة الاختبار (الامتحان) */
+        .exam-header { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; border: 2px dashed var(--accent); }
+        .question-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); direction: ltr; text-align: left; }
+        .question-text { font-size: 1.2em; font-weight: bold; color: var(--primary); margin-bottom: 15px; }
+        
+        .options-grid { display: grid; gap: 10px; }
+        .option-label { background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #dee2e6; cursor: pointer; font-size: 16px; transition: 0.3s; display: block; }
+        .option-label:hover { background: #eef2f5; }
+        
+        .input-text, .input-textarea { width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Tajawal'; box-sizing: border-box; }
+        .input-textarea { resize: vertical; min-height: 100px; }
+        
+        .btn-submit-exam { background: #27ae60; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; font-family: 'Tajawal'; }
+        .btn-submit-exam:hover { background: #2ecc71; }
+
+        /* شاشة النتيجة */
+        .result-box { text-align: center; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: #eafaf1; color: #27ae60; display: flex; justify-content: center; align-items: center; font-size: 3em; font-weight: 900; margin: 0 auto 20px; border: 5px solid #2ecc71; }
+
+        footer { text-align: center; padding: 30px; color: #95a5a6; font-size: 13px; background: white; margin-top: auto; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">👑 قاعة المحاضرات</div>
+        <div class="nav-actions">
+            <span class="user-greeting" id="userInfo">جاري التحميل...</span>
+            <a href="dashboard.html" class="btn-outline">📊 لوحة تحكمي</a>
+            <button class="btn-outline" style="border-color: #e74c3c; color: #e74c3c;" onclick="logout()">خروج</button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <section id="gradesView" class="view-section active">
+            <div style="text-align: center;">
+                <h2 style="color: var(--primary); font-size: 2em; margin-bottom: 5px;">أهلاً بك في منصة التعلم الذكية 🎓</h2>
+                <p style="color: #7f8c8d; font-size: 16px;">اختر مرحلتك الدراسية أو الكورس الخاص بك للبدء</p>
+            </div>
+            <div class="grades-grid" id="gradesContainer">
+                <div style="text-align: center; grid-column: 1 / -1; padding: 50px;">⏳ جاري تحميل الصفوف المتاحة...</div>
+            </div>
+        </section>
+
+        <section id="contentView" class="view-section">
+            <div class="page-title-box">
+                <h2 id="selectedGradeTitle" style="color: var(--primary); margin: 0;">--</h2>
+                <button class="btn-outline" style="color: var(--text); border-color: #ccc;" onclick="switchView('gradesView')">🔙 عودة للصفوف</button>
+            </div>
+            <div id="unitsContainer">
+                <div style="text-align: center; padding: 50px;">⏳ جاري جلب الدروس والامتحانات...</div>
+            </div>
+        </section>
+
+        <section id="examView" class="view-section">
+            <div class="exam-header">
+                <h2 id="activeExamTitle" style="color: var(--primary); margin: 0 0 10px;">--</h2>
+                <p style="color: #7f8c8d; margin: 0;">أجب على جميع الأسئلة بتركيز. بالتوفيق! 🎯</p>
+            </div>
+            <div id="questionsContainer"></div>
+            <button class="btn-submit-exam" onclick="finishExam()" id="submitBtn">✔️ إنهاء الاختبار وإرسال الإجابات</button>
+            <button class="btn-outline" style="color: #7f8c8d; border-color: #ccc; margin-top: 15px; width: 100%;" onclick="switchView('contentView')">❌ إلغاء والعودة</button>
+        </section>
+
+        <section id="resultView" class="view-section">
+            <div class="result-box">
+                <h2>تم تسليم إجاباتك بنجاح! 🎉</h2>
+                <div class="score-circle" id="finalScoreDisplay">0/0</div>
+                <p style="color: #7f8c8d; font-size: 16px; line-height: 1.6;">تم إرسال نتيجتك لغرفة عمليات المستر.<br>يمكنك دائماً مراجعة جميع درجاتك من خلال <a href="dashboard.html" style="color: var(--teal); font-weight: bold;">لوحة تحكمك</a>.</p>
+                <button class="btn-action" style="margin-top: 20px; font-size: 18px;" onclick="switchView('contentView')">🔙 العودة لقائمة الدروس</button>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
+
+    <script>
+        // ======= كود الربط بالخزنة =======
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+            authDomain: "alhusseiny-academy.firebaseapp.com",
+            projectId: "alhusseiny-academy",
+            storageBucket: "alhusseiny-academy.firebasestorage.app",
+            messagingSenderId: "1048097240090",
+            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentStudentName = "";
+        let currentStudentEmail = "";
+        let activeExamData = null; // سيحفظ بيانات الامتحان المفتوح حالياً
+
+        // 1. حارس الأمن
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentStudentName = user.displayName || "طالب الأكاديمية";
+                currentStudentEmail = user.email;
+                document.getElementById('userInfo').innerText = `👋 أهلاً بك، ${currentStudentName}`;
+                loadGrades(); // بمجرد الدخول، اسحب الصفوف الدراسية
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // نظام التنقل السريع بين الشاشات
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // ==========================================
+        // 🗂️ سحب الصفوف وعرضها
+        // ==========================================
+        function loadGrades() {
+            db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => {
+                const container = document.getElementById("gradesContainer");
+                if(snapshot.empty) {
+                    container.innerHTML = "<div style='grid-column: 1/-1; text-align:center;'>لا توجد صفوف دراسية متاحة حالياً.</div>";
+                    return;
+                }
+                container.innerHTML = snapshot.docs.map(doc => {
+                    let g = doc.data();
+                    return `
+                        <div class="grade-card" onclick="openGrade('${doc.id}', '${g.name}')">
+                            <div class="grade-icon">📁</div>
+                            <h3>${g.name}</h3>
+                            <p style="color: #7f8c8d; font-size:14px; margin:0;">اضغط لاستعراض الدروس والامتحانات</p>
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+
+        // ==========================================
+        // 📚 سحب محتوى الصف (دروس + امتحانات) وتجميعها بالوحدات
+        // ==========================================
+        function openGrade(gradeId, gradeName) {
+            document.getElementById("selectedGradeTitle").innerText = `📚 ${gradeName}`;
+            document.getElementById("unitsContainer").innerHTML = "<div style='text-align:center; padding:50px;'>جاري جلب المحتوى... ⏳</div>";
+            switchView('contentView');
+
+            // هنجيب المحتوى العادي (فيديوهات و PDF)
+            let contentsPromise = db.collection("contents").where("gradeId", "==", gradeId).get();
+            // وهنجيب الامتحانات الذكية
+            let examsPromise = db.collection("exams").where("gradeId", "==", gradeId).get();
+
+            Promise.all([contentsPromise, examsPromise]).then((results) => {
+                let allItems = [];
+
+                // معالجة المحتوى العادي
+                results[0].forEach(doc => {
+                    let d = doc.data();
+                    allItems.push({ id: doc.id, unit: d.unit || 'عام', title: d.title, type: d.type, url: d.url });
+                });
+
+                // معالجة الامتحانات
+                results[1].forEach(doc => {
+                    let e = doc.data();
+                    allItems.push({ id: doc.id, unit: e.unit || 'عام', title: e.title, type: 'exam', examData: e });
+                });
+
+                renderUnits(allItems);
+            }).catch(e => {
+                document.getElementById("unitsContainer").innerHTML = "<div style='text-align:center; color:red;'>خطأ في جلب البيانات!</div>";
+            });
+        }
+
+        // دالة لترتيب المحتوى في صناديق (Units)
+        function renderUnits(items) {
+            const container = document.getElementById("unitsContainer");
+            if(items.length === 0) {
+                container.innerHTML = "<div style='text-align:center; padding:50px;'>هذا الصف لا يحتوي على دروس أو اختبارات حالياً.</div>";
+                return;
+            }
+
+            // تجميع العناصر حسب الوحدة (Unit)
+            let grouped = {};
+            items.forEach(item => {
+                if(!grouped[item.unit]) grouped[item.unit] = [];
+                grouped[item.unit].push(item);
+            });
+
+            let html = "";
+            for(let unit in grouped) {
+                html += `<div class="unit-box"><h3 class="unit-title">🔖 ${unit}</h3>`;
+                grouped[unit].forEach(item => {
+                    if(item.type === 'video') {
+                        html += `<a href="${item.url}" target="_blank" class="content-item">
+                                    <div class="content-info"><div class="icon-circle bg-video">🎥</div> ${item.title}</div>
+                                    <span class="btn-action">مشاهدة</span>
+                                 </a>`;
+                    } else if(item.type === 'pdf') {
+                        html += `<a href="${item.url}" target="_blank" class="content-item">
+                                    <div class="content-info"><div class="icon-circle bg-pdf">📄</div> ${item.title}</div>
+                                    <span class="btn-action">تحميل / قراءة</span>
+                                 </a>`;
+                    } else if(item.type === 'exam') {
+                        // تمرير كائن الامتحان كـ String (بعد تحويله عشان ميبوظش الـ HTML)
+                        let encodedData = encodeURIComponent(JSON.stringify(item.examData));
+                        html += `<div class="content-item" style="cursor:pointer;" onclick="startExam('${encodedData}')">
+                                    <div class="content-info"><div class="icon-circle bg-exam">📝</div> ${item.title}</div>
+                                    <span class="btn-action" style="background:#e67e22;">ابدأ الاختبار</span>
+                                 </div>`;
+                    }
+                });
+                html += `</div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        // ==========================================
+        // 📝 نظام تشغيل الامتحان الديناميكي الذكي
+        // ==========================================
+        function startExam(encodedExamData) {
+            activeExamData = JSON.parse(decodeURIComponent(encodedExamData));
+            document.getElementById("activeExamTitle").innerText = activeExamData.title;
+            
+            let questionsHtml = "";
+            
+            activeExamData.questions.forEach((q, i) => {
+                questionsHtml += `<div class="question-card" id="qBox_${i}">`;
+                questionsHtml += `<div class="question-text">${i+1}. ${q.questionText}</div>`;
+                
+                if(q.type === 'mcq') {
+                    questionsHtml += `<div class="options-grid req-answer" data-type="mcq" data-index="${i}">`;
+                    q.options.forEach((opt, optIdx) => {
+                        questionsHtml += `<label class="option-label">
+                            <input type="radio" name="q_${i}" value="${optIdx}"> ${opt}
+                        </label>`;
+                    });
+                    questionsHtml += `</div>`;
+                } 
+                else if(q.type === 'fill') {
+                    questionsHtml += `<input type="text" class="input-text req-answer" data-type="fill" data-index="${i}" id="ans_${i}" placeholder="اكتب إجابتك هنا...">`;
+                } 
+                else if(q.type === 'text') {
+                    questionsHtml += `<textarea class="input-textarea req-answer" data-type="text" data-index="${i}" id="ans_${i}" placeholder="اكتب إجابتك المقالية أو البراجراف هنا..."></textarea>`;
+                }
+                questionsHtml += `</div>`;
+            });
+
+            document.getElementById("questionsContainer").innerHTML = questionsHtml;
+            document.getElementById("submitBtn").innerText = "✔️ إنهاء الاختبار وإرسال الإجابات";
+            document.getElementById("submitBtn").disabled = false;
+            switchView('examView');
+        }
+
+        // تصحيح الامتحان وحفظ النتيجة
+        function finishExam() {
+            let valid = true;
+            // تحقق من الإجابة على كل الأسئلة
+            document.querySelectorAll(".req-answer").forEach(el => {
+                let type = el.dataset.type;
+                let idx = el.dataset.index;
+                let box = document.getElementById(`qBox_${idx}`);
+                
+                if(type === 'mcq') {
+                    if(!document.querySelector(`input[name="q_${idx}"]:checked`)) { box.style.border = "2px solid red"; valid = false; }
+                    else { box.style.border = "none"; }
+                } else {
+                    if(!el.value.trim()) { el.style.borderColor = "red"; valid = false; }
+                    else { el.style.borderColor = "#bdc3c7"; }
+                }
+            });
+
+            if(!valid) { alert("⚠️ يرجى الإجابة على جميع الأسئلة المحددة باللون الأحمر!"); return; }
+
+            let score = 0;
+            let total = activeExamData.questions.length;
+
+            // التصحيح التلقائي
+            activeExamData.questions.forEach((q, i) => {
+                if(q.type === 'mcq') {
+                    let selected = parseInt(document.querySelector(`input[name="q_${i}"]:checked`).value);
+                    if(selected === q.ans) score++;
+                } 
+                else if(q.type === 'fill') {
+                    let studentAns = document.getElementById(`ans_${i}`).value.trim().toLowerCase();
+                    let modelAns = q.ans.trim().toLowerCase();
+                    if(studentAns === modelAns) score++;
+                }
+                else if(q.type === 'text') {
+                    // الأسئلة المقالية تعتبر صحيحة مبدئياً لحين مراجعة المستر
+                    score++; 
+                }
+            });
+
+            let finalScoreText = `${score} / ${total}`;
+            
+            let btn = document.getElementById("submitBtn");
+            btn.innerText = "جاري الحفظ والإرسال... ⏳";
+            btn.disabled = true;
+
+            // حفظ النتيجة في الخزنة
+            db.collection("exam_results").add({
+                name: currentStudentName,
+                email: currentStudentEmail,
+                examName: activeExamData.title,
+                score: finalScoreText,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                // عرض النتيجة
+                document.getElementById("finalScoreDisplay").innerText = finalScoreText;
+                switchView('resultView');
+            }).catch(e => {
+                alert("حدث خطأ أثناء الحفظ! " + e.message);
+                btn.innerText = "✔️ إنهاء الاختبار وإرسال الإجابات";
+                btn.disabled = false;
+            });
+        }
+
+        function logout() { auth.signOut().then(() => { window.location.href = "index.html"; }); }
+    </script>
+</body>
+</html>
