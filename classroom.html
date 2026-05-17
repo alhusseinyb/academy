@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قاعة المحاضرات | أكاديمية مستر الحسيني</title>
+    <title>قاعة المحاضرات الذكية | أكاديمية مستر الحسيني</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
@@ -22,7 +22,6 @@
         .nav-actions { display: flex; gap: 15px; align-items: center; }
         .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.5); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; cursor: pointer; }
         .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
-        .user-greeting { font-weight: bold; color: #f1c40f; }
 
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
 
@@ -30,53 +29,52 @@
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* شاشة اختيار الصفوف */
-        .grades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
-        .grade-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 5px solid var(--accent); cursor: pointer; transition: 0.3s; }
-        .grade-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .grade-card h3 { color: var(--primary); font-size: 1.5em; margin: 10px 0; }
-        .grade-icon { font-size: 50px; }
-
-        /* شاشة المحتوى */
+        /* شاشة المحتوى المخصصة */
         .page-title-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .unit-box { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-right: 5px solid var(--teal); }
         .unit-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-top: 0; margin-bottom: 15px; }
-        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; text-decoration: none; color: var(--text); cursor: pointer; }
+        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; cursor: pointer; }
         .content-item:hover { background: #f4f7f6; transform: translateX(-5px); border-color: var(--secondary); }
         .content-info { display: flex; align-items: center; gap: 15px; font-weight: bold; }
         .icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; color: white; }
         .bg-video { background: #e74c3c; } .bg-pdf { background: #3498db; } .bg-exam { background: #f39c12; }
         .btn-action { background: var(--teal); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Tajawal'; }
 
-        /* 🎥 شاشة السينما التعليمية (جديد) */
+        /* شاشة السينما والميديا */
         .media-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 12px 12px 0 0; border-bottom: 2px solid #eee; }
-        .media-header h2 { margin: 0; color: var(--primary); font-size: 1.3em; }
-        .media-container { background: #000; width: 100%; aspect-ratio: 16 / 9; border-radius: 0 0 12px 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .media-container { background: #000; width: 100%; aspect-ratio: 16 / 9; border-radius: 0 0 12px 12px; overflow: hidden; }
         .media-container iframe { width: 100%; height: 100%; border: none; }
         .pdf-container { aspect-ratio: auto; height: 80vh; background: #ecf0f1; }
 
-        /* شاشة الامتحان (المحرك الذكي المدمج) */
+        /* المحرك الذكي للامتحانات */
         .exam-header { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; border: 2px dashed var(--secondary); }
         .question-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .question-text { font-size: 1.2em; font-weight: bold; color: var(--primary); margin-bottom: 15px; line-height: 1.6; }
-        
         .option-btn { display: block; width: 100%; text-align: right; padding: 15px; margin: 10px 0; background: #f8f9fa; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-family: 'Tajawal'; font-size: 16px; transition: 0.2s; direction: ltr; }
         .option-btn:hover { background: #edf2f7; border-color: #cbd5e0; }
         .option-btn.selected { background: #e6fffa; border-color: var(--secondary); color: #006d5b; font-weight: bold; }
+        .input-text { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Tajawal'; box-sizing: border-box; direction: ltr; }
+        .btn-submit-exam { background: var(--secondary); color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; font-family: 'Tajawal'; }
         
-        .input-text { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Tajawal'; box-sizing: border-box; }
-        
-        .btn-submit-exam { background: var(--secondary); color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; transition: 0.3s; font-family: 'Tajawal'; }
-        .btn-submit-exam:hover { background: #128f76; }
         .progress-bar { width: 100%; background: #e2e8f0; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
         .progress-fill { background: var(--secondary); height: 100%; width: 0%; transition: 0.3s; }
 
-        /* شاشة المراجعة */
-        .review-item { padding: 15px; border-bottom: 1px solid #e2e8f0; background: white; margin-bottom: 10px; border-radius: 8px; }
-        .correct-ans { color: #27ae60; font-weight: bold; margin: 5px 0; }
-        .wrong-ans { color: #c0392b; font-weight: bold; margin: 5px 0; }
+        /* 🤖 الزر العائم للمدرس الذكي */
+        .floating-ai-btn { position: fixed; bottom: 30px; left: 30px; background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 15px 25px; border-radius: 50px; font-family: 'Tajawal'; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 10px 25px rgba(142, 68, 173, 0.4); border: none; z-index: 1000; display: flex; align-items: center; gap: 10px; transition: 0.3s; animation: bounce 2s infinite; }
+        .floating-ai-btn:hover { transform: scale(1.05); background: linear-gradient(135deg, #732d91, #8e44ad); }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
-        footer { text-align: center; padding: 30px; color: #95a5a6; font-size: 13px; background: white; margin-top: auto; border-top: 1px solid #eee; }
+        /* 🤖 نافذة المدرس الذكي المنبثقة */
+        .ai-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .ai-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .ai-modal-box { background: white; width: 95%; max-width: 800px; height: 85vh; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transform: scale(0.9); transition: 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .ai-modal-overlay.active .ai-modal-box { transform: scale(1); }
+        .ai-modal-header { background: #8e44ad; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .ai-modal-header h3 { margin: 0; display: flex; align-items: center; gap: 10px; }
+        .close-ai-modal { background: transparent; border: none; color: white; font-size: 28px; cursor: pointer; }
+        .ai-modal-body { flex: 1; width: 100%; }
+        .ai-modal-body iframe { width: 100%; height: 100%; border: none; }
+
     </style>
 </head>
 <body>
@@ -84,27 +82,23 @@
     <header>
         <div class="logo">👑 قاعة المحاضرات الشاملة</div>
         <div class="nav-actions">
-            <span class="user-greeting" id="userInfo">جاري التحميل...</span>
-            <a href="dashboard.html" class="btn-outline">📊 لوحة تحكمي</a>
+            <a href="dashboard.html" class="btn-outline">🔙 لوحة تحكمي</a>
         </div>
     </header>
 
     <div class="container">
         
-        <section id="gradesView" class="view-section active">
-            <div style="text-align: center;">
-                <h2 style="color: var(--primary); font-size: 2em; margin-bottom: 5px;">أهلاً بك في منصة التعلم الذكية 🎓</h2>
-                <p style="color: #7f8c8d; font-size: 16px;">اختر مرحلتك الدراسية أو الكورس الخاص بك للبدء</p>
-            </div>
-            <div class="grades-grid" id="gradesContainer">
-                <div style="text-align: center; grid-column: 1 / -1; padding: 50px;">⏳ جاري تحميل الصفوف المتاحة من السيرفر...</div>
+        <section id="loadingView" class="view-section active">
+            <div style="text-align: center; padding: 100px 20px;">
+                <h2 style="color: var(--primary); font-size: 2em;">جاري تجهيز بيئة التعلم الخاصة بك... ⏳</h2>
+                <p style="color: #7f8c8d;">الذكاء الاصطناعي يقوم بتخصيص الكورسات بناءً على صفك الدراسي.</p>
             </div>
         </section>
 
         <section id="contentView" class="view-section">
             <div class="page-title-box">
                 <h2 id="selectedGradeTitle" style="color: var(--primary); margin: 0;">--</h2>
-                <button class="btn-outline" style="color: var(--primary); border-color: #bdc3c7;" onclick="switchView('gradesView')">🔙 عودة لقائمة الصفوف</button>
+                <span style="background: #eafaf1; color: #27ae60; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 13px;">مسارك التعليمي المعتمد ✅</span>
             </div>
             <div id="unitsContainer">
                 <div style="text-align: center; padding: 50px;">⏳ جاري جلب الدروس والامتحانات...</div>
@@ -124,38 +118,43 @@
         <section id="examView" class="view-section">
             <div class="exam-header">
                 <h2 id="activeExamTitle" style="color: var(--primary); margin: 0 0 10px;">--</h2>
-                <p style="color: #7f8c8d; margin: 0;">أجب على جميع الأسئلة بتركيز. بالتوفيق! 🎯</p>
             </div>
-            
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-            <div style="display: flex; justify-content: space-between; color: #7f8c8d; margin-bottom: 10px; font-weight: bold;">
-                <span id="questionCounter">السؤال 1 من 10</span>
-            </div>
-            
+            <div style="display: flex; justify-content: space-between; color: #7f8c8d; margin-bottom: 10px; font-weight: bold;"><span id="questionCounter"></span></div>
             <div id="questionBox" class="question-card"></div>
-            
             <button class="btn-submit-exam" onclick="nextQuestion()" id="nextBtn">السؤال التالي ➡️</button>
-            <button class="btn-outline" style="color: #e74c3c; border-color: #e74c3c; margin-top: 15px; width: 100%;" onclick="switchView('contentView')">❌ إلغاء والعودة للدروس</button>
+            <button class="btn-outline" style="color: #e74c3c; border-color: #e74c3c; margin-top: 15px; width: 100%;" onclick="switchView('contentView')">❌ إلغاء الاختبار</button>
         </section>
 
         <section id="resultView" class="view-section">
-            <div style="text-align: center; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px;">
+            <div style="text-align: center; background: white; padding: 40px; border-radius: 15px; margin-bottom: 25px;">
                 <h2 style="color: var(--secondary);">🎉 تمت المهمة بنجاح!</h2>
                 <div style="font-size: 50px; font-weight: 900; color: var(--primary); margin: 15px 0;" id="scoreDisplay">0 / 0</div>
-                <p style="color: #7f8c8d; font-size: 16px;">تم تسجيل نتيجتك في غرفة عمليات المستر.</p>
-                <button class="btn-action" style="font-size: 16px;" onclick="switchView('contentView')">🔙 العودة لقائمة الدروس</button>
+                <button class="btn-action" onclick="switchView('contentView')">🔙 العودة للدروس</button>
             </div>
-
-            <h3 style="color: var(--primary); margin-bottom: 15px;">📝 تقرير الإجابات النموذجية:</h3>
+            <h3 style="color: var(--primary); margin-bottom: 15px;">📝 تقرير الإجابات:</h3>
             <div id="reviewContent"></div>
         </section>
 
     </div>
 
-    <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
+    <button class="floating-ai-btn" onclick="openAITutor()">
+        🤖 المدرس الذكي
+    </button>
+
+    <div class="ai-modal-overlay" id="aiTutorModal">
+        <div class="ai-modal-box">
+            <div class="ai-modal-header">
+                <h3>🤖 المدرس الذكي (مساعدك الشخصي)</h3>
+                <button class="close-ai-modal" onclick="closeAITutor()">&times;</button>
+            </div>
+            <div class="ai-modal-body">
+                <iframe src="ai-tutor.html"></iframe>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
             authDomain: "alhusseiny-academy.firebaseapp.com",
@@ -175,12 +174,26 @@
         let currentQuestionIndex = 0;
         let studentAnswers = [];
 
+        // 🧠 التخصيص الذكي: التعرف على الطالب وتوجيهه لكورسه فوراً
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentStudentName = user.displayName || "طالب الأكاديمية";
                 currentStudentEmail = user.email;
-                document.getElementById('userInfo').innerText = `👋 أهلاً، ${currentStudentName}`;
-                loadGrades();
+                
+                // البحث عن صف الطالب المسجل في قاعدة البيانات
+                db.collection("students").doc(user.uid).get().then((doc) => {
+                    if (doc.exists && doc.data().grade) {
+                        let myGradeId = doc.data().grade;
+                        // جلب اسم الصف لفتحه مباشرة
+                        db.collection("grades").doc(myGradeId).get().then((gDoc) => {
+                            let gName = gDoc.exists ? gDoc.data().name : "مسارك التعليمي";
+                            openGradeDirectly(myGradeId, gName);
+                        }).catch(() => openGradeDirectly(myGradeId, "مسارك التعليمي"));
+                    } else {
+                        // لو مش محدد صف، نطلب منه يراجع لوحة التحكم
+                        document.getElementById("loadingView").innerHTML = "<h3 style='text-align:center; color:red; margin-top:50px;'>لم يتم تحديد صفك الدراسي. يرجى التواصل مع الإدارة.</h3>";
+                    }
+                });
             } else {
                 window.location.href = "login.html";
             }
@@ -193,34 +206,10 @@
         }
 
         // ==========================================
-        // 🗂️ سحب الصفوف وعرضها
+        // 📚 سحب محتوى كورس الطالب المخصص فقط
         // ==========================================
-        function loadGrades() {
-            db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => {
-                const container = document.getElementById("gradesContainer");
-                if(snapshot.empty) {
-                    container.innerHTML = "<div style='grid-column: 1/-1; text-align:center;'>لا توجد صفوف دراسية متاحة حالياً.</div>";
-                    return;
-                }
-                container.innerHTML = snapshot.docs.map(doc => {
-                    let g = doc.data();
-                    return `
-                        <div class="grade-card" onclick="openGrade('${doc.id}', '${g.name}')">
-                            <div class="grade-icon">🏫</div>
-                            <h3>${g.name}</h3>
-                            <p style="color: #7f8c8d; font-size:14px; margin:0;">اضغط لاستعراض المحتوى والامتحانات</p>
-                        </div>
-                    `;
-                }).join('');
-            });
-        }
-
-        // ==========================================
-        // 📚 سحب محتوى الصف وترتيبه
-        // ==========================================
-        function openGrade(gradeId, gradeName) {
+        function openGradeDirectly(gradeId, gradeName) {
             document.getElementById("selectedGradeTitle").innerText = `📚 ${gradeName}`;
-            document.getElementById("unitsContainer").innerHTML = "<div style='text-align:center; padding:50px;'>⏳ جاري جلب الدروس والامتحانات...</div>";
             switchView('contentView');
 
             let contentsPromise = db.collection("contents").where("gradeId", "==", gradeId).get();
@@ -228,56 +217,33 @@
 
             Promise.all([contentsPromise, examsPromise]).then((results) => {
                 let allItems = [];
-
-                results[0].forEach(doc => {
-                    let d = doc.data();
-                    allItems.push({ id: doc.id, unit: d.unit || 'عام', title: d.title, type: d.type, url: d.url });
-                });
-
-                results[1].forEach(doc => {
-                    let e = doc.data();
-                    allItems.push({ id: doc.id, unit: e.unit || 'عام', title: e.title, type: 'exam', examData: e });
-                });
-
+                results[0].forEach(doc => { let d = doc.data(); allItems.push({ id: doc.id, unit: d.unit || 'عام', title: d.title, type: d.type, url: d.url }); });
+                results[1].forEach(doc => { let e = doc.data(); allItems.push({ id: doc.id, unit: e.unit || 'عام', title: e.title, type: 'exam', examData: e }); });
                 renderUnits(allItems);
             }).catch(e => {
-                document.getElementById("unitsContainer").innerHTML = "<div style='text-align:center; color:red;'>خطأ في جلب البيانات!</div>";
+                document.getElementById("unitsContainer").innerHTML = "<div style='text-align:center; color:red;'>خطأ في جلب بيانات الكورس!</div>";
             });
         }
 
         function renderUnits(items) {
             const container = document.getElementById("unitsContainer");
             if(items.length === 0) {
-                container.innerHTML = "<div style='text-align:center; padding:50px;'>هذا الصف لا يحتوي على محتوى حالياً.</div>";
-                return;
+                container.innerHTML = "<div style='text-align:center; padding:50px;'>لم يتم إضافة دروس لهذا الكورس بعد.</div>"; return;
             }
-
             let grouped = {};
-            items.forEach(item => {
-                if(!grouped[item.unit]) grouped[item.unit] = [];
-                grouped[item.unit].push(item);
-            });
+            items.forEach(item => { if(!grouped[item.unit]) grouped[item.unit] = []; grouped[item.unit].push(item); });
 
             let html = "";
             for(let unit in grouped) {
                 html += `<div class="unit-box"><h3 class="unit-title">🔖 ${unit}</h3>`;
                 grouped[unit].forEach(item => {
                     if(item.type === 'video') {
-                        html += `<div class="content-item" onclick="openMedia('${item.url}', 'video', '${item.title}')">
-                                    <div class="content-info"><div class="icon-circle bg-video">🎥</div> ${item.title}</div>
-                                    <span class="btn-action">مشاهدة الدرس</span>
-                                 </div>`;
+                        html += `<div class="content-item" onclick="openMedia('${item.url}', 'video', '${item.title}')"><div class="content-info"><div class="icon-circle bg-video">🎥</div> ${item.title}</div><span class="btn-action">مشاهدة الدرس</span></div>`;
                     } else if(item.type === 'pdf') {
-                        html += `<div class="content-item" onclick="openMedia('${item.url}', 'pdf', '${item.title}')">
-                                    <div class="content-info"><div class="icon-circle bg-pdf">📄</div> ${item.title}</div>
-                                    <span class="btn-action" style="background:#3498db;">قراءة الملزمة</span>
-                                 </div>`;
+                        html += `<div class="content-item" onclick="openMedia('${item.url}', 'pdf', '${item.title}')"><div class="content-info"><div class="icon-circle bg-pdf">📄</div> ${item.title}</div><span class="btn-action" style="background:#3498db;">قراءة الملزمة</span></div>`;
                     } else if(item.type === 'exam') {
                         let encodedData = encodeURIComponent(JSON.stringify(item.examData));
-                        html += `<div class="content-item" onclick="startExam('${encodedData}')">
-                                    <div class="content-info"><div class="icon-circle bg-exam">📝</div> ${item.title}</div>
-                                    <span class="btn-action" style="background:var(--accent);">ابدأ الاختبار</span>
-                                 </div>`;
+                        html += `<div class="content-item" onclick="startExam('${encodedData}')"><div class="content-info"><div class="icon-circle bg-exam">📝</div> ${item.title}</div><span class="btn-action" style="background:var(--accent);">ابدأ الاختبار</span></div>`;
                     }
                 });
                 html += `</div>`;
@@ -285,196 +251,92 @@
             container.innerHTML = html;
         }
 
-        // ==========================================
-        // 🎥 محرك السينما التعليمية (Theater Mode)
-        // ==========================================
+        // 🎥 الميديا (فيديو / PDF)
         function openMedia(url, type, title) {
             document.getElementById("mediaTitle").innerText = title;
             const iframe = document.getElementById("mediaIframe");
             const wrapper = document.getElementById("mediaContainerWrapper");
-            
             let finalUrl = url;
-
-            // محول الروابط الذكي (URL Converter)
             if (type === 'video') {
-                wrapper.className = "media-container"; // 16:9 نسبة العرض للفيديو
-                if (url.includes("watch?v=")) {
-                    finalUrl = url.replace("watch?v=", "embed/").split("&")[0];
-                } else if (url.includes("youtu.be/")) {
-                    finalUrl = url.replace("youtu.be/", "www.youtube.com/embed/").split("?")[0];
-                }
+                wrapper.className = "media-container";
+                if (url.includes("watch?v=")) finalUrl = url.replace("watch?v=", "embed/").split("&")[0];
+                else if (url.includes("youtu.be/")) finalUrl = url.replace("youtu.be/", "www.youtube.com/embed/").split("?")[0];
             } else if (type === 'pdf') {
-                wrapper.className = "media-container pdf-container"; // شاشة أطول للـ PDF
-                if (url.includes("/view")) {
-                    finalUrl = url.replace("/view", "/preview");
-                }
+                wrapper.className = "media-container pdf-container";
+                if (url.includes("/view")) finalUrl = url.replace("/view", "/preview");
             }
-
             iframe.src = finalUrl;
             switchView('mediaView');
         }
+        function closeMedia() { document.getElementById("mediaIframe").src = ""; switchView('contentView'); }
 
-        // إغلاق الميديا لتفريغ الرامات ومنع الصوت في الخلفية
-        function closeMedia() {
-            document.getElementById("mediaIframe").src = "";
-            switchView('contentView');
-        }
+        // 🤖 التحكم في نافذة المدرس الذكي المنبثقة
+        function openAITutor() { document.getElementById("aiTutorModal").classList.add("active"); }
+        function closeAITutor() { document.getElementById("aiTutorModal").classList.remove("active"); }
 
-        // ==========================================
-        // 📝 المحرك الذكي للامتحانات
-        // ==========================================
+        // 📝 دوال الامتحانات (نفس الدوال المستقرة)
         function startExam(encodedExamData) {
             activeExamData = JSON.parse(decodeURIComponent(encodedExamData));
             document.getElementById("activeExamTitle").innerText = activeExamData.title;
-            
-            if (!activeExamData.questions || activeExamData.questions.length === 0) {
-                alert("⚠️ هذا الامتحان فارغ أو به مشكلة!"); return;
-            }
-
-            currentQuestionIndex = 0;
-            studentAnswers = new Array(activeExamData.questions.length).fill(null);
-
-            switchView('examView');
-            showQuestion();
+            currentQuestionIndex = 0; studentAnswers = new Array(activeExamData.questions.length).fill(null);
+            switchView('examView'); showQuestion();
         }
-
         function showQuestion() {
             const q = activeExamData.questions[currentQuestionIndex];
             const container = document.getElementById("questionBox");
             const total = activeExamData.questions.length;
-            
             document.getElementById("questionCounter").innerText = `السؤال ${currentQuestionIndex + 1} من ${total}`;
             document.getElementById("progressFill").style.width = `${((currentQuestionIndex) / total) * 100}%`;
-
-            if (currentQuestionIndex === total - 1) {
-                document.getElementById("nextBtn").innerText = "🏁 إنهاء الاختبار وإرسال النتيجة";
-            } else {
-                document.getElementById("nextBtn").innerText = "السؤال التالي ➡️";
-            }
-
+            document.getElementById("nextBtn").innerText = (currentQuestionIndex === total - 1) ? "🏁 إنهاء الاختبار وإرسال النتيجة" : "السؤال التالي ➡️";
+            
             let qText = q.questionText || q.question || "سؤال";
-            let formattedText = qText.replace(/\n/g, "<br>");
-
-            let options = q.options || [];
-            if (options.length === 0 && q.a) {
-                options = [q.a, q.b, q.c, q.d].filter(o => o);
-            }
+            let options = q.options || []; if (options.length === 0 && q.a) options = [q.a, q.b, q.c, q.d].filter(o => o);
 
             if (options.length > 0) {
                 let optionsHtml = "";
                 options.forEach((opt, idx) => {
-                    let selectedClass = studentAnswers[currentQuestionIndex] === idx ? "selected" : "";
-                    optionsHtml += `<button class="option-btn ${selectedClass}" onclick="selectOption(${idx})">${opt}</button>`;
+                    let sel = studentAnswers[currentQuestionIndex] === idx ? "selected" : "";
+                    optionsHtml += `<button class="option-btn ${sel}" onclick="selectOption(${idx})">${opt}</button>`;
                 });
-                container.innerHTML = `<div class="question-text" style="direction: ltr; text-align: left;">${formattedText}</div>${optionsHtml}`;
+                container.innerHTML = `<div class="question-text" style="direction: ltr; text-align: left;">${qText.replace(/\n/g, "<br>")}</div>${optionsHtml}`;
             } else {
                 let currentVal = studentAnswers[currentQuestionIndex] || "";
-                container.innerHTML = `
-                    <div class="question-text" style="direction: ltr; text-align: left;">${formattedText}</div>
-                    <label style="font-weight:bold; display:block; margin-bottom:10px;">اكتب إجابتك هنا بدقة:</label>
-                    <input type="text" class="input-text" oninput="saveTextAnswer(this.value)" value="${currentVal}" placeholder="Answer here..." style="direction: ltr;">
-                `;
+                container.innerHTML = `<div class="question-text" style="direction: ltr; text-align: left;">${qText.replace(/\n/g, "<br>")}</div><input type="text" class="input-text" oninput="saveTextAnswer(this.value)" value="${currentVal}" placeholder="Answer here...">`;
             }
         }
-
-        function selectOption(index) {
-            studentAnswers[currentQuestionIndex] = index;
-            showQuestion();
-        }
-
-        function saveTextAnswer(val) {
-            studentAnswers[currentQuestionIndex] = val;
-        }
-
+        function selectOption(index) { studentAnswers[currentQuestionIndex] = index; showQuestion(); }
+        function saveTextAnswer(val) { studentAnswers[currentQuestionIndex] = val; }
         function nextQuestion() {
-            if (studentAnswers[currentQuestionIndex] === null || studentAnswers[currentQuestionIndex] === "") {
-                alert("⚠️ من فضلك أجب على السؤال الحالي أولاً!"); return;
-            }
-
-            const total = activeExamData.questions.length;
-            if (currentQuestionIndex < total - 1) {
-                currentQuestionIndex++;
-                showQuestion();
-                window.scrollTo(0,0);
-            } else {
-                finishAndSubmitQuiz();
-            }
+            if (studentAnswers[currentQuestionIndex] === null || studentAnswers[currentQuestionIndex] === "") { alert("⚠️ أجب على السؤال أولاً!"); return; }
+            if (currentQuestionIndex < activeExamData.questions.length - 1) { currentQuestionIndex++; showQuestion(); window.scrollTo(0,0); } 
+            else { finishAndSubmitQuiz(); }
         }
-
         function finishAndSubmitQuiz() {
-            let score = 0;
-            const total = activeExamData.questions.length;
-            let reviewHtml = "";
-
-            document.getElementById("nextBtn").innerText = "جاري الحفظ وإرسال النتيجة... ⏳";
-            document.getElementById("nextBtn").disabled = true;
+            let score = 0; const total = activeExamData.questions.length; let reviewHtml = "";
+            document.getElementById("nextBtn").innerText = "جاري الحفظ... ⏳"; document.getElementById("nextBtn").disabled = true;
 
             activeExamData.questions.forEach((q, idx) => {
-                let studentAns = studentAnswers[idx];
-                let isCorrect = false;
-
-                let options = q.options || [];
-                if (options.length === 0 && q.a) options = [q.a, q.b, q.c, q.d].filter(o => o);
-
-                let modelAnsIndex = 0;
-                if (q.ans !== undefined) {
-                    if (typeof q.ans === 'string') {
-                        let cleanAns = q.ans.trim().toLowerCase();
-                        if (cleanAns === 'a' || cleanAns === '0') modelAnsIndex = 0;
-                        else if (cleanAns === 'b' || cleanAns === '1') modelAnsIndex = 1;
-                        else if (cleanAns === 'c' || cleanAns === '2') modelAnsIndex = 2;
-                        else if (cleanAns === 'd' || cleanAns === '3') modelAnsIndex = 3;
-                    } else modelAnsIndex = parseInt(q.ans);
-                } else if (q.correct !== undefined) {
-                    let cleanCorrect = String(q.correct).trim().toLowerCase();
-                    if (cleanCorrect === 'a') modelAnsIndex = 0;
-                    else if (cleanCorrect === 'b') modelAnsIndex = 1;
-                    else if (cleanCorrect === 'c') modelAnsIndex = 2;
-                    else if (cleanCorrect === 'd') modelAnsIndex = 3;
-                }
+                let sAns = studentAnswers[idx]; let isCor = false;
+                let options = q.options || []; if (options.length === 0 && q.a) options = [q.a, q.b, q.c, q.d].filter(o => o);
+                let mAns = 0;
+                if (q.ans !== undefined) mAns = (typeof q.ans === 'string') ? parseInt(q.ans.replace(/[abcdABCD]/g, m => ({a:0,b:1,c:2,d:3}[m.toLowerCase()]))) : parseInt(q.ans);
+                else if (q.correct !== undefined) mAns = {a:0,b:1,c:2,d:3}[String(q.correct).trim().toLowerCase()] || 0;
 
                 if (options.length > 0) {
-                    if (parseInt(studentAns) === modelAnsIndex) { score++; isCorrect = true; }
-                    let sText = options[studentAns] || "لم يحل";
-                    let cText = options[modelAnsIndex] || "";
-                    
-                    reviewHtml += `
-                        <div class="review-item" style="direction: ltr; text-align: left;">
-                            <div class="question-text" style="font-size:15px;">Q${idx+1}: ${q.questionText || q.question}</div>
-                            <div class="${isCorrect ? 'correct-ans' : 'wrong-ans'}">Your Answer: ${sText}</div>
-                            ${!isCorrect ? `<div class="correct-ans">Correct Answer: ${cText}</div>` : ''}
-                        </div>
-                    `;
+                    if (parseInt(sAns) === mAns) { score++; isCor = true; }
+                    reviewHtml += `<div class="review-item" style="direction:ltr; text-align:left;"><div class="question-text">Q${idx+1}: ${q.questionText || q.question}</div><div class="${isCor?'correct-ans':'wrong-ans'}">Your Answer: ${options[sAns]||"لم يحل"}</div>${!isCor?`<div class="correct-ans">Correct: ${options[mAns]||""}</div>`:''}</div>`;
                 } else {
-                    let targetAns = q.ans || q.correct || "";
-                    let cleanStudent = String(studentAns).trim().toLowerCase();
-                    let cleanCorrect = String(targetAns).trim().toLowerCase();
-                    if (cleanStudent === cleanCorrect) { score++; isCorrect = true; }
-                    reviewHtml += `
-                        <div class="review-item" style="direction: ltr; text-align: left;">
-                            <div class="question-text" style="font-size:15px;">Q${idx+1}: ${q.questionText || q.question}</div>
-                            <div class="${isCorrect ? 'correct-ans' : 'wrong-ans'}">Your Answer: ${studentAns}</div>
-                            ${!isCorrect ? `<div class="correct-ans">Correct Answer: ${targetAns}</div>` : ''}
-                        </div>
-                    `;
+                    let tAns = String(q.ans || q.correct || "").trim().toLowerCase();
+                    if (String(sAns).trim().toLowerCase() === tAns) { score++; isCor = true; }
+                    reviewHtml += `<div class="review-item" style="direction:ltr; text-align:left;"><div class="question-text">Q${idx+1}: ${q.questionText || q.question}</div><div class="${isCor?'correct-ans':'wrong-ans'}">Your Answer: ${sAns}</div>${!isCor?`<div class="correct-ans">Correct: ${q.ans||q.correct}</div>`:''}</div>`;
                 }
             });
 
-            db.collection("exam_results").add({
-                name: currentStudentName,
-                email: currentStudentEmail,
-                examName: activeExamData.title,
-                score: score + " / " + total,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
+            db.collection("exam_results").add({ name: currentStudentName, email: currentStudentEmail, examName: activeExamData.title, score: score + " / " + total, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+            .then(() => {
                 document.getElementById("scoreDisplay").innerText = score + " / " + total;
                 document.getElementById("reviewContent").innerHTML = reviewHtml;
-                document.getElementById("nextBtn").disabled = false;
-                switchView('resultView');
-            }).catch((e) => {
-                alert("خطأ أثناء الحفظ: " + e.message);
-                document.getElementById("nextBtn").disabled = false;
-                document.getElementById("nextBtn").innerText = "🏁 إنهاء الاختبار وإرسال النتيجة";
+                document.getElementById("nextBtn").disabled = false; switchView('resultView');
             });
         }
     </script>
