@@ -8,242 +8,248 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --primary: #1a252f; --secondary: #2c3e50; --accent: #e67e22; --teal: #0a7c6e; --bg: #ecf0f1; --text: #2c3e50; }
-        body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--text); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        :root { 
+            --primary: #2c3e50; --secondary: #18bc9c; --accent: #e67e22; 
+            --bg: #f4f7f6; --white: #ffffff; --text: #2c3e50; 
+        }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         
-        .auth-container { background: white; width: 100%; max-width: 420px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden; position: relative; margin: 20px;}
-        .auth-header { background: var(--teal); color: white; text-align: center; padding: 30px 20px; transition: 0.3s; }
-        .auth-header h2 { margin: 0; font-size: 2em; }
-        .auth-header p { margin: 10px 0 0 0; opacity: 0.9; }
+        .auth-container { background: var(--white); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--secondary); }
+        .auth-header { text-align: center; margin-bottom: 25px; }
+        .auth-header h2 { margin: 0; font-size: 1.6em; color: var(--primary); font-weight: 900; }
+        .auth-header p { margin: 5px 0 0; color: #7f8c8d; font-size: 13px; font-weight: bold; }
         
-        .form-box { padding: 30px; display: none; animation: fadeIn 0.5s; }
-        .form-box.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        
-        .input-group { margin-bottom: 18px; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--secondary); font-size: 14px;}
-        .input-group input { width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 15px; font-family: 'Tajawal'; box-sizing: border-box; transition: 0.3s; }
-        .input-group input:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 8px rgba(10, 124, 110, 0.2); }
-        
-        .btn-submit { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-submit:hover { background: #d35400; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3); }
-        
-        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #7f8c8d; font-size: 14px; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #ddd; }
-        .divider:not(:empty)::before { margin-left: 10px; }
-        .divider:not(:empty)::after { margin-right: 10px; }
+        /* تبديل التبويبات */
+        .auth-tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 25px; }
+        .auth-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: bold; color: #7f8c8d; transition: 0.3s; font-size: 15px; }
+        .auth-tab.active { color: var(--secondary); border-bottom: 3px solid var(--secondary); }
 
-        .btn-google { width: 100%; padding: 12px; background: white; color: #333; border: 2px solid #eee; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-google:hover { background: #f8f9fa; border-color: #ddd; transform: translateY(-2px); }
+        .form-group { margin-bottom: 18px; position: relative; }
+        .form-group label { display: block; font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #eaeded; border-radius: 8px; font-family: 'Tajawal'; font-size: 14px; box-sizing: border-box; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--secondary); outline: none; background: white; }
         
-        .message { margin-top: 15px; text-align: center; font-size: 14px; font-weight: bold; line-height: 1.5; }
-        .msg-error { color: #c0392b; }
-        .msg-success { color: #27ae60; }
+        .forgot-link { display: block; text-align: left; font-size: 12px; color: #7f8c8d; text-decoration: none; font-weight: bold; margin-top: -10px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; }
+        .forgot-link:hover { color: var(--accent); }
+
+        .btn-auth { background: var(--secondary); color: white; border: none; padding: 13px; width: 100%; font-size: 16px; font-weight: bold; font-family: 'Tajawal'; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(24, 188, 156, 0.2); }
+        .btn-auth:hover { background: #128f76; transform: translateY(-1px); }
         
-        .password-criteria { list-style: none; padding: 0; margin-top: 8px; font-size: 12.5px; color: #7f8c8d; background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px dashed #ccc;}
-        .password-criteria li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; transition: 0.3s; color: #c0392b; }
-        .password-criteria li.valid { color: #27ae60; }
+        .method-toggle { text-align: center; margin-top: 15px; font-size: 13px; color: var(--primary); font-weight: bold; cursor: pointer; text-decoration: underline; }
 
-        .toggle-text { text-align: center; margin-top: 20px; font-size: 15px; color: #34495e; font-weight: bold;}
-        .toggle-text span { color: var(--teal); cursor: pointer; text-decoration: underline; transition: 0.3s; }
-        .toggle-text span:hover { color: var(--accent); }
-
-        .back-home { display: block; text-align: center; margin-top: 10px; color: #95a5a6; text-decoration: none; font-size: 14px; transition: 0.3s; padding-bottom: 25px;}
-        .back-home:hover { color: var(--primary); }
+        /* شاشات الإخفاء والإظهار */
+        .auth-view { display: none; }
+        .auth-view.active { display: block; }
+        
+        /* لتأكيد رقم الهاتف */
+        #recaptcha-container { margin: 10px 0; }
     </style>
 </head>
 <body>
 
-<div class="auth-container">
-    <div class="auth-header" id="headerBox">
-        <div style="font-size: 40px; margin-bottom: 10px;">👑</div>
-        <h2 id="formTitle">تسجيل الدخول</h2>
-        <p id="formDesc">أهلاً بك من جديد في الأكاديمية</p>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>👑 أكاديمية الحسيني</h2>
+            <p id="authSubtitle">بوابة تسجيل الدخول الذكية للطلاب</p>
+        </div>
+
+        <div class="auth-tabs" id="authTabsBar">
+            <div class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</div>
+            <div class="auth-tab" onclick="switchAuthTab('register')">إنشاء حساب جديد</div>
+        </div>
+
+        <div id="loginView" class="auth-view active">
+            <div id="emailLoginBox">
+                <div class="form-group">
+                    <label>البريد الإلكتروني (Email):</label>
+                    <input type="email" id="loginEmail" placeholder="name@example.com" style="direction: ltr;">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور (Password):</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <a class="forgot-link" onclick="handleForgotPassword()">نسيت كلمة المرور؟ 🔑</a>
+                <button class="btn-auth" onclick="loginWithEmail()">دخول آمن 🔐</button>
+                <div class="method-toggle" onclick="toggleLoginMethod('phone')">📱 الدخول السريع برقم الهاتف</div>
+            </div>
+
+            <div id="phoneLoginBox" style="display: none;">
+                <div class="form-group">
+                    <label>رقم الهاتف (مع رمز الدولة كمثال +20):</label>
+                    <input type="text" id="loginPhone" placeholder="+201xxxxxxxx" style="direction: ltr;">
+                </div>
+                <div id="recaptcha-container"></div>
+                <div id="otpBox" class="form-group" style="display: none;">
+                    <label>أدخل كود التحقق المرسل لهاتفك (OTP):</label>
+                    <input type="text" id="loginOTP" placeholder="------" style="letter-spacing: 5px; text-align: center;">
+                </div>
+                <button class="btn-auth" id="phoneSubmitBtn" onclick="handlePhoneAuth()">إرسال كود التحقق 🚀</button>
+                <div class="method-toggle" onclick="toggleLoginMethod('email')">📧 العودة للدخول بالبريد الإلكتروني</div>
+            </div>
+        </div>
+
+        <div id="registerView" class="auth-view">
+            <div class="form-group">
+                <label>الاسم الثلاثي للطالب (بالعربية):</label>
+                <input type="text" id="regName" placeholder="محمد أحمد محمود">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني الخاص بك:</label>
+                <input type="email" id="regEmail" placeholder="student@example.com" style="direction: ltr;">
+            </div>
+            <div class="form-group">
+                <label>اختر مرحلتك الدراسية الحالية:</label>
+                <select id="regGrade">
+                    <option value="prep1">الصف الأول الإعدادي 📚</option>
+                    <option value="prep2">الصف الثاني الإعدادي 📚</option>
+                    <option value="prep3">الصف الثالث الإعدادي 📚</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>إنشاء كلمة مرور للحساب:</label>
+                <input type="password" id="regPassword" placeholder="لا تقل عن 6 خانات">
+            </div>
+            <button class="btn-auth" onclick="registerNewStudent()">إنشاء الحساب واعتاده 🎯</button>
+        </div>
     </div>
 
-    <div id="loginForm" class="form-box active">
-        <button class="btn-google" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
-            الدخول السريع باستخدام جوجل
-        </button>
-        
-        <div class="divider">أو عبر الإيميل</div>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
+            authDomain: "alhusseiny-academy.firebaseapp.com",
+            projectId: "alhusseiny-academy",
+            storageBucket: "alhusseiny-academy.firebasestorage.app",
+            messagingSenderId: "1048097240090",
+            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        <div class="input-group">
-            <label>البريد الإلكتروني</label>
-            <input type="email" id="loginEmail" placeholder="example@gmail.com">
-        </div>
-        <div class="input-group">
-            <label>كلمة المرور</label>
-            <input type="password" id="loginPassword" placeholder="********">
-        </div>
-        <button class="btn-submit" onclick="loginUser()" id="loginBtn">دخول</button>
-        <div id="loginMsg" class="message"></div>
-        
-        <p class="toggle-text">ليس لديك حساب؟ <span onclick="switchTab('register')">أنشئ حساباً جديداً الآن</span></p>
-    </div>
+        const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
+        let confirmationResult = null; // لحفظ نتيجة كود الهاتف
 
-    <div id="registerForm" class="form-box">
-        <button class="btn-google" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
-            التسجيل السريع باستخدام جوجل
-        </button>
-
-        <div class="divider">أو التسجيل بالإيميل</div>
-
-        <div class="input-group">
-            <label>الاسم الثلاثي (سيظهر للمستر)</label>
-            <input type="text" id="regName" placeholder="اكتب اسمك الحقيقي...">
-        </div>
-        <div class="input-group">
-            <label>البريد الإلكتروني</label>
-            <input type="email" id="regEmail" placeholder="example@gmail.com">
-        </div>
-        <div class="input-group">
-            <label>كلمة المرور</label>
-            <input type="password" id="regPassword" placeholder="********" oninput="checkPasswordStrength()">
+        // نظام التبديل بين الدخول والتسجيل
+        function switchAuthTab(target) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-view').forEach(v => v.classList.remove('active'));
             
-            <ul class="password-criteria">
-                <li id="req-length"><span class="icon">❌</span> 8 أحرف على الأقل</li>
-                <li id="req-upper"><span class="icon">❌</span> حرف إنجليزي كبير (A-Z)</li>
-                <li id="req-lower"><span class="icon">❌</span> حرف إنجليزي صغير (a-z)</li>
-                <li id="req-number"><span class="icon">❌</span> رقم (0-9)</li>
-                <li id="req-symbol"><span class="icon">❌</span> رمز خاص (مثل @ أو #)</li>
-            </ul>
-        </div>
-
-        <button class="btn-submit" style="background: var(--teal);" onclick="registerUser()" id="regBtn">إنشاء حسابي</button>
-        <div id="regMsg" class="message"></div>
-
-        <p class="toggle-text">لديك حساب بالفعل؟ <span onclick="switchTab('login')">سجل دخولك من هنا</span></p>
-    </div>
-    
-    <a href="index.html" class="back-home">🏠 العودة للصفحة الرئيسية</a>
-</div>
-
-<script>
-    // إعدادات Firebase الخاصة بك
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-      authDomain: "alhusseiny-academy.firebaseapp.com",
-      projectId: "alhusseiny-academy",
-      storageBucket: "alhusseiny-academy.firebasestorage.app",
-      messagingSenderId: "1048097240090",
-      appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    
-    // إيميل المستر للتحويل التلقائي لغرفة العمليات
-    const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
-
-    function switchTab(tab) {
-        document.querySelectorAll('.form-box').forEach(f => f.classList.remove('active'));
-        if(tab === 'login') {
-            document.getElementById('loginForm').classList.add('active');
-            document.getElementById('formTitle').innerText = "تسجيل الدخول";
-            document.getElementById('formDesc').innerText = "أهلاً بك من جديد في الأكاديمية";
-            document.getElementById('headerBox').style.background = "var(--teal)";
-        } else {
-            document.getElementById('registerForm').classList.add('active');
-            document.getElementById('formTitle').innerText = "إنشاء حساب جديد";
-            document.getElementById('formDesc').innerText = "انضم إلينا الآن في أقل من دقيقة";
-            document.getElementById('headerBox').style.background = "var(--accent)"; 
+            if(target === 'login') {
+                document.getElementById('loginView').classList.add('active');
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('authSubtitle').innerText = "بوابة تسجيل الدخول الذكية للطلاب";
+            } else {
+                document.getElementById('registerView').classList.add('active');
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('authSubtitle').innerText = "انضم الآن لأقوى منصة تعليمية وتأسيسية";
+            }
         }
-    }
 
-    function updateCrit(id, isValid) {
-        const li = document.getElementById(id);
-        const icon = li.querySelector('.icon');
-        if(isValid) { li.classList.add('valid'); icon.innerText = "✅"; } 
-        else { li.classList.remove('valid'); icon.innerText = "❌"; }
-        return isValid;
-    }
+        // التبديل بين الإيميل والهاتف داخل شاشة الدخول
+        function toggleLoginMethod(method) {
+            if(method === 'phone') {
+                document.getElementById('emailLoginBox').style.display = 'none';
+                document.getElementById('phoneLoginBox').style.display = 'block';
+                initRecaptcha();
+            } else {
+                document.getElementById('emailLoginBox').style.display = 'block';
+                document.getElementById('phoneLoginBox').style.display = 'none';
+            }
+        }
 
-    function checkPasswordStrength() {
-        const val = document.getElementById('regPassword').value;
-        const v1 = updateCrit('req-length', val.length >= 8);
-        const v2 = updateCrit('req-upper', /[A-Z]/.test(val));
-        const v3 = updateCrit('req-lower', /[a-z]/.test(val));
-        const v4 = updateCrit('req-number', /[0-9]/.test(val));
-        const v5 = updateCrit('req-symbol', /[^a-zA-Z0-9]/.test(val));
-        return (v1 && v2 && v3 && v4 && v5);
-    }
+        // تهيئة حماية الـ Recaptcha لرقم الهاتف
+        function initRecaptcha() {
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                    'size': 'invisible'
+                });
+            }
+        }
 
-    function loginWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider).then((result) => {
-            // التحويل الذكي بناءً على الإيميل
-            if (result.user.email === ADMIN_EMAIL) {
+        // 1️⃣ تسجيل الدخول بالبريد الإلكتروني
+        function loginWithEmail() {
+            const email = document.getElementById("loginEmail").value.trim();
+            const pass = document.getElementById("loginPassword").value.trim();
+            if(!email || !pass) { alert("⚠️ يرجى كتابة الإيميل والباسورد!"); return; }
+
+            auth.signInWithEmailAndPassword(email, pass).then((userCredential) => {
+                redirectUser(userCredential.user);
+            }).catch(err => alert("❌ خطأ في الدخول: " + err.message));
+        }
+
+        // 2️⃣ تسجيل الدخول / التحقق برقم الهاتف
+        function handlePhoneAuth() {
+            const phone = document.getElementById("loginPhone").value.trim();
+            if(!phone) { alert("⚠️ اكتب رقم الهاتف كاملاً مع رمز الدولة!"); return; }
+
+            if (!confirmationResult) {
+                // المرحلة الأولى: إرسال الـ OTP
+                const appVerifier = window.recaptchaVerifier;
+                auth.signInWithPhoneNumber(phone, appVerifier).then((result) => {
+                    confirmationResult = result;
+                    document.getElementById("otpBox").style.display = "block";
+                    document.getElementById("phoneSubmitBtn").innerText = "✔️ تأكيد الكود والدخول";
+                    alert("🚀 تم إرسال كود التحقق لهاتفك في رسالة SMS!");
+                }).catch(err => alert("خطأ في الإرسال: " + err.message));
+            } else {
+                // المرحلة الثانية: تأكيد الـ OTP ودخول الطالب
+                const code = document.getElementById("loginOTP").value.trim();
+                if(!code) { alert("⚠️ أدخل كود الـ OTP!"); return; }
+
+                confirmationResult.confirm(code).then((userCredential) => {
+                    redirectUser(userCredential.user);
+                }).catch(err => alert("❌ كود التحقق خاطئ أو منتهي الصلاحية!"));
+            }
+        }
+
+        // 3️⃣ إنشاء حساب جديد للطالب
+        function registerNewStudent() {
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const grade = document.getElementById("regGrade").value;
+            const pass = document.getElementById("regPassword").value.trim();
+
+            if(!name || !email || !pass) { alert("⚠️ يرجى ملء كافة الخانات المطلوبة!"); return; }
+            if(pass.length < 6) { alert("⚠️ كلمة المرور يجب ألا تقل عن 6 خانات!"); return; }
+
+            auth.createUserWithEmailAndPassword(email, pass).then((userCredential) => {
+                // حفظ الاسم في الـ Auth Profile
+                userCredential.user.updateProfile({ displayName: name }).then(() => {
+                    // حفظ بيانات الطالب والمرحلة في الـ Firestore
+                    db.collection("students").doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        grade: grade,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        alert(`🎉 أهلاً بك يا ${name}! تم إنشاء حسابك بنجاح وجاري توجيهك للوحة التحكم.`);
+                        window.location.href = "dashboard.html";
+                    });
+                });
+            }).catch(err => alert("❌ خطأ أثناء التسجيل: " + err.message));
+        }
+
+        // 🔑 4️⃣ خاصية نسيت كلمة المرور (إرسال إيميل الاستعادة)
+        function handleForgotPassword() {
+            const email = document.getElementById("loginEmail").value.trim();
+            if(!email) { alert("⚠️ يرجى كتابة بريدك الإلكتروني في خانة الإيميل أولاً، ثم الضغط على نسيت كلمة المرور لإرسال رابط الاستعادة!"); return; }
+
+            auth.sendPasswordResetEmail(email).then(() => {
+                alert(`📧 تم إرسال رابط إعادة تعيين كلمة المرور بنجاح إلى: ${email}\nيرجى مراجعة بريدك الوارد أو رسائل الـ Spam.`);
+            }).catch(err => alert("خطأ: " + err.message));
+        }
+
+        // الموجه الذكي (توجيه المستر للإدارة والطالب للداشبورد)
+        function redirectUser(user) {
+            if(user.email === ADMIN_EMAIL) {
                 window.location.href = "admin.html";
             } else {
-                window.location.href = "index.html";
+                window.location.href = "dashboard.html";
             }
-        }).catch((error) => { alert("خطأ في الدخول: " + error.message); });
-    }
-
-    function registerUser() {
-        const name = document.getElementById('regName').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        const password = document.getElementById('regPassword').value;
-        const msgDiv = document.getElementById('regMsg');
-        const btn = document.getElementById('regBtn');
-
-        if(!name || !email || !password) { msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى ملء البيانات!</span>"; return; }
-        if(!checkPasswordStrength()) { msgDiv.innerHTML = "<span class='msg-error'>❌ تأكد من شروط كلمة المرور!</span>"; return; }
-
-        btn.innerText = "جاري إنشاء الحساب..."; btn.disabled = true;
-
-        auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            return userCredential.user.updateProfile({ displayName: name })
-            .then(() => { return userCredential.user.sendEmailVerification(); });
-        })
-        .then(() => {
-            auth.signOut(); 
-            msgDiv.innerHTML = "<span class='msg-success'>✅ تم! تحقق من إيميلك لتفعيل الحساب ثم سجل دخولك.</span>";
-            btn.innerText = "إنشاء حسابي"; btn.disabled = false;
-            setTimeout(() => { switchTab('login'); }, 4000); 
-        })
-        .catch((error) => {
-            btn.innerText = "إنشاء حسابي"; btn.disabled = false;
-            msgDiv.innerHTML = `<span class='msg-error'>❌ ${error.message}</span>`;
-        });
-    }
-
-    function loginUser() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        const msgDiv = document.getElementById('loginMsg');
-        const btn = document.getElementById('loginBtn');
-
-        if(!email || !password) { msgDiv.innerHTML = "<span class='msg-error'>⚠️ أدخل الإيميل والباسورد!</span>"; return; }
-        btn.innerText = "جاري الدخول..."; btn.disabled = true;
-
-        auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
-            // التحقق من تفعيل الإيميل للطلاب (المستر مستثنى للسهولة)
-            if(!userCredential.user.emailVerified && userCredential.user.email !== ADMIN_EMAIL) {
-                auth.signOut();
-                msgDiv.innerHTML = "<span class='msg-error'>⚠️ يرجى تفعيل الحساب من بريدك أولاً!</span>";
-                btn.innerText = "دخول"; btn.disabled = false;
-            } else {
-                msgDiv.innerHTML = "<span class='msg-success'>✅ أهلاً بك! جاري التحويل...</span>";
-                setTimeout(() => {
-                    if (userCredential.user.email === ADMIN_EMAIL) {
-                        window.location.href = "admin.html";
-                    } else {
-                        window.location.href = "index.html";
-                    }
-                }, 1500);
-            }
-        }).catch((error) => {
-            btn.innerText = "دخول"; btn.disabled = false;
-            msgDiv.innerHTML = "<span class='msg-error'>❌ خطأ في الإيميل أو الباسورد!</span>";
-        });
-    }
-</script>
+        }
+    </script>
 </body>
 </html>
