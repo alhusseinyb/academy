@@ -50,19 +50,18 @@
         .btn-delete { background: #fdedec; color: #c0392b; }
         .btn-delete:hover { background: #c0392b; color: white; }
 
-        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 2px solid #f0f0f0; border-radius: 8px; font-family: 'Tajawal'; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; transition: 0.3s; background: #fdfdfd; }
-        input:focus, textarea:focus, select:focus { border-color: var(--teal); outline: none; background: white; }
+        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 2px solid #f0f0f0; border-radius: 8px; font-family: 'Tajawal'; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; background: #fdfdfd; }
+        input:focus { border-color: var(--teal); outline: none; background: white; }
         .form-label { font-weight: bold; color: var(--secondary); font-size: 14px; }
         
         .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
         .flex-child { flex: 1; min-width: 200px; }
-
-        .btn-primary { background: var(--teal); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: 'Tajawal'; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; box-shadow: 0 3px 10px rgba(22, 160, 133, 0.2); }
-        .btn-primary:hover { background: #117a65; transform: translateY(-1px); }
+        .btn-primary { background: var(--teal); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: 'Tajawal'; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-primary:hover { background: #117a65; }
 
         .tabs-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .tab-btn { padding: 10px 20px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; border-radius: 8px 8px 0 0; transition: 0.3s; }
-        .tab-btn.active { background: var(--teal); color: white; }
+        .tab-btn { padding: 10px 20px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; }
+        .tab-btn.active { background: var(--teal); color: white; border-radius: 8px 8px 0 0; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; }
@@ -81,6 +80,7 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item active" onclick="switchView('resultsView', this, '📊 نتائج الطلاب وتفاعلهم')">📊 نتائج الطلاب</li>
+            <li class="nav-item" onclick="switchView('studentsRadarView', this, '📈 رادار إدارة شؤون الطلاب والاشتراكات')">📈 رادار الطلاب</li>
             <li class="nav-item" onclick="switchView('gradesManagerView', this, '🗂️ إدارة المراحل والصفوف الدراسية')">🗂️ إدارة الصفوف الدراسية</li>
             <li class="nav-item" onclick="switchView('addContentView', this, '✨ إضافة محتوى تعليمي جديد')">✨ إضافة محتوى جديد</li>
             <li class="nav-item" onclick="switchView('contentListView', this, '📚 استعراض وإدارة المحتوى الحالي')">📚 إدارة المحتوى الحالي</li>
@@ -109,6 +109,32 @@
                         <table>
                             <thead><tr><th>الطالب</th><th>الاختبار</th><th>التاريخ</th><th>الدرجة</th></tr></thead>
                             <tbody id="adminTableBody"><tr><td colspan="4" style="text-align:center;">جاري جلب سجل الدرجات... ⏳</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="studentsRadarView" class="view-section">
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-right-color: #2980b9;"><div><h3 id="totalRegisteredStudents">0</h3><p>إجمالي الطلاب المسجلين</p></div><div style="font-size: 30px;">👥</div></div>
+                </div>
+                <div class="card">
+                    <input type="text" id="studentRadarSearch" placeholder="🔍 ابحث عن طالب باسمه أو بريده الإلكتروني أو تليفونه..." oninput="filterStudentsRadar()">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم الطالب الثلاثي</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>رقم الهاتف موبايل</th>
+                                    <th>المرحلة/الصف الافتراضي</th>
+                                    <th>تاريخ التسجيل بالأكاديمية</th>
+                                    <th>إجراءات التحكم</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsRadarTableBody">
+                                <tr><td colspan="6" style="text-align:center;">جاري مسح وسحب قائمة الطلاب المسجلين... ⏳</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -152,14 +178,14 @@
                         </div>
                         <div class="flex-child">
                             <div class="form-label">نوع المحتوى المضاف</div>
-                            <select id="contentTypeSelect" onchange="toggleContentFormFields()">
+                            <select id="contentTypeSelect">
                                 <option value="video">🎥 محاضرة مرئية (فيديو شرح)</option>
                                 <option value="pdf">📄 ملزمة ومرفقات (PDF Material)</option>
                             </select>
                         </div>
                     </div>
                     <div id="mediaUrlFieldBox">
-                        <div class="form-label" id="mediaUrlLabel">رابط الفيديو (YouTube Unlisted أو Vimeo)</div>
+                        <div class="form-label">رابط المحاضرة أو ملف الـ PDF (يوتيوب أو جوجل درايف):</div>
                         <input type="text" id="contentMediaUrl" placeholder="https://...">
                     </div>
                     <button class="btn-primary" onclick="saveContentToFirestore()">🚀 نشر المحتوى فوراً في حسابات الطلاب</button>
@@ -183,9 +209,7 @@
                     <h3 style="margin-top: 0; color: var(--secondary);">📚 الاختبارات الإلكترونية المخزنة والنشطة</h3>
                     <div style="overflow-x: auto;">
                         <table>
-                            <thead>
-                                <tr><th>اسم الاختبار</th><th>الصف الدراسي</th><th>الوحدة / التصنيف</th><th>الحالة</th><th>إجراءات</th></tr>
-                            </thead>
+                            <thead><tr><th>اسم الاختبار</th><th>الصف الدراسي</th><th>الوحدة / التصنيف</th><th>الحالة</th><th>إجراءات</th></tr></thead>
                             <tbody id="examsTableBody"><tr><td colspan="5" style="text-align:center;">جاري جلب الاختبارات... ⏳</td></tr></tbody>
                         </table>
                     </div>
@@ -201,77 +225,25 @@
                     </div>
 
                     <div id="manualTab" class="tab-content active">
-                        <div class="flex-row">
-                            <div class="flex-child">
-                                <div class="form-label">اسم الاختبار (مثال: Unit 7 Quiz)</div>
-                                <input type="text" id="examTitleInput" placeholder="اكتب اسم الاختبار هنا...">
-                            </div>
-                            <div class="flex-child">
-                                <div class="form-label">الوحدة / التصنيف</div>
-                                <input type="text" id="examUnitInput" placeholder="مثال: Unit 7, مراجعة شهر أكتوبر...">
-                            </div>
-                        </div>
-                        
-                        <div class="form-label">اختر الصف الدراسي الموجه له الاختبار</div>
-                        <select id="examGradeSelect"><option value="">-- جاري تحميل الصفوف --</option></select>
-
+                        <div class="flex-row"><div class="flex-child"><div class="form-label">اسم الاختبار:</div><input type="text" id="examTitleInput"></div><div class="flex-child"><div class="form-label">الوحدة:</div><input type="text" id="examUnitInput"></div></div>
+                        <div class="form-label">اختر الصف الدراسي الموجه له الاختبار</div><select id="examGradeSelect"></select>
                         <hr style="border: 1px solid #eee; margin: 25px 0;">
-                        
                         <div style="background: #fdfefe; border: 1px solid #e5e8e8; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
-                            <h3 style="color: var(--teal); margin-top: 0;">📝 بناء سؤال جديد يدوياً</h3>
-                            <div class="form-label">نوع السؤال</div>
-                            <select id="qTypeSelect" onchange="toggleQuestionFields()">
-                                <option value="mcq">🔠 اختيار من متعدد (MCQ)</option>
-                                <option value="fill">✏️ أكمل الفراغات (Fill in)</option>
-                                <option value="text">✍️ سؤال مقالي / براجراف</option>
-                            </select>
-                            <div class="form-label">نص السؤال</div>
-                            <textarea id="qTextInput" rows="2" placeholder="اكتب نص السؤال بالإنجليزية هنا..."></textarea>
-                            <div id="mcqOptionsBox" style="display: block; margin-bottom: 15px; background: #fafbfc; padding: 15px; border: 1px dashed #ccc; border-radius: 8px;">
-                                <div class="flex-row" style="margin-bottom: 10px;">
-                                    <input type="text" id="opt1" placeholder="الخيار الأول (A)" style="margin:0; flex:1;">
-                                    <input type="text" id="opt2" placeholder="الخيار الثاني (B)" style="margin:0; flex:1;">
-                                </div>
-                                <div class="flex-row" style="margin-top:10px;">
-                                    <input type="text" id="opt3" placeholder="الخيار الثالث (C)" style="margin:0; flex:1;">
-                                    <input type="text" id="opt4" placeholder="الخيار الرابع (D)" style="margin:0; flex:1;">
-                                </div>
-                            </div>
-                            <div class="form-label" id="correctAnswerLabel">اختر الإجابة الصحيحة:</div>
-                            <select id="qMcqCorrectSelect" style="margin-bottom:5px;">
-                                <option value="0">الخيار الأول (A)</option><option value="1">الخيار الثاني (B)</option><option value="2">الخيار الثالث (C)</option><option value="3">الخيار الرابع (D)</option>
-                            </select>
-                            <input type="text" id="qAnswerInput" placeholder="اكتب الإجابة النموذجية للفراغ هنا..." style="display:none; margin-bottom:5px;">
-                            <button class="btn-primary" onclick="addQuestionToCurrentExam()" style="background: var(--secondary); margin-top: 15px;">➕ أضف السؤال للاختبار</button>
+                            <h3 style="color: var(--teal); margin-top: 0;">📝 بناء سؤال جديد</h3>
+                            <select id="qTypeSelect" onchange="toggleQuestionFields()"><option value="mcq">🔠 اختيار من متعدد</option><option value="fill">✏️ أكمل</option></select>
+                            <div class="form-label">نص السؤال</div><textarea id="qTextInput" rows="2"></textarea>
+                            <div id="mcqOptionsBox"><div class="flex-row"><input type="text" id="opt1" placeholder="A"><input type="text" id="opt2" placeholder="B"></div><div class="flex-row"><input type="text" id="opt3" placeholder="C"><input type="text" id="opt4" placeholder="D"></div></div>
+                            <div class="form-label" id="correctAnswerLabel">الإجابة:</div><select id="qMcqCorrectSelect"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select><input type="text" id="qAnswerInput" style="display:none;">
+                            <button class="btn-primary" onclick="addQuestionToCurrentExam()" style="background: var(--secondary); margin-top: 15px;">➕ أضف السؤال لقائمة الاختبار</button>
                         </div>
-
-                        <h4 style="color: var(--secondary); border-bottom: 2px solid #f4f7f6; padding-bottom: 5px;">📋 الأسئلة المضافة في الاختبار:</h4>
-                        <div id="addedQuestionsList" style="margin-bottom: 25px;"><p style="color:#95a5a6; font-size:13px;">لم تضف أسئلة بعد.</p></div>
-                        <button class="btn-primary" onclick="saveFullExamToFirestore()">💾 اعتماد ونشر الاختبار بالكامل للطلاب</button>
+                        <h4 style="color: var(--secondary);">📋 الأسئلة المضافة:</h4><div id="addedQuestionsList"></div><button class="btn-primary" style="margin-top:20px;" onclick="saveFullExamToFirestore()">💾 اعتماد ونشر الاختبار بالكامل</button>
                     </div>
 
                     <div id="bulkTab" class="tab-content">
-                        <div style="background: #fdfefe; border: 1px solid #e5e8e8; padding: 20px; border-radius: 12px;">
-                            <h3 style="color: var(--teal); margin-top: 0;">📋 الاستيراد النصي السريع (Bulk Import)</h3>
-                            <p style="color: #7f8c8d; font-size: 14px; line-height: 1.6;">
-                                الصق أسئلتك المكتوبة كالتالي لرفعها بضغطة زر:<br>
-                                1. السطر الأول: <b>السؤال</b><br>
-                                2. السطور التالية (للاختياري): <b>الخيارات</b><br>
-                                3. سطر الإجابة: ضع علامة <b>*</b> قبل الإجابة الصحيحة.<br>
-                                4. اترك <b>سطراً فارغاً</b> بين كل سؤال والتالي.
-                            </p>
-                            <textarea id="bulkTextarea" rows="12" placeholder="مثال للاختياري:\nWhat is the capital of Egypt?\nCairo\nAlexandria\nAswan\n*Cairo\n\nمثال للأكمل:\nThe ancient Egyptians built the .....\n*pyramids" style="direction: ltr; font-family: Arial;"></textarea>
-                            <button class="btn-primary" onclick="parseBulkText()">🚀 تفكيك الأسئلة واستيرادها للاختبار</button>
-                        </div>
+                        <textarea id="bulkTextarea" rows="12" placeholder="الصق أسئلتك هنا..."></textarea>
+                        <button class="btn-primary" onclick="parseBulkText()">🚀 تفكيك واستيراد الأسئلة</button>
                     </div>
-
-                    <div id="aiTab" class="tab-content">
-                        <div class="ai-box" style="background: #e8f6f3; border: 2px dashed var(--teal); padding: 20px; border-radius: 12px; text-align: center;">
-                            <h3 style="margin-top: 0; color: var(--secondary);">المعلم الآلي المساعد 🤖</h3>
-                            <textarea id="aiPromptTextarea" rows="4" placeholder="اكتب وصف الاختبار وسيقوم الذكاء بتوليد الأسئلة..."></textarea>
-                            <button class="btn-primary" id="aiGenBtn" onclick="generateExamWithAISimulation()">✨ توليد الاختبار السحري</button>
-                        </div>
-                    </div>
+                    <div id="aiTab" class="tab-content"><div class="ai-box"><textarea id="aiPromptTextarea" rows="4"></textarea><button class="btn-primary" onclick="generateExamWithAISimulation()">✨ توليد الاختبار السحري</button></div></div>
                 </div>
             </section>
 
@@ -293,6 +265,7 @@
 
         const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
         var allRecords = []; 
+        var allStudentsRadar = []; // مصفوفة لحفظ الطلاب المسجلين
         var currentExamQuestions = []; 
 
         auth.onAuthStateChanged((user) => {
@@ -302,6 +275,7 @@
                 loadAllGrades();
                 loadAllContents();
                 loadAllExams(); 
+                loadStudentsRadar(); // تفريغ لايف لقائمة الطلاب في الرادار الجديد!
             } else {
                 window.location.href = "login.html";
             }
@@ -311,7 +285,7 @@
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            element.classList.add('active');
+            if(element) element.classList.add('active');
             document.getElementById('topNavTitle').innerText = title;
         }
 
@@ -322,127 +296,66 @@
             element.classList.add('active');
         }
 
-        function toggleQuestionFields() {
-            const type = document.getElementById("qTypeSelect").value;
-            const mcqBox = document.getElementById("mcqOptionsBox");
-            const answerLabel = document.getElementById("correctAnswerLabel");
-            
-            if (type === "mcq") {
-                mcqBox.style.display = "block"; answerLabel.innerText = "اختر الإجابة الصحيحة:";
-                document.getElementById("qAnswerInput").style.display = "none";
-                document.getElementById("qMcqCorrectSelect").style.display = "block";
-            } else {
-                mcqBox.style.display = "none"; document.getElementById("qAnswerInput").style.display = "block";
-                document.getElementById("qMcqCorrectSelect").style.display = "none";
-                answerLabel.innerText = type === "fill" ? "الكلمة النموذجية للفراغ:" : "الإجابة النموذجية (اختياري للمقالي):";
-            }
-        }
-
         // ==========================================
-        // 🚀 أداة تفكيك واستيراد النصوص الذكية (Bulk Import)
+        // 📈 رادار المستر لإدارة الطلاب لايف (جديد 100%)
         // ==========================================
-        function parseBulkText() {
-            let text = document.getElementById("bulkTextarea").value.trim();
-            if(!text) { alert("⚠️ يرجى لصق النص أولاً!"); return; }
-            
-            let blocks = text.split(/\n\s*\n/); // فصل كل سؤال عن التاني بناءً على السطر الفاضي
-            let parsedCount = 0;
-
-            blocks.forEach(block => {
-                let lines = block.split('\n').map(l => l.trim()).filter(l => l);
-                if(lines.length < 2) return; // لازم سؤال وإجابة على الأقل
-
-                let questionText = lines[0];
-                let ansLineIndex = lines.findIndex(l => l.startsWith('*'));
-                
-                if(ansLineIndex === -1) return; // لو مفيش نجمة، هيتجاهل البلوك ده
-
-                let ansText = lines[ansLineIndex].substring(1).trim(); // نشيل النجمة
-                let type, ans, options = [];
-
-                let optionLines = lines.slice(1, ansLineIndex);
-                
-                if(optionLines.length >= 2) {
-                    type = 'mcq';
-                    options = optionLines;
-                    let matchIdx = options.findIndex(o => o.toLowerCase() === ansText.toLowerCase());
-                    ans = matchIdx !== -1 ? matchIdx : 0;
-                } else if (questionText.toLowerCase().includes('paragraph') || questionText.includes('براجراف') || questionText.includes('مقال')) {
-                    type = 'text';
-                    ans = ansText || 'Review by Master';
-                } else {
-                    type = 'fill';
-                    ans = ansText;
+        function loadStudentsRadar() {
+            db.collection("students").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                const tbody = document.getElementById("studentsRadarTableBody");
+                if (snapshot.empty) {
+                    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>لا يوجد طلاب مسجلين بالمنصة حتى الآن 👥</td></tr>";
+                    document.getElementById("totalRegisteredStudents").innerText = "0";
+                    return;
                 }
-
-                currentExamQuestions.push({type, questionText, options, ans});
-                parsedCount++;
+                allStudentsRadar = [];
+                snapshot.forEach(doc => {
+                    allStudentsRadar.push({ id: doc.id, ...doc.data() });
+                });
+                document.getElementById("totalRegisteredStudents").innerText = allStudentsRadar.length;
+                displayStudentsRadarRows(allStudentsRadar);
             });
+        }
 
-            if(parsedCount > 0) {
-                alert(`🎉 تم تفكيك واستيراد ${parsedCount} أسئلة بنجاح!`);
-                renderAddedQuestionsList();
-                document.getElementById("bulkTextarea").value = "";
-                switchInnerTab('manualTab', document.querySelector('.tab-btn')); // نرجع لليدوي عشان يراجعهم ويحفظ
-            } else {
-                alert("⚠️ لم يتعرف النظام على أسئلة. تأكد من ترك سطر فارغ بين كل سؤال والتاني، ووضع (*) قبل الإجابة.");
+        function displayStudentsRadarRows(studentsArray) {
+            const tbody = document.getElementById("studentsRadarTableBody");
+            tbody.innerHTML = studentsArray.map(st => {
+                let dateObj = st.createdAt ? st.createdAt.toDate() : new Date();
+                let displayGrade = st.grade === 'prep1' ? 'الصف الأول الإعدادي' : st.grade === 'prep2' ? 'الصف الثاني الإعدادي' : st.grade === 'prep3' ? 'الصف الثالث الإعدادي' : st.grade;
+                return `
+                    <tr>
+                        <td style="color:var(--secondary); font-weight:900;">👨‍🎓 ${st.name || 'طالب مجهول'}</td>
+                        <td style="direction:ltr; text-align:right;">${st.email || 'بدون إيميل'}</td>
+                        <td style="color:#e67e22;">${st.phone || 'غير مسجل'}</td>
+                        <td><span class="badge badge-type" style="background:#e8f8f5; color:#117a65;">${displayGrade}</span></td>
+                        <td style="color:#7f8c8d; font-size:12px;">${dateObj.toLocaleDateString('ar-EG')}</td>
+                        <td>
+                            <button class="action-btn btn-delete" onclick="deleteStudentFromRadar('${st.id}')">🗑️ طرد / حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterStudentsRadar() {
+            let kw = document.getElementById("studentRadarSearch").value.toLowerCase().trim();
+            if(!kw) return displayStudentsRadarRows(allStudentsRadar);
+            let filtered = allStudentsRadar.filter(s => (s.name||"").toLowerCase().includes(kw) || (s.email||"").toLowerCase().includes(kw) || (s.phone||"").toLowerCase().includes(kw));
+            displayStudentsRadarRows(filtered);
+        }
+
+        function deleteStudentFromRadar(id) {
+            if (confirm("⚠️ هل أنت متأكد من حذف حساب هذا الطالب نهائياً من الأكاديمية؟")) {
+                db.collection("students").doc(id).delete().then(() => alert("✅ تم طرد وحذف الطالب بنجاح."));
             }
         }
 
         // ==========================================
-        // 📝 إدارة وبناء الاختبارات 
-        // ==========================================
-        function addQuestionToCurrentExam() {
-            const text = document.getElementById("qTextInput").value.trim();
-            const type = document.getElementById("qTypeSelect").value;
-            if(!text) return;
-
-            let questionObj = { type: type, questionText: text };
-            if(type === "mcq") {
-                questionObj.options = [document.getElementById("opt1").value, document.getElementById("opt2").value, document.getElementById("opt3").value, document.getElementById("opt4").value].filter(o => o);
-                questionObj.ans = parseInt(document.getElementById("qMcqCorrectSelect").value);
-            } else {
-                questionObj.ans = document.getElementById("qAnswerInput").value.trim() || "Review by Master";
-            }
-            currentExamQuestions.push(questionObj);
-            renderAddedQuestionsList();
-            document.getElementById("qTextInput").value = ""; document.getElementById("qAnswerInput").value = "";
-        }
-
-        function renderAddedQuestionsList() {
-            const container = document.getElementById("addedQuestionsList");
-            if(currentExamQuestions.length === 0) { container.innerHTML = "<p style='color:#95a5a6; font-size:13px;'>لم تضف أسئلة بعد.</p>"; return; }
-            container.innerHTML = currentExamQuestions.map((q, idx) => `
-                <div style="background:#f8f9fa; padding:12px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid var(--teal);">
-                    <div><strong>سؤال ${idx+1} (${q.type}):</strong> ${q.questionText}</div>
-                    <button class="action-btn btn-delete" onclick="removeQuestion(${idx})" style="padding:4px 8px;">❌</button>
-                </div>
-            `).join('');
-        }
-        function removeQuestion(idx) { currentExamQuestions.splice(idx, 1); renderAddedQuestionsList(); }
-
-        function saveFullExamToFirestore() {
-            const title = document.getElementById("examTitleInput").value.trim();
-            const gradeId = document.getElementById("examGradeSelect").value;
-            const gradeName = document.getElementById("examGradeSelect").options[document.getElementById("examGradeSelect").selectedIndex]?.text;
-            const unit = document.getElementById("examUnitInput").value.trim();
-
-            if(!title || !gradeId || currentExamQuestions.length === 0) { alert("⚠️ أكمل بيانات الاختبار وأضف أسئلة!"); return; }
-
-            db.collection("exams").add({ title, gradeId, gradeName, unit, questions: currentExamQuestions, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => {
-                alert("🎉 تم حفظ ونشر الاختبار بنجاح!");
-                document.getElementById("examTitleInput").value = ""; currentExamQuestions = []; renderAddedQuestionsList();
-                switchView('examsManagerView', document.querySelector('.nav-menu li:nth-child(5)'), '🗂️ إدارة الاختبارات الإلكترونية');
-            });
-        }
-
-        // ==========================================
-        // الوظائف الأساسية للسحب والعرض (من الأكواد السابقة)
+        // باقي وظائف الإدارة المستقرة والمحفوظة سابقاً
         // ==========================================
         function loadAllGrades() {
             db.collection("grades").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
                 let tbody = document.getElementById("gradesTableBody"), select1 = document.getElementById("contentGradeSelect"), select2 = document.getElementById("examGradeSelect");
-                if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>لا توجد صفوف</td></tr>"; return; }
+                if(snapshot.empty) return;
                 let tableHtml = "", selectHtml = "<option value=''>-- اختر الصف الدراسي --</option>";
                 snapshot.forEach((doc) => {
                     let g = doc.data(); tableHtml += `<tr><td>📁 ${g.name}</td><td>${doc.id}</td><td><button class="action-btn btn-delete" onclick="deleteGrade('${doc.id}')">🗑️ حذف</button></td></tr>`;
@@ -452,22 +365,41 @@
             });
         }
         function addNewGradeToFirestore() { let name = document.getElementById("newGradeName").value; if(name) { db.collection("grades").add({ name: name, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => document.getElementById("newGradeName").value = ""); } }
-        function deleteGrade(id) { if(confirm("⚠️ تأكيد الحذف؟")) db.collection("grades").doc(id).delete(); }
-        function toggleContentFormFields() { /* Logic for content toggle */ }
-        function saveContentToFirestore() { /* Logic for content save */ }
-        function loadAllContents() { /* Logic for content fetch */ }
-        function deleteContent(id) { /* Logic for content delete */ }
+        function deleteGrade(id) { if(confirm("⚠️ تأكيد حذف الصف؟")) db.collection("grades").doc(id).delete(); }
+        function saveContentToFirestore() {
+            const gradeId = document.getElementById("contentGradeSelect").value, gradeName = document.getElementById("contentGradeSelect").options[document.getElementById("contentGradeSelect").selectedIndex].text, unit = document.getElementById("contentUnit").value.trim(), title = document.getElementById("contentTitle").value.trim(), type = document.getElementById("contentTypeSelect").value, url = document.getElementById("contentMediaUrl").value.trim();
+            if(!gradeId || !unit || !title || !url) return;
+            db.collection("contents").add({ gradeId, gradeName, unit, title, type, url, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { alert("🚀 تم النشر!"); document.getElementById("contentTitle").value = ""; document.getElementById("contentMediaUrl").value = ""; });
+        }
+        function loadAllContents() {
+            db.collection("contents").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                const tbody = document.getElementById("contentTableBody"); if(snapshot.empty) return;
+                tbody.innerHTML = snapshot.docs.map(doc => { let c = doc.data(); return `<tr><td>${c.gradeName}</td><td>${c.unit}</td><td>${c.title}</td><td><span class="badge badge-type">${c.type==='video'?'🎥 فيديو':'📄 ملزمة'}</span></td><td><button class="action-btn btn-delete" onclick="deleteContent('${doc.id}')">🗑️ حذف</button></td></tr>`; }).join('');
+            });
+        }
+        function deleteContent(id) { if(confirm("⚠️ حذف المحتوى؟")) db.collection("contents").doc(id).delete(); }
         function loadAllExams() {
             db.collection("exams").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let tbody = document.getElementById("examsTableBody");
-                if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>لا توجد اختبارات منشورة</td></tr>"; return; }
+                let tbody = document.getElementById("examsTableBody"); if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>لا توجد اختبارات منشورة</td></tr>"; return; }
                 tbody.innerHTML = snapshot.docs.map(doc => { let e = doc.data(); return `<tr><td>${e.title}</td><td>${e.gradeName}</td><td>${e.unit||'عام'}</td><td><span class="badge">منشور ✅</span></td><td><button class="action-btn btn-delete" onclick="deleteExam('${doc.id}')">🗑️ حذف</button></td></tr>`; }).join('');
             });
         }
-        function deleteExam(id) { if(confirm("⚠️ تأكيد الحذف؟")) db.collection("exams").doc(id).delete(); }
-        function loadAllStudentResults() { /* Logic for results */ }
-        function displayRows(dataArray) { /* Logic for rows */ }
-        function filterResults() { /* Logic for filtering */ }
+        function deleteExam(id) { if(confirm("⚠️ حذف الاختبار؟")) db.collection("exams").doc(id).delete(); }
+        function loadAllStudentResults() {
+            db.collection("exam_results").get().then((querySnapshot) => {
+                const tbody = document.getElementById("adminTableBody"); if (querySnapshot.empty) return;
+                allRecords = []; let studentEmails = new Set();
+                querySnapshot.forEach((doc) => { let data = doc.data(); allRecords.push(data); if(data.email) studentEmails.add(data.email); });
+                allRecords.sort((a, b) => (b.timestamp ? b.timestamp.toMillis() : 0) - (a.timestamp ? a.timestamp.toMillis() : 0));
+                document.getElementById("totalSubmissions").innerText = allRecords.length; document.getElementById("totalUniqueStudents").innerText = studentEmails.size;
+                displayRows(allRecords);
+            });
+        }
+        function displayRows(dataArray) {
+            const tbody = document.getElementById("adminTableBody");
+            tbody.innerHTML = dataArray.map(data => { let dateObj = data.timestamp ? data.timestamp.toDate() : new Date(); return `<tr><td><div style="font-weight:900;color:#2c3e50;">${data.name}</div><div style="font-size:11px;color:#95a5a6;">${data.email}</div></td><td>${data.examName}</td><td>${dateObj.toLocaleDateString('ar-EG')}</td><td><span class="badge">${data.score}</span></td></tr>`; }).join('');
+        }
+        function filterResults() { let kw = document.getElementById("searchBar").value.toLowerCase().trim(); if(!kw) return displayRows(allRecords); let filtered = allRecords.filter(r => (r.name||"").toLowerCase().includes(kw) || (r.email||"").toLowerCase().includes(kw) || (r.examName||"").toLowerCase().includes(kw)); displayRows(filtered); }
         function logout() { auth.signOut().then(() => { window.location.href = "index.html"; }); }
     </script>
 </body>
