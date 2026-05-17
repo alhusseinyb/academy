@@ -61,8 +61,7 @@
         <span id="examTimer">المادة: لغة إنجليزية</span>
     </div>
     
-    <div id="questionBox">
-        </div>
+    <div id="questionBox"></div>
     
     <button class="btn btn-block" style="margin-top:20px;" onclick="nextQuestion()" id="nextBtn">السؤال التالي ➡️</button>
 </div>
@@ -81,7 +80,6 @@
 </div>
 
 <script>
-    // 1. إعداد الفايربيز المعتمد لـ أكاديمية الحسيني
     const firebaseConfig = {
         apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
         authDomain: "alhusseiny-academy.firebaseapp.com",
@@ -93,7 +91,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // متغيرات اللعبة التعليمية للاختبار الحالي
     let availableExams = [];
     let activeExam = null;
     let currentQuestionIndex = 0;
@@ -101,24 +98,21 @@
     let currentStudent = "";
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3g79bU7-669wX3i2t69h89M5mNfR7G1y3w0v7/exec";
 
-    // 2. سحب الامتحانات المتاحة للصف الأول الإعدادي لايف من الـ Firestore
-    // يبحث عن أي امتحان يحمل معرف الصف الأول الإعدادي (يرجى التأكد من اختيار الصف الصح أثناء الترحيل)
+    // جلب البيانات من السيرفر
     db.collection("exams").orderBy("timestamp", "desc").get().then((snapshot) => {
         const grid = document.getElementById("examsGrid");
         grid.innerHTML = "";
         availableExams = [];
 
         if(snapshot.empty) {
-            grid.innerHTML = "<p style='color:#e74c3c; grid-column: 1/-1;'>⚠️ لا توجد امتحانات مرفوعة في الخزنة حالياً لهذا الصف. يرجى الترحيل أولاً!</p>";
+            grid.innerHTML = "<p style='color:#e74c3c; grid-column: 1/-1;'>⚠️ لا توجد امتحانات في السيرفر حالياً.</p>";
             return;
         }
 
         snapshot.forEach(doc => {
             const examData = doc.data();
-            // حفظ الداتا مع الـ ID
             availableExams.push({ id: doc.id, ...examData });
 
-            // رسم كارت الامتحان للطالب
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `
@@ -130,63 +124,59 @@
             grid.appendChild(card);
         });
     }).catch(err => {
-        console.error("خطأ في جلب الامتحانات:", err);
-        document.getElementById("examsGrid").innerHTML = "<p style='color:red;'>حدث خطأ أثناء تحميل الاختبارات من السيرفر.</p>";
+        console.error(err);
     });
 
-    // 3. دالة بدء الامتحان الذكية والمرنة (تتحمل أي نظام أسئلة)
     function startQuiz(examId) {
         const nameInput = document.getElementById("studentNameInput").value.trim();
         if (!nameInput) {
-            alert("🚨 يرجى كتابة اسمك الثلاثي أولاً لحفظ النتيجة في لوحة تحكم المستر!");
+            alert("🚨 يرجى كتابة اسمك الثلاثي أولاً لبدء الاختبار!");
             return;
         }
         currentStudent = nameInput;
         
-        // العثور على الامتحان المختار
         activeExam = availableExams.find(e => e.id === examId);
         if (!activeExam || !activeExam.questions || activeExam.questions.length === 0) {
-            alert("⚠️ هذا الامتحان فارغ أو لم يتم ترحيل أسئلته بشكل صحيح!");
+            alert("⚠️ الامتحان فارغ أو به مشكلة!");
             return;
         }
 
-        // تحضير المتغيرات للامتحان الجديد
         currentQuestionIndex = 0;
         studentAnswers = new Array(activeExam.questions.length).fill(null);
 
-        // تحويل الشاشات
         document.getElementById("mainMenu").style.display = "none";
         document.getElementById("quizScreen").style.display = "block";
         
-        // عرض السؤال الأول
         showQuestion();
     }
 
-    // 4. الدالة المرنة لعرض السؤال (التي تحل مشكلة الترتيب والأنواع)
     function showQuestion() {
         const q = activeExam.questions[currentQuestionIndex];
         const container = document.getElementById("questionBox");
         
-        // تحديث شريط التقدم والعداد
         const total = activeExam.questions.length;
         document.getElementById("questionCounter").innerText = `السؤال ${currentQuestionIndex + 1} من ${total}`;
         document.getElementById("progressFill").style.width = `${((currentQuestionIndex) / total) * 100}%`;
 
-        // زر التالي يتحول لـ "إنهاء" لو وصلنا لآخر سؤال
         if (currentQuestionIndex === total - 1) {
             document.getElementById("nextBtn").innerText = "🏁 إنهاء الاختبار وإرسال النتيجة";
         } else {
             document.getElementById("nextBtn").innerText = "السؤال التالي ➡️";
         }
 
-        // معالجة نص السؤال واستبدال الرموز ليعرض بجمالية وسطور منسقة
-        let formattedText = q.questionText ? q.questionText.replace(/\n/g, "<br>") : "سؤال اختياري";
+        // أمان تام لقراءة نص السؤال وحالة الأحرف والخيارات المتنوعة
+        let qText = q.questionText || q.question || "سؤال اختياري";
+        let formattedText = qText.replace(/\n/g, "<br>");
 
-        // بناء وعرض السؤال بناءً على نوعه (MCQ أو مقالي)
-        if (q.type === "mcq" || q.options) {
-            // سؤال اختيار من متعدد
+        // استخراج الخيارات بذكاء سواء كانت مصفوفة جاهزة أو متغيرات منفصلة
+        let options = q.options || [];
+        if (options.length === 0 && q.a) {
+            options = [q.a, q.b, q.c, q.d].filter(o => o !== undefined && o !== null);
+        }
+
+        if (options.length > 0) {
             let optionsHtml = "";
-            q.options.forEach((opt, idx) => {
+            options.forEach((opt, idx) => {
                 let selectedClass = studentAnswers[currentQuestionIndex] === idx ? "selected" : "";
                 optionsHtml += `<button class="option-btn ${selectedClass}" onclick="selectOption(${idx})">${opt}</button>`;
             });
@@ -196,7 +186,6 @@
                 <div class="options-container">${optionsHtml}</div>
             `;
         } else {
-            // سؤال مقالي أو أكمل (Fill/Text)
             let currentVal = studentAnswers[currentQuestionIndex] || "";
             container.innerHTML = `
                 <div class="question-text">${formattedText}</div>
@@ -206,22 +195,18 @@
         }
     }
 
-    // دالة اختيار الإجابة الـ MCQ
     function selectOption(index) {
         studentAnswers[currentQuestionIndex] = index;
-        showQuestion(); // لإعادة التلوين فوراً باللون الأخضر المميز للزر المحدد
+        showQuestion();
     }
 
-    // دالة حفظ الإجابة المقالية أثناء الكتابة
     function saveTextAnswer(val) {
         studentAnswers[currentQuestionIndex] = val;
     }
 
-    // 5. دالة الانتقال أو الإنهاء وحساب النتيجة
     function nextQuestion() {
-        // التحقق من أن الطالب حل السؤال الحالي لمنع الاستعجال
         if (studentAnswers[currentQuestionIndex] === null || studentAnswers[currentQuestionIndex] === "") {
-            alert("⚠️ من فضلك أجب على السؤال الحالي أولاً قبل الانتقال!");
+            alert("⚠️ من فضلك أجب على السؤال الحالي أولاً!");
             return;
         }
 
@@ -235,7 +220,6 @@
         }
     }
 
-    // 6. دالة حساب النتيجة النهائية وضخها في الفايربيز وشيت جوجل الشامل
     function finishAndSubmitQuiz() {
         let score = 0;
         const total = activeExam.questions.length;
@@ -245,61 +229,82 @@
         activeExam.questions.forEach((q, idx) => {
             let studentAns = studentAnswers[idx];
             let isCorrect = false;
-            let qText = q.questionText ? q.questionText.replace(/<br>/g, " ") : "Question";
+            let qText = (q.questionText || q.question || "Question").replace(/<br>/g, " ");
 
-            if (q.type === "mcq" || q.options) {
-                // حساب الاختياري بالـ Index
-                if (parseInt(studentAns) === parseInt(q.ans)) {
+            let options = q.options || [];
+            if (options.length === 0 && q.a) {
+                options = [q.a, q.b, q.c, q.d].filter(o => o);
+            }
+
+            // تحويل ذكي للإجابة النموذجية سواء كانت رقم أو حرف (a, b, c, d)
+            let modelAnsIndex = 0;
+            if (q.ans !== undefined) {
+                // لو الإجابة متخزنة كرقم أو حرف مباشرة
+                if (typeof q.ans === 'string') {
+                    let cleanAns = q.ans.trim().toLowerCase();
+                    if (cleanAns === 'a' || cleanAns === '0') modelAnsIndex = 0;
+                    else if (cleanAns === 'b' || cleanAns === '1') modelAnsIndex = 1;
+                    else if (cleanAns === 'c' || cleanAns === '2') modelAnsIndex = 2;
+                    else if (cleanAns === 'd' || cleanAns === '3') modelAnsIndex = 3;
+                } else {
+                    modelAnsIndex = parseInt(q.ans);
+                }
+            } else if (q.correct !== undefined) {
+                let cleanCorrect = String(q.correct).trim().toLowerCase();
+                if (cleanCorrect === 'a') modelAnsIndex = 0;
+                else if (cleanCorrect === 'b') modelAnsIndex = 1;
+                else if (cleanCorrect === 'c') modelAnsIndex = 2;
+                else if (cleanCorrect === 'd') modelAnsIndex = 3;
+            }
+
+            if (options.length > 0) {
+                if (parseInt(studentAns) === modelAnsIndex) {
                     score++;
                     isCorrect = true;
                 }
-                let sText = q.options[studentAns] || "لم يحل";
-                let cText = q.options[q.ans] || "";
+                let sText = options[studentAns] || "لم يحل";
+                let cText = options[modelAnsIndex] || "";
                 
                 reviewHtml += `
                     <div class="review-item">
-                        <p class="question-text">س${idx+1}: ${q.questionText}</p>
+                        <p class="question-text">س${idx+1}: ${q.questionText || q.question}</p>
                         <p class="${isCorrect ? 'correct-ans' : 'wrong-ans'}">إجابتك: ${sText}</p>
                         ${!isCorrect ? `<p class="correct-ans">الإجابة النموذجية: ${cText}</p>` : ''}
                     </div>
                 `;
                 reportForDocs += `س${idx+1}: ${qText} | إجابتك: ${sText} [${isCorrect?'صح':'خطأ'}]\n`;
             } else {
-                // حساب المقالي / أكمل بمطابقة النصوص (بدون فراغات أو حساسيات كابيتال)
+                let targetAns = q.ans || q.correct || "";
                 let cleanStudent = String(studentAns).trim().toLowerCase();
-                let cleanCorrect = String(q.ans).trim().toLowerCase();
+                let cleanCorrect = String(targetAns).trim().toLowerCase();
                 if (cleanStudent === cleanCorrect) {
                     score++;
                     isCorrect = true;
                 }
                 reviewHtml += `
                     <div class="review-item">
-                        <p class="question-text">س${idx+1}: ${q.questionText}</p>
+                        <p class="question-text">س${idx+1}: ${q.questionText || q.question}</p>
                         <p class="${isCorrect ? 'correct-ans' : 'wrong-ans'}">إجابتك: ${studentAns}</p>
-                        ${!isCorrect ? `<p class="correct-ans">الإجابة النموذجية: ${q.ans}</p>` : ''}
+                        ${!isCorrect ? `<p class="correct-ans">الإجابة النموذجية: ${targetAns}</p>` : ''}
                     </div>
                 `;
                 reportForDocs += `س${idx+1}: ${qText} | إجابتك: ${studentAns} [${isCorrect?'صح':'خطأ'}]\n`;
             }
         });
 
-        // حفظ النتيجة في لوحة تحكم الفايربيز (لو الإيميل متوفر أو مجهول)
+        // إرسال النتيجة للفايربيز
         firebase.firestore().collection("exam_results").add({
             name: currentStudent,
             examName: activeExam.title,
             score: score + " / " + total,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => console.log("تم إرسال النتيجة لقاعدة البيانات."))
-          .catch((e) => console.log("خطأ في حفظ النتيجة:", e));
+        }).then(() => console.log("Success firestore"))
+          .catch((e) => console.log(e));
 
-        // إرسال التقرير الأوتوماتيكي لشيت جوجل والكنترول
+        // إرسال لشيت جوجل
         fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({name: currentStudent, exam: activeExam.title, score: score+"/"+total, report: reportForDocs}) })
-        .then(() => {
-            displayResults(score, total, reviewHtml);
-        }).catch(() => { 
-            // احتياطي لو النت علق عند الطالب يعرض النتيجة علطول
-            displayResults(score, total, reviewHtml);
-        });
+        .then(() => { displayResults(score, total, reviewHtml); })
+        .catch(() => { displayResults(score, total, reviewHtml); });
     }
 
     function displayResults(score, total, reviewHtml) {
