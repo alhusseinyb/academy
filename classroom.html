@@ -41,12 +41,19 @@
         .page-title-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .unit-box { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-right: 5px solid var(--teal); }
         .unit-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-top: 0; margin-bottom: 15px; }
-        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; text-decoration: none; color: var(--text); }
+        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; text-decoration: none; color: var(--text); cursor: pointer; }
         .content-item:hover { background: #f4f7f6; transform: translateX(-5px); border-color: var(--secondary); }
         .content-info { display: flex; align-items: center; gap: 15px; font-weight: bold; }
         .icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; color: white; }
         .bg-video { background: #e74c3c; } .bg-pdf { background: #3498db; } .bg-exam { background: #f39c12; }
         .btn-action { background: var(--teal); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Tajawal'; }
+
+        /* 🎥 شاشة السينما التعليمية (جديد) */
+        .media-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 12px 12px 0 0; border-bottom: 2px solid #eee; }
+        .media-header h2 { margin: 0; color: var(--primary); font-size: 1.3em; }
+        .media-container { background: #000; width: 100%; aspect-ratio: 16 / 9; border-radius: 0 0 12px 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .media-container iframe { width: 100%; height: 100%; border: none; }
+        .pdf-container { aspect-ratio: auto; height: 80vh; background: #ecf0f1; }
 
         /* شاشة الامتحان (المحرك الذكي المدمج) */
         .exam-header { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; border: 2px dashed var(--secondary); }
@@ -104,6 +111,16 @@
             </div>
         </section>
 
+        <section id="mediaView" class="view-section">
+            <div class="media-header">
+                <h2 id="mediaTitle">--</h2>
+                <button class="btn-outline" style="color: var(--primary); border-color: #bdc3c7;" onclick="closeMedia()">🔙 عودة للدروس</button>
+            </div>
+            <div id="mediaContainerWrapper" class="media-container">
+                <iframe id="mediaIframe" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+        </section>
+
         <section id="examView" class="view-section">
             <div class="exam-header">
                 <h2 id="activeExamTitle" style="color: var(--primary); margin: 0 0 10px;">--</h2>
@@ -115,8 +132,7 @@
                 <span id="questionCounter">السؤال 1 من 10</span>
             </div>
             
-            <div id="questionBox" class="question-card">
-                </div>
+            <div id="questionBox" class="question-card"></div>
             
             <button class="btn-submit-exam" onclick="nextQuestion()" id="nextBtn">السؤال التالي ➡️</button>
             <button class="btn-outline" style="color: #e74c3c; border-color: #e74c3c; margin-top: 15px; width: 100%;" onclick="switchView('contentView')">❌ إلغاء والعودة للدروس</button>
@@ -155,12 +171,10 @@
         let currentStudentName = "";
         let currentStudentEmail = "";
         
-        // متغيرات المحرك الذكي
         let activeExamData = null;
         let currentQuestionIndex = 0;
         let studentAnswers = [];
 
-        // التحقق من الدخول
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentStudentName = user.displayName || "طالب الأكاديمية";
@@ -249,19 +263,18 @@
                 html += `<div class="unit-box"><h3 class="unit-title">🔖 ${unit}</h3>`;
                 grouped[unit].forEach(item => {
                     if(item.type === 'video') {
-                        html += `<a href="${item.url}" target="_blank" class="content-item">
+                        html += `<div class="content-item" onclick="openMedia('${item.url}', 'video', '${item.title}')">
                                     <div class="content-info"><div class="icon-circle bg-video">🎥</div> ${item.title}</div>
-                                    <span class="btn-action">مشاهدة</span>
-                                 </a>`;
+                                    <span class="btn-action">مشاهدة الدرس</span>
+                                 </div>`;
                     } else if(item.type === 'pdf') {
-                        html += `<a href="${item.url}" target="_blank" class="content-item">
+                        html += `<div class="content-item" onclick="openMedia('${item.url}', 'pdf', '${item.title}')">
                                     <div class="content-info"><div class="icon-circle bg-pdf">📄</div> ${item.title}</div>
-                                    <span class="btn-action" style="background:#3498db;">تحميل/قراءة</span>
-                                 </a>`;
+                                    <span class="btn-action" style="background:#3498db;">قراءة الملزمة</span>
+                                 </div>`;
                     } else if(item.type === 'exam') {
-                        // تشفير البيانات لتمريرها كـ String
                         let encodedData = encodeURIComponent(JSON.stringify(item.examData));
-                        html += `<div class="content-item" style="cursor:pointer;" onclick="startExam('${encodedData}')">
+                        html += `<div class="content-item" onclick="startExam('${encodedData}')">
                                     <div class="content-info"><div class="icon-circle bg-exam">📝</div> ${item.title}</div>
                                     <span class="btn-action" style="background:var(--accent);">ابدأ الاختبار</span>
                                  </div>`;
@@ -273,7 +286,42 @@
         }
 
         // ==========================================
-        // 📝 المحرك الذكي للامتحانات (منقول من prep1)
+        // 🎥 محرك السينما التعليمية (Theater Mode)
+        // ==========================================
+        function openMedia(url, type, title) {
+            document.getElementById("mediaTitle").innerText = title;
+            const iframe = document.getElementById("mediaIframe");
+            const wrapper = document.getElementById("mediaContainerWrapper");
+            
+            let finalUrl = url;
+
+            // محول الروابط الذكي (URL Converter)
+            if (type === 'video') {
+                wrapper.className = "media-container"; // 16:9 نسبة العرض للفيديو
+                if (url.includes("watch?v=")) {
+                    finalUrl = url.replace("watch?v=", "embed/").split("&")[0];
+                } else if (url.includes("youtu.be/")) {
+                    finalUrl = url.replace("youtu.be/", "www.youtube.com/embed/").split("?")[0];
+                }
+            } else if (type === 'pdf') {
+                wrapper.className = "media-container pdf-container"; // شاشة أطول للـ PDF
+                if (url.includes("/view")) {
+                    finalUrl = url.replace("/view", "/preview");
+                }
+            }
+
+            iframe.src = finalUrl;
+            switchView('mediaView');
+        }
+
+        // إغلاق الميديا لتفريغ الرامات ومنع الصوت في الخلفية
+        function closeMedia() {
+            document.getElementById("mediaIframe").src = "";
+            switchView('contentView');
+        }
+
+        // ==========================================
+        // 📝 المحرك الذكي للامتحانات
         // ==========================================
         function startExam(encodedExamData) {
             activeExamData = JSON.parse(decodeURIComponent(encodedExamData));
@@ -412,7 +460,6 @@
                 }
             });
 
-            // حفظ النتيجة في لوحة المستر
             db.collection("exam_results").add({
                 name: currentStudentName,
                 email: currentStudentEmail,
