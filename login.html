@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الدخول الموحدة | أكاديمية مستر الحسيني</title>
+    <title>بوابة الدخول | أكاديمية مستر الحسيني</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
@@ -37,7 +37,6 @@
         .btn-auth { background: var(--secondary); color: white; border: none; padding: 13px; width: 100%; font-size: 16px; font-weight: bold; font-family: 'Tajawal'; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(24, 188, 156, 0.2); }
         .btn-auth:hover { background: #128f76; transform: translateY(-1px); }
         
-        /* زر جوجل الفاخر */
         .btn-google { background: #fff; color: #757575; border: 2px solid #e1e4e8; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; font-family: 'Tajawal'; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
         .btn-google:hover { background: #f8f9fa; border-color: #cbd5e0; }
         .btn-google img { width: 18px; height: 18px; }
@@ -49,7 +48,6 @@
 
         .auth-view { display: none; }
         .auth-view.active { display: block; }
-        #recaptcha-container { margin: 10px 0; }
     </style>
 </head>
 <body>
@@ -67,23 +65,17 @@
 
         <div id="loginView" class="auth-view active">
             <div class="form-group">
-                <label>البريد الإلكتروني أو رقم الهاتف:</label>
-                <input type="text" id="loginUserKey" placeholder="name@example.com أو +201xxxxxxxxx" style="direction: ltr;" onkeypress="handleEnterKey(event, 'login')">
+                <label>البريد الإلكتروني (Email):</label>
+                <input type="email" id="loginEmail" placeholder="name@example.com" style="direction: ltr;" onkeypress="handleEnterKey(event, 'login')">
             </div>
             
-            <div id="loginPasswordGroup" class="form-group">
+            <div class="form-group">
                 <label>كلمة المرور (Password):</label>
                 <input type="password" id="loginPassword" placeholder="••••••••" onkeypress="handleEnterKey(event, 'login')">
             </div>
 
-            <div id="loginOtpGroup" class="form-group" style="display: none;">
-                <div id="recaptcha-container"></div>
-                <label>أدخل كود التحقق المرسل للموبايل (OTP):</label>
-                <input type="text" id="loginOTP" placeholder="------" style="text-align: center; letter-spacing: 5px;" onkeypress="handleEnterKey(event, 'login')">
-            </div>
-
-            <a class="forgot-link" id="forgotLinkBtn" onclick="handleForgotPassword()">نسيت كلمة المرور؟ 🔑</a>
-            <button class="btn-auth" id="mainLoginBtn" onclick="executeLogin()">دخول آمن 🔐</button>
+            <a class="forgot-link" onclick="handleForgotPassword()">نسيت كلمة المرور؟ 🔑</a>
+            <button class="btn-auth" onclick="executeLogin()">دخول آمن 🔐</button>
 
             <div class="divider">أو الدخول السريع عبر</div>
             <button class="btn-google" onclick="loginWithGoogle()">
@@ -101,10 +93,12 @@
                 <label>البريد الإلكتروني:</label>
                 <input type="email" id="regEmail" placeholder="student@example.com" style="direction: ltr;" onkeypress="handleEnterKey(event, 'register')">
             </div>
+            
             <div class="form-group">
-                <label>رقم الهاتف (اختياري):</label>
-                <input type="text" id="regPhone" placeholder="+201xxxxxxxx" style="direction: ltr;" onkeypress="handleEnterKey(event, 'register')">
+                <label>رقم الهاتف الموبايل (اختياري) 📱:</label>
+                <input type="text" id="regPhone" placeholder="01xxxxxxxxx" style="direction: ltr;" onkeypress="handleEnterKey(event, 'register')">
             </div>
+            
             <div class="form-group">
                 <label>اختر مرحلتك الدراسية الحالية:</label>
                 <select id="regGrade">
@@ -141,9 +135,8 @@
         const db = firebase.firestore();
 
         const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
-        let confirmationResult = null;
 
-        // ميزة الـ Enter = دخول
+        // تفعيل ميزة الـ Enter للدخول السريع
         function handleEnterKey(event, action) {
             if (event.key === "Enter") {
                 event.preventDefault();
@@ -158,79 +151,42 @@
             if(target === 'login') {
                 document.getElementById('loginView').classList.add('active');
                 document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('authSubtitle').innerText = "بوابة تسجيل الدخول الاحترافية والموحدة";
             } else {
                 document.getElementById('registerView').classList.add('active');
                 document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('authSubtitle').innerText = "انضم الآن لأقوى منصة تعليمية وتأسيسية";
             }
         }
 
-        // دالة الدخول الذكية (تفحص المدخل تلقائياً: إيميل أم هاتف؟)
+        // تسجيل الدخول بالإيميل والباسورد المباشر
         function executeLogin() {
-            const userKey = document.getElementById("loginUserKey").value.trim();
-            if(!userKey) { alert("⚠️ يرجى إدخال البريد الإلكتروني أو رقم الهاتف!"); return; }
+            const email = document.getElementById("loginEmail").value.trim();
+            const pass = document.getElementById("loginPassword").value.trim();
+            
+            if(!email || !pass) { alert("⚠️ يرجى إدخال البريد الإلكتروني وكلمة المرور!"); return; }
 
-            // فحص المدخلات عبر Regex ذكي
-            const isEmail = userKey.includes('@');
-
-            if(isEmail) {
-                // دخول بالإيميل والباسورد التقليدي
-                const pass = document.getElementById("loginPassword").value.trim();
-                if(!pass) { alert("⚠️ يرجى كتابة كلمة المرور!"); return; }
-                auth.signInWithEmailAndPassword(userKey, pass)
-                    .then(res => redirectUser(res.user))
-                    .catch(err => alert("❌ خطأ: " + err.message));
-            } else {
-                // دخول برقم الهاتف والـ OTP
-                handlePhoneLoginProcess(userKey);
-            }
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(res => redirectUser(res.user))
+                .catch(err => alert("❌ خطأ في الدخول: " + err.message));
         }
 
-        // معالجة الدخول بالهاتف لايف
-        function handlePhoneLoginProcess(phone) {
-            if (!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
-            }
-
-            if (!confirmationResult) {
-                document.getElementById("mainLoginBtn").innerText = "جاري الإرسال... ⏳";
-                auth.signInWithPhoneNumber(phone, window.recaptchaVerifier).then((result) => {
-                    confirmationResult = result;
-                    document.getElementById("loginPasswordGroup").style.display = "none";
-                    document.getElementById("forgotLinkBtn").style.display = "none";
-                    document.getElementById("loginOtpGroup").style.display = "block";
-                    document.getElementById("mainLoginBtn").innerText = "✔️ تأكيد كود التحقق";
-                    alert("🚀 تم إرسال كود التحقق لهاتفك بنجاح!");
-                }).catch(err => {
-                    alert("خطأ: " + err.message);
-                    document.getElementById("mainLoginBtn").innerText = "دخول آمن 🔐";
-                });
-            } else {
-                const code = document.getElementById("loginOTP").value.trim();
-                if(!code) { alert("⚠️ أدخل كود الـ OTP!"); return; }
-                confirmationResult.confirm(code)
-                    .then(res => redirectUser(res.user))
-                    .catch(err => alert("❌ الكود خاطئ أو منتهي!"));
-            }
-        }
-
-        // ✨ 3️⃣ ميزة الدخول الفوري السريع عبر جوجل (Google Sign-In)
+        // الدخول السريع والآمن بجوجل (مجاني 100%)
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).then((result) => {
                 const user = result.user;
                 
-                // فحص هل الطالب جديد لنسجل بياناته أم مسجل مسبقاً؟
                 db.collection("students").doc(user.uid).get().then((doc) => {
                     if (!doc.exists) {
-                        // لو يوزر جديد دخل بجوجل، نضع له إعدادات افتراضية (أولى إعدادي مثلاً) ويقدر يغيرها بعدين
+                        // لو طالب جديد يسجل أول مرة بجوجل، نحتفظ ببياناته فوراً في الكنترول
                         db.collection("students").doc(user.uid).set({
                             name: user.displayName,
                             email: user.email,
+                            phone: "سجل بجوجل (غير محدد)",
                             grade: "prep1",
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        }).then(() => {
-                            redirectUser(user);
-                        });
+                        }).then(() => redirectUser(user));
                     } else {
                         redirectUser(user);
                     }
@@ -238,7 +194,7 @@
             }).catch(err => alert("خطأ جوجل: " + err.message));
         }
 
-        // إنشاء حساب جديد للطلاب (مع ميزة اختيارية الهاتف)
+        // إنشاء حساب طالب جديد وحفظ رقم هاتفه اختيارياً
         function registerNewStudent() {
             const name = document.getElementById("regName").value.trim();
             const email = document.getElementById("regEmail").value.trim();
@@ -246,28 +202,30 @@
             const grade = document.getElementById("regGrade").value;
             const pass = document.getElementById("regPassword").value.trim();
 
-            if(!name || !email || !pass) { alert("⚠️ يرجى ملء الخانات الأساسية!"); return; }
+            if(!name || !email || !pass) { alert("⚠️ يرجى ملء الخانات الأساسية المطلوبة!"); return; }
+            if(pass.length < 6) { alert("⚠️ كلمة المرور يجب ألا تقل عن 6 خانات!"); return; }
 
             auth.createUserWithEmailAndPassword(email, pass).then((userCredential) => {
                 userCredential.user.updateProfile({ displayName: name }).then(() => {
+                    // تجميع وكتابة الملف الشخصي للطالب في الفايرستور
                     db.collection("students").doc(userCredential.user.uid).set({
                         name: name,
                         email: email,
-                        phone: phone || "غير مسجل",
+                        phone: phone || "غير مسجل", // لحفظه كبيانات اختيارية واحترافية للمستقبل!
                         grade: grade,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }).then(() => {
-                        alert(`🎉 أهلاً بك يا بطل! تم إنشاء حسابك بنجاح.`);
+                        alert(`🎉 أهلاً بك يا بطل! تم إنشاء حسابك المعتمد بنجاح.`);
                         window.location.href = "dashboard.html";
                     });
                 });
-            }).catch(err => alert("❌ خطأ: " + err.message));
+            }).catch(err => alert("❌ خطأ أثناء التسجيل: " + err.message));
         }
 
         // نسيت كلمة المرور
         function handleForgotPassword() {
-            const email = document.getElementById("loginUserKey").value.trim();
-            if(!email || !email.includes('@')) { alert("⚠️ اكتب بريدك الإلكتروني في الخانة أولاً بشكل صحيح لإرسال رابط الاستعادة!"); return; }
+            const email = document.getElementById("loginEmail").value.trim();
+            if(!email) { alert("⚠️ يرجى كتابة بريدك الإلكتروني أولاً في خانة الإيميل، ثم الضغط على نسيت كلمة المرور لإرسال الرابط!"); return; }
             auth.sendPasswordResetEmail(email).then(() => {
                 alert(`📧 تم إرسال رابط استعادة كلمة المرور بنجاح إلى: ${email}`);
             }).catch(err => alert(err.message));
