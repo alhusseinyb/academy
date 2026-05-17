@@ -3,125 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أكاديمية مستر الحسيني يحيى للغة الإنجليزية</title>
+    <title>أكاديمية مستر الحسيني يحيى | البوابة التعليمية للغة الإنجليزية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
-
     <style>
-        :root { --primary: #1a252f; --secondary: #2c3e50; --accent: #e67e22; --prep1: #27ae60; --prep2: #2980b9; --prep3: #c0392b; --ai: #8e44ad; --bg: #ecf0f1; --text: #2c3e50; }
-        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        /* شريط المستخدم العلوي */
-        .top-bar { background: #0d1f1a; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        .user-info { font-weight: bold; color: #f5c842; }
-        .auth-btn { background: var(--accent); color: white; text-decoration: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; transition: 0.3s; cursor: pointer; border: none; font-family: 'Tajawal'; }
-        .auth-btn:hover { background: #d35400; }
-        .auth-btn.logout { background: #c0392b; }
-        .auth-btn.logout:hover { background: #922b21; }
+        :root { 
+            --primary: #2c3e50; --secondary: #18bc9c; --accent: #e67e22; 
+            --bg: #f8f9fa; --white: #ffffff; --text: #2c3e50; 
+        }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
 
-        .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; text-align: center; padding: 50px 20px; border-bottom: 5px solid var(--accent); }
-        .hero h1 { font-size: 2.8em; margin: 0; font-weight: 900; }
-        .hero p { font-size: 1.3em; margin: 10px 0; opacity: 0.9; }
-
-        .main-content { flex: 1; max-width: 1100px; margin: -30px auto 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box;}
+        /* الهيدر ونظام التنقل */
+        header { background: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5em; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .logo span { color: var(--secondary); }
         
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .grade-card { background: white; border-radius: 15px; padding: 30px 15px; text-align: center; text-decoration: none; color: var(--text); box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: 0.3s; border: 2px solid transparent; }
-        .grade-card:hover { transform: translateY(-10px); }
-        .grade-card h2 { font-size: 1.8em; margin: 10px 0; }
-        .grade-card .icon { font-size: 3.5em; }
-        
-        /* ألوان البطاقات */
-        .card-p1:hover { border-color: var(--prep1); } .card-p1 h2 { color: var(--prep1); }
-        .card-p2:hover { border-color: var(--prep2); } .card-p2 h2 { color: var(--prep2); }
-        .card-p3:hover { border-color: var(--prep3); } .card-p3 h2 { color: var(--prep3); }
-        .card-ai:hover { border-color: var(--ai); } .card-ai h2 { color: var(--ai); }
+        /* أزرار الهيدر */
+        .btn { font-family: 'Tajawal'; font-weight: bold; padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+        .btn-primary { background: var(--secondary); color: white; box-shadow: 0 4px 10px rgba(24, 188, 156, 0.2); }
+        .btn-primary:hover { background: #128f76; transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; }
 
-        footer { background: #1a252f; color: white; text-align: center; padding: 30px; margin-top: auto; border-top: 5px solid var(--accent); }
-        .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
-        .footer-links a { color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px;}
+        /* قسم البطولة (Hero Section) */
+        .hero-section { background: linear-gradient(135deg, var(--primary), #34495e); color: white; padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
+        .hero-container { max-width: 800px; margin: 0 auto; position: relative; z-index: 10; }
+        .hero-section h1 { font-size: 3em; font-weight: 900; margin: 0 0 20px 0; line-height: 1.2; }
+        .hero-section p { font-size: 1.2em; color: #bdc3c7; margin-bottom: 35px; font-weight: bold; }
+        .hero-btns { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .hero-btns .btn-outline { border-color: white; color: white; }
+        .hero-btns .btn-outline:hover { background: white; color: var(--primary); }
+
+        /* قسم المميزات */
+        .features-section { max-width: 1200px; margin: -50px auto 6px; padding: 0 20px; position: relative; z-index: 20; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .feature-card { background: var(--white); border-radius: 16px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); }
+        .feature-icon { font-size: 45px; margin-bottom: 15px; display: inline-block; }
+        .feature-card h3 { margin: 0 0 10px 0; font-size: 1.3em; color: var(--primary); font-weight: 900; }
+        .feature-card p { margin: 0; color: #7f8c8d; font-size: 14px; font-weight: bold; }
+
+        /* قسم من نحن للمستر */
+        .about-section { max-width: 1200px; margin: 80px auto; padding: 0 20px; display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
+        .about-text { flex: 1; min-width: 300px; }
+        .about-text h2 { font-size: 2.2em; font-weight: 900; color: var(--primary); margin-top: 0; }
+        .about-text p { color: #555; font-size: 16px; line-height: 1.8; margin-bottom: 25px; font-weight: bold; }
+        
+        .stat-badges { display: flex; gap: 20px; flex-wrap: wrap; }
+        .stat-badge { background: #eef2f5; padding: 15px 25px; border-radius: 12px; border-right: 4px solid var(--accent); }
+        .stat-badge strong { display: block; font-size: 1.8em; color: var(--primary); font-weight: 900; }
+        .stat-badge span { font-size: 13px; color: #7f8c8d; font-weight: bold; }
+
+        footer { text-align: center; padding: 30px; color: #95a5a6; font-size: 13px; background: var(--white); border-top: 1px solid #eee; margin-top: 80px; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div id="userInfo" class="user-info">جاري التحميل...</div>
-        <div id="authAction"></div>
-    </div>
-
-    <div class="hero">
-        <h1>أكاديمية مستر الحسيني يحيى</h1>
-        <p>الإنجليزية بشكل مختلف - نظام تعليمي ذكي ومتكامل</p>
-    </div>
-
-    <div class="main-content">
-        <div class="grid-container">
-            <a href="prep1.html" class="grade-card card-p1">
-                <div class="icon">📗</div><h2>الصف الأول الإعدادي</h2><p>اختبارات تفاعلية شاملة</p>
-            </a>
-            <a href="prep2.html" class="grade-card card-p2">
-                <div class="icon">📘</div><h2>الصف الثاني الإعدادي</h2><p>مراجعات ووحدات دراسية</p>
-            </a>
-            <a href="prep3.html" class="grade-card card-p3">
-                <div class="icon">📕</div><h2>الشهادة الإعدادية</h2><p>طريقك نحو الدرجة النهائية</p>
-            </a>
-            <a href="ai-tutor.html" class="grade-card card-ai">
-                <div class="icon">🤖</div><h2>المعلم الذكي (AI)</h2><p>اسأل، صوّر، واشرح بالذكاء الاصطناعي</p>
-            </a>
+    <header>
+        <div class="nav-container">
+            <div class="logo">👑 أكاديمية <span>الحسيني</span></div>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-outline">تسجيل الدخول 🔐</a>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <footer>
-        <h3 style="margin: 0;">🔗 روابط هامة</h3>
-        <div class="footer-links">
-            <a href="golden.html">📝 الدليل الذهبي للإجابة</a>
-            <a href="https://www.facebook.com/Alhusseiny.badawy" target="_blank">📘 فيسبوك</a>
-            <a href="https://wa.me/201003124783" target="_blank">💬 واتساب</a>
+    <section class="hero-section">
+        <div class="hero-container">
+            <h1>احترف اللغة الإنجليزية مع أقوى نظام تعليمي ذكي 🚀</h1>
+            <p>منصة تفاعلية مخصصة لشرح المناهج الدراسية، كورسات الجرامر، والاختبارات الإلكترونية المدعومة بالذكاء الاصطناعي لتأسيس جيل متفوق.</p>
+            <div class="hero-btns">
+                <a href="login.html" class="btn btn-primary" style="font-size: 16px; padding: 14px 30px;">🎯 ابدأ رحلتك التعليمية الآن</a>
+                <a href="#about" class="btn btn-outline" style="font-size: 16px; padding: 14px 30px;">اكتشف المزيد 🔍</a>
+            </div>
         </div>
-        <p style="margin-top: 15px; font-size: 13px; opacity: 0.7;">جميع الحقوق محفوظة © 2026 مستر الحسيني يحيى</p>
-    </footer>
+    </section>
 
-    <script>
-        // ==========================================
-        // ⚠️ ضع كود الـ firebaseConfig الخاص بك هنا
-       const firebaseConfig = {
-  apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-  authDomain: "alhusseiny-academy.firebaseapp.com",
-  projectId: "alhusseiny-academy",
-  storageBucket: "alhusseiny-academy.firebasestorage.app",
-  messagingSenderId: "1048097240090",
-  appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-};
-        // ==========================================
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎥</div>
+                <h3>محاضرات مرئية حصرية</h3>
+                <p>شرح مبسط وممتع لكل جزئيات المنهج والقواعد يعتمد على الفهم وليس التلقين.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>اختبارات ذكية فورية</h3>
+                <p>امتحانات دورية وشاملة يتم تصحيحها تلقائياً مع إرسال تقارير الأداء الفورية لك ولولي الأمر.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>لوحة متابعة خاصة</h3>
+                <p>حساب خاص لكل طالب يستعرض فيه تاريخ درجاته ومستوى تقدمه في المادة حظوة بخطوة.</p>
+            </div>
+        </div>
+    </section>
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+    <section class="about-section" id="about">
+        <div class="about-text">
+            <h2>من هو مستر الحسيني يحيى؟ 👨‍🏫</h2>
+            <p>معلم خبير في تدريس اللغة الإنجليزية للمراحل الدراسية المختلفة، يتبنى أسلوباً تعليمياً مبتكراً يعتمد على تبسيط المعلومة والربط التكنولوجي. تهدف الأكاديمية إلى تغيير النظرة التقليدية للمادة وتحويلها من مجرد "حفظ كلمات" إلى "مهارة احترافية حقيقية" يمتلكها الطالب بثقة تامة.</p>
+            
+            <div class="stat-badges">
+                <div class="stat-badge">
+                    <strong>+1000</strong>
+                    <span>طالب متفوق ومعتمد</span>
+                </div>
+                <div class="stat-badge">
+                    <strong>100%</strong>
+                    <span>أمان تكنولوجي ومتابعة حية</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        const userInfo = document.getElementById('userInfo');
-        const authAction = document.getElementById('authAction');
+    <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
 
-        // مراقبة حالة تسجيل الدخول
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // الطالب مسجل دخول
-                let studentName = user.displayName || "يا بطل";
-                userInfo.innerHTML = `👋 أهلاً بك، ${studentName}`;
-                authAction.innerHTML = `<button onclick="logout()" class="auth-btn logout">تسجيل الخروج</button>`;
-            } else {
-                // الطالب غير مسجل دخول
-                userInfo.innerHTML = `أهلاً بك في الأكاديمية!`;
-                authAction.innerHTML = `<a href="login.html" class="auth-btn">تسجيل الدخول / حساب جديد</a>`;
-            }
-        });
-
-        // دالة تسجيل الخروج
-        function logout() {
-            auth.signOut().then(() => {
-                window.location.reload();
-            });
-        }
-    </script>
 </body>
 </html>
