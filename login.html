@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الدخول | أكاديمية مستر الحسيني</title>
+    <title>بوابة الدخول الموحدة | أكاديمية مستر الحسيني</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
@@ -17,34 +17,38 @@
         }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         
-        .auth-container { background: var(--white); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--secondary); }
+        .auth-container { background: var(--white); width: 100%; max-width: 450px; border-radius: 16px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border-top: 6px solid var(--secondary); }
         .auth-header { text-align: center; margin-bottom: 25px; }
         .auth-header h2 { margin: 0; font-size: 1.6em; color: var(--primary); font-weight: 900; }
         .auth-header p { margin: 5px 0 0; color: #7f8c8d; font-size: 13px; font-weight: bold; }
         
-        /* تبديل التبويبات */
         .auth-tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 25px; }
         .auth-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: bold; color: #7f8c8d; transition: 0.3s; font-size: 15px; }
         .auth-tab.active { color: var(--secondary); border-bottom: 3px solid var(--secondary); }
 
-        .form-group { margin-bottom: 18px; position: relative; }
+        .form-group { margin-bottom: 18px; }
         .form-group label { display: block; font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 8px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #eaeded; border-radius: 8px; font-family: 'Tajawal'; font-size: 14px; box-sizing: border-box; transition: 0.3s; }
         .form-group input:focus, .form-group select:focus { border-color: var(--secondary); outline: none; background: white; }
         
-        .forgot-link { display: block; text-align: left; font-size: 12px; color: #7f8c8d; text-decoration: none; font-weight: bold; margin-top: -10px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; }
+        .forgot-link { display: block; text-align: left; font-size: 12px; color: #7f8c8d; text-decoration: none; font-weight: bold; margin-top: -10px; margin-bottom: 15px; cursor: pointer; }
         .forgot-link:hover { color: var(--accent); }
 
         .btn-auth { background: var(--secondary); color: white; border: none; padding: 13px; width: 100%; font-size: 16px; font-weight: bold; font-family: 'Tajawal'; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(24, 188, 156, 0.2); }
         .btn-auth:hover { background: #128f76; transform: translateY(-1px); }
         
-        .method-toggle { text-align: center; margin-top: 15px; font-size: 13px; color: var(--primary); font-weight: bold; cursor: pointer; text-decoration: underline; }
+        /* زر جوجل الفاخر */
+        .btn-google { background: #fff; color: #757575; border: 2px solid #e1e4e8; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; font-family: 'Tajawal'; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+        .btn-google:hover { background: #f8f9fa; border-color: #cbd5e0; }
+        .btn-google img { width: 18px; height: 18px; }
 
-        /* شاشات الإخفاء والإظهار */
+        .divider { display: flex; align-items: center; text-align: center; color: #95a5a6; font-size: 12px; margin: 20px 0; font-weight: bold; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e2e8f0; }
+        .divider:not(:empty)::before { margin-left: .5em; }
+        .divider:not(:empty)::after { margin-right: .5em; }
+
         .auth-view { display: none; }
         .auth-view.active { display: block; }
-        
-        /* لتأكيد رقم الهاتف */
         #recaptcha-container { margin: 10px 0; }
     </style>
 </head>
@@ -53,52 +57,53 @@
     <div class="auth-container">
         <div class="auth-header">
             <h2>👑 أكاديمية الحسيني</h2>
-            <p id="authSubtitle">بوابة تسجيل الدخول الذكية للطلاب</p>
+            <p id="authSubtitle">بوابة تسجيل الدخول الاحترافية والموحدة</p>
         </div>
 
-        <div class="auth-tabs" id="authTabsBar">
+        <div class="auth-tabs">
             <div class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</div>
             <div class="auth-tab" onclick="switchAuthTab('register')">إنشاء حساب جديد</div>
         </div>
 
         <div id="loginView" class="auth-view active">
-            <div id="emailLoginBox">
-                <div class="form-group">
-                    <label>البريد الإلكتروني (Email):</label>
-                    <input type="email" id="loginEmail" placeholder="name@example.com" style="direction: ltr;">
-                </div>
-                <div class="form-group">
-                    <label>كلمة المرور (Password):</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••">
-                </div>
-                <a class="forgot-link" onclick="handleForgotPassword()">نسيت كلمة المرور؟ 🔑</a>
-                <button class="btn-auth" onclick="loginWithEmail()">دخول آمن 🔐</button>
-                <div class="method-toggle" onclick="toggleLoginMethod('phone')">📱 الدخول السريع برقم الهاتف</div>
+            <div class="form-group">
+                <label>البريد الإلكتروني أو رقم الهاتف:</label>
+                <input type="text" id="loginUserKey" placeholder="name@example.com أو +201xxxxxxxxx" style="direction: ltr;" onkeypress="handleEnterKey(event, 'login')">
+            </div>
+            
+            <div id="loginPasswordGroup" class="form-group">
+                <label>كلمة المرور (Password):</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" onkeypress="handleEnterKey(event, 'login')">
             </div>
 
-            <div id="phoneLoginBox" style="display: none;">
-                <div class="form-group">
-                    <label>رقم الهاتف (مع رمز الدولة كمثال +20):</label>
-                    <input type="text" id="loginPhone" placeholder="+201xxxxxxxx" style="direction: ltr;">
-                </div>
+            <div id="loginOtpGroup" class="form-group" style="display: none;">
                 <div id="recaptcha-container"></div>
-                <div id="otpBox" class="form-group" style="display: none;">
-                    <label>أدخل كود التحقق المرسل لهاتفك (OTP):</label>
-                    <input type="text" id="loginOTP" placeholder="------" style="letter-spacing: 5px; text-align: center;">
-                </div>
-                <button class="btn-auth" id="phoneSubmitBtn" onclick="handlePhoneAuth()">إرسال كود التحقق 🚀</button>
-                <div class="method-toggle" onclick="toggleLoginMethod('email')">📧 العودة للدخول بالبريد الإلكتروني</div>
+                <label>أدخل كود التحقق المرسل للموبايل (OTP):</label>
+                <input type="text" id="loginOTP" placeholder="------" style="text-align: center; letter-spacing: 5px;" onkeypress="handleEnterKey(event, 'login')">
             </div>
+
+            <a class="forgot-link" id="forgotLinkBtn" onclick="handleForgotPassword()">نسيت كلمة المرور؟ 🔑</a>
+            <button class="btn-auth" id="mainLoginBtn" onclick="executeLogin()">دخول آمن 🔐</button>
+
+            <div class="divider">أو الدخول السريع عبر</div>
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\" G\"_Logo.svg" alt="Google">
+                متابعة باستخدام حساب Google
+            </button>
         </div>
 
         <div id="registerView" class="auth-view">
             <div class="form-group">
                 <label>الاسم الثلاثي للطالب (بالعربية):</label>
-                <input type="text" id="regName" placeholder="محمد أحمد محمود">
+                <input type="text" id="regName" placeholder="محمد أحمد محمود" onkeypress="handleEnterKey(event, 'register')">
             </div>
             <div class="form-group">
-                <label>البريد الإلكتروني الخاص بك:</label>
-                <input type="email" id="regEmail" placeholder="student@example.com" style="direction: ltr;">
+                <label>البريد الإلكتروني:</label>
+                <input type="email" id="regEmail" placeholder="student@example.com" style="direction: ltr;" onkeypress="handleEnterKey(event, 'register')">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف (اختياري):</label>
+                <input type="text" id="regPhone" placeholder="+201xxxxxxxx" style="direction: ltr;" onkeypress="handleEnterKey(event, 'register')">
             </div>
             <div class="form-group">
                 <label>اختر مرحلتك الدراسية الحالية:</label>
@@ -110,9 +115,15 @@
             </div>
             <div class="form-group">
                 <label>إنشاء كلمة مرور للحساب:</label>
-                <input type="password" id="regPassword" placeholder="لا تقل عن 6 خانات">
+                <input type="password" id="regPassword" placeholder="لا تقل عن 6 خانات" onkeypress="handleEnterKey(event, 'register')">
             </div>
-            <button class="btn-auth" onclick="registerNewStudent()">إنشاء الحساب واعتاده 🎯</button>
+            <button class="btn-auth" onclick="registerNewStudent()">تأكيد وإنشاء الحساب 🎯</button>
+            
+            <div class="divider">أو التسجيل الفوري عبر</div>
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\" G\"_Logo.svg" alt="Google">
+                تسجيل سريع بحساب Google
+            </button>
         </div>
     </div>
 
@@ -130,125 +141,141 @@
         const db = firebase.firestore();
 
         const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
-        let confirmationResult = null; // لحفظ نتيجة كود الهاتف
+        let confirmationResult = null;
 
-        // نظام التبديل بين الدخول والتسجيل
+        // ميزة الـ Enter = دخول
+        function handleEnterKey(event, action) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                if (action === 'login') executeLogin();
+                else registerNewStudent();
+            }
+        }
+
         function switchAuthTab(target) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.auth-view').forEach(v => v.classList.remove('active'));
-            
             if(target === 'login') {
                 document.getElementById('loginView').classList.add('active');
                 document.querySelectorAll('.auth-tab')[0].classList.add('active');
-                document.getElementById('authSubtitle').innerText = "بوابة تسجيل الدخول الذكية للطلاب";
             } else {
                 document.getElementById('registerView').classList.add('active');
                 document.querySelectorAll('.auth-tab')[1].classList.add('active');
-                document.getElementById('authSubtitle').innerText = "انضم الآن لأقوى منصة تعليمية وتأسيسية";
             }
         }
 
-        // التبديل بين الإيميل والهاتف داخل شاشة الدخول
-        function toggleLoginMethod(method) {
-            if(method === 'phone') {
-                document.getElementById('emailLoginBox').style.display = 'none';
-                document.getElementById('phoneLoginBox').style.display = 'block';
-                initRecaptcha();
+        // دالة الدخول الذكية (تفحص المدخل تلقائياً: إيميل أم هاتف؟)
+        function executeLogin() {
+            const userKey = document.getElementById("loginUserKey").value.trim();
+            if(!userKey) { alert("⚠️ يرجى إدخال البريد الإلكتروني أو رقم الهاتف!"); return; }
+
+            // فحص المدخلات عبر Regex ذكي
+            const isEmail = userKey.includes('@');
+
+            if(isEmail) {
+                // دخول بالإيميل والباسورد التقليدي
+                const pass = document.getElementById("loginPassword").value.trim();
+                if(!pass) { alert("⚠️ يرجى كتابة كلمة المرور!"); return; }
+                auth.signInWithEmailAndPassword(userKey, pass)
+                    .then(res => redirectUser(res.user))
+                    .catch(err => alert("❌ خطأ: " + err.message));
             } else {
-                document.getElementById('emailLoginBox').style.display = 'block';
-                document.getElementById('phoneLoginBox').style.display = 'none';
+                // دخول برقم الهاتف والـ OTP
+                handlePhoneLoginProcess(userKey);
             }
         }
 
-        // تهيئة حماية الـ Recaptcha لرقم الهاتف
-        function initRecaptcha() {
+        // معالجة الدخول بالهاتف لايف
+        function handlePhoneLoginProcess(phone) {
             if (!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                    'size': 'invisible'
-                });
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
             }
-        }
-
-        // 1️⃣ تسجيل الدخول بالبريد الإلكتروني
-        function loginWithEmail() {
-            const email = document.getElementById("loginEmail").value.trim();
-            const pass = document.getElementById("loginPassword").value.trim();
-            if(!email || !pass) { alert("⚠️ يرجى كتابة الإيميل والباسورد!"); return; }
-
-            auth.signInWithEmailAndPassword(email, pass).then((userCredential) => {
-                redirectUser(userCredential.user);
-            }).catch(err => alert("❌ خطأ في الدخول: " + err.message));
-        }
-
-        // 2️⃣ تسجيل الدخول / التحقق برقم الهاتف
-        function handlePhoneAuth() {
-            const phone = document.getElementById("loginPhone").value.trim();
-            if(!phone) { alert("⚠️ اكتب رقم الهاتف كاملاً مع رمز الدولة!"); return; }
 
             if (!confirmationResult) {
-                // المرحلة الأولى: إرسال الـ OTP
-                const appVerifier = window.recaptchaVerifier;
-                auth.signInWithPhoneNumber(phone, appVerifier).then((result) => {
+                document.getElementById("mainLoginBtn").innerText = "جاري الإرسال... ⏳";
+                auth.signInWithPhoneNumber(phone, window.recaptchaVerifier).then((result) => {
                     confirmationResult = result;
-                    document.getElementById("otpBox").style.display = "block";
-                    document.getElementById("phoneSubmitBtn").innerText = "✔️ تأكيد الكود والدخول";
-                    alert("🚀 تم إرسال كود التحقق لهاتفك في رسالة SMS!");
-                }).catch(err => alert("خطأ في الإرسال: " + err.message));
+                    document.getElementById("loginPasswordGroup").style.display = "none";
+                    document.getElementById("forgotLinkBtn").style.display = "none";
+                    document.getElementById("loginOtpGroup").style.display = "block";
+                    document.getElementById("mainLoginBtn").innerText = "✔️ تأكيد كود التحقق";
+                    alert("🚀 تم إرسال كود التحقق لهاتفك بنجاح!");
+                }).catch(err => {
+                    alert("خطأ: " + err.message);
+                    document.getElementById("mainLoginBtn").innerText = "دخول آمن 🔐";
+                });
             } else {
-                // المرحلة الثانية: تأكيد الـ OTP ودخول الطالب
                 const code = document.getElementById("loginOTP").value.trim();
                 if(!code) { alert("⚠️ أدخل كود الـ OTP!"); return; }
-
-                confirmationResult.confirm(code).then((userCredential) => {
-                    redirectUser(userCredential.user);
-                }).catch(err => alert("❌ كود التحقق خاطئ أو منتهي الصلاحية!"));
+                confirmationResult.confirm(code)
+                    .then(res => redirectUser(res.user))
+                    .catch(err => alert("❌ الكود خاطئ أو منتهي!"));
             }
         }
 
-        // 3️⃣ إنشاء حساب جديد للطالب
+        // ✨ 3️⃣ ميزة الدخول الفوري السريع عبر جوجل (Google Sign-In)
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).then((result) => {
+                const user = result.user;
+                
+                // فحص هل الطالب جديد لنسجل بياناته أم مسجل مسبقاً؟
+                db.collection("students").doc(user.uid).get().then((doc) => {
+                    if (!doc.exists) {
+                        // لو يوزر جديد دخل بجوجل، نضع له إعدادات افتراضية (أولى إعدادي مثلاً) ويقدر يغيرها بعدين
+                        db.collection("students").doc(user.uid).set({
+                            name: user.displayName,
+                            email: user.email,
+                            grade: "prep1",
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            redirectUser(user);
+                        });
+                    } else {
+                        redirectUser(user);
+                    }
+                });
+            }).catch(err => alert("خطأ جوجل: " + err.message));
+        }
+
+        // إنشاء حساب جديد للطلاب (مع ميزة اختيارية الهاتف)
         function registerNewStudent() {
             const name = document.getElementById("regName").value.trim();
             const email = document.getElementById("regEmail").value.trim();
+            const phone = document.getElementById("regPhone").value.trim();
             const grade = document.getElementById("regGrade").value;
             const pass = document.getElementById("regPassword").value.trim();
 
-            if(!name || !email || !pass) { alert("⚠️ يرجى ملء كافة الخانات المطلوبة!"); return; }
-            if(pass.length < 6) { alert("⚠️ كلمة المرور يجب ألا تقل عن 6 خانات!"); return; }
+            if(!name || !email || !pass) { alert("⚠️ يرجى ملء الخانات الأساسية!"); return; }
 
             auth.createUserWithEmailAndPassword(email, pass).then((userCredential) => {
-                // حفظ الاسم في الـ Auth Profile
                 userCredential.user.updateProfile({ displayName: name }).then(() => {
-                    // حفظ بيانات الطالب والمرحلة في الـ Firestore
                     db.collection("students").doc(userCredential.user.uid).set({
                         name: name,
                         email: email,
+                        phone: phone || "غير مسجل",
                         grade: grade,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }).then(() => {
-                        alert(`🎉 أهلاً بك يا ${name}! تم إنشاء حسابك بنجاح وجاري توجيهك للوحة التحكم.`);
+                        alert(`🎉 أهلاً بك يا بطل! تم إنشاء حسابك بنجاح.`);
                         window.location.href = "dashboard.html";
                     });
                 });
-            }).catch(err => alert("❌ خطأ أثناء التسجيل: " + err.message));
+            }).catch(err => alert("❌ خطأ: " + err.message));
         }
 
-        // 🔑 4️⃣ خاصية نسيت كلمة المرور (إرسال إيميل الاستعادة)
+        // نسيت كلمة المرور
         function handleForgotPassword() {
-            const email = document.getElementById("loginEmail").value.trim();
-            if(!email) { alert("⚠️ يرجى كتابة بريدك الإلكتروني في خانة الإيميل أولاً، ثم الضغط على نسيت كلمة المرور لإرسال رابط الاستعادة!"); return; }
-
+            const email = document.getElementById("loginUserKey").value.trim();
+            if(!email || !email.includes('@')) { alert("⚠️ اكتب بريدك الإلكتروني في الخانة أولاً بشكل صحيح لإرسال رابط الاستعادة!"); return; }
             auth.sendPasswordResetEmail(email).then(() => {
-                alert(`📧 تم إرسال رابط إعادة تعيين كلمة المرور بنجاح إلى: ${email}\nيرجى مراجعة بريدك الوارد أو رسائل الـ Spam.`);
-            }).catch(err => alert("خطأ: " + err.message));
+                alert(`📧 تم إرسال رابط استعادة كلمة المرور بنجاح إلى: ${email}`);
+            }).catch(err => alert(err.message));
         }
 
-        // الموجه الذكي (توجيه المستر للإدارة والطالب للداشبورد)
         function redirectUser(user) {
-            if(user.email === ADMIN_EMAIL) {
-                window.location.href = "admin.html";
-            } else {
-                window.location.href = "dashboard.html";
-            }
+            if(user.email === ADMIN_EMAIL) window.location.href = "admin.html";
+            else window.location.href = "dashboard.html";
         }
     </script>
 </body>
