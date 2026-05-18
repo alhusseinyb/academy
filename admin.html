@@ -231,4 +231,261 @@
         // =====================================
         // دوال الجلب والحذف
         // =====================================
-        function safeDelete(collectionName, docId, itemTi
+        function safeDelete(collectionName, docId, itemTitle) {
+            if (confirm(`⚠️ تحذير: هل أنت متأكد من رغبتك في حذف [ ${itemTitle} ] نهائياً؟\nلا يمكن التراجع عن هذا الإجراء!`)) {
+                db.collection(collectionName).doc(docId).delete().then(() => alert("✅ تم الحذف بنجاح."));
+            }
+        }
+
+        function loadAllGrades() {
+            db.collection("grades").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                let tbody = document.getElementById("gradesTableBody");
+                let sel1 = document.getElementById("contentGradeSelect"), sel2 = document.getElementById("examGradeSelect"), sel3 = document.getElementById("aiGradeSelect");
+                if(snapshot.empty) return;
+                let tableHtml = "", selectHtml = "<option value=''>-- اختر الكورس --</option>";
+                snapshot.forEach((doc) => {
+                    let g = doc.data(); 
+                    tableHtml += `<tr><td>📁 ${g.name}</td><td><button class="action-btn btn-edit" onclick="openEditModal('grades', '${doc.id}', '${g.name}', '', '')">✏️ تعديل الاسم</button><button class="action-btn btn-delete" onclick="safeDelete('grades', '${doc.id}', '${g.name}')">🗑️ حذف</button></td></tr>`;
+                    selectHtml += `<option value="${doc.id}">${g.name}</option>`;
+                });
+                tbody.innerHTML = tableHtml; sel1.innerHTML = selectHtml; sel2.innerHTML = selectHtml; sel3.innerHTML = selectHtml;
+            });
+        }
+
+        function loadAllContents() {
+            db.collection("contents").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                const tbody = document.getElementById("contentTableBody"); if(snapshot.empty) return;
+                tbody.innerHTML = snapshot.docs.map(doc => { 
+                    let c = doc.data(); 
+                    return `<tr><td>${c.gradeName}</td><td>${c.unit}</td><td>${c.title}</td><td>${c.type==='video'?'🎥':'📄'}</td><td><button class="action-btn btn-edit" onclick="openEditModal('contents', '${doc.id}', '${c.title}', '${c.unit}', '${c.url}')">✏️ تعديل</button><button class="action-btn btn-delete" onclick="safeDelete('contents', '${doc.id}', '${c.title}')">🗑️ حذف</button></td></tr>`; 
+                }).join('');
+            });
+        }
+
+        function loadAllExams() {
+            db.collection("exams").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                let tbody = document.getElementById("examsTableBody"); if(snapshot.empty) return;
+                tbody.innerHTML = snapshot.docs.map(doc => { 
+                    let e = doc.data(); 
+                    return `<tr><td>${e.title}</td><td>${e.gradeName}</td><td>${e.unit||'عام'}</td><td><button class="action-btn btn-edit" onclick="openDeepExamEdit('${doc.id}')">✏️ تعديل شامل للاختبار</button><button class="action-btn btn-delete" onclick="safeDelete('exams', '${doc.id}', '${e.title}')">🗑️ حذف</button></td></tr>`; 
+                }).join('');
+            });
+        }
+
+        // =====================================
+        // ✏️ التعديل العميق للاختبارات (Deep Edit) المطور
+        // =====================================
+        function openDeepExamEdit(examId) {
+            deepEditingExamId = examId;
+            db.collection("exams").doc(examId).get().then(doc => {
+                let data = doc.data();
+                document.getElementById('deepEditExamTitle').value = data.title || "";
+                document.getElementById('deepEditExamUnit').value = data.unit || "";
+                deepEditingQuestions = data.questions ? JSON.parse(JSON.stringify(data.questions)) : []; 
+                renderDeepEditQuestions();
+                switchView('deepEditExamView', null, '✏️ التعديل الشامل للاختبار');
+            });
+        }
+
+        function renderDeepEditQuestions() {
+            const container = document.getElementById("deepEditQuestionsContainer");
+            container.innerHTML = deepEditingQuestions.map((q, idx) => {
+                // تحديد نوع السؤال (اختياري أم أكمل)
+                let isMcq = (q.options && q.options.length > 0) || (!q.options && q.a);
+                if(q.a && !q.options) q.options = [q.a, q.b, q.c, q.d].filter(Boolean); // للتوافق مع الإصدارات القديمة
+
+                let headerHtml = `
+                    <div class="q-edit-header">
+                        <span>السؤال ${idx + 1}</span>
+                        <div>
+                            <select id="edit_type_${idx}" onchange="changeQuestionTypeInEdit(${idx}, this.value)" style="padding:5px; margin-left:10px; border-radius:5px; border:1px solid #ccc;">
+                                <option value="mcq" ${isMcq ? 'selected' : ''}>🔠 سؤال اختياري</option>
+                                <option value="text" ${!isMcq ? 'selected' : ''}>✏️ سؤال أكمل</option>
+                            </select>
+                            <button class="action-btn btn-delete" onclick="removeQuestionFromDeepEdit(${idx})">🗑️ حذف</button>
+                        </div>
+                    </div>
+                    <div class="form-label">نص السؤال:</div>
+                    <textarea id="edit_qtext_${idx}" rows="2">${q.questionText || q.question || ""}</textarea>
+                `;
+
+                let bodyHtml = "";
+                if(isMcq) {
+                    let optA = q.options[0] || ""; let optB = q.options[1] || "";
+                    let optC = q.options[2] || ""; let optD = q.options[3] || "";
+                    let ans = parseInt(q.ans) || 0;
+                    bodyHtml = `
+                        <div class="flex-row">
+                            <div class="flex-child"><div class="opt-label">A:</div><input type="text" id="edit_opt0_${idx}" value="${optA}"></div>
+                            <div class="flex-child"><div class="opt-label">B:</div><input type="text" id="edit_opt1_${idx}" value="${optB}"></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-child"><div class="opt-label">C:</div><input type="text" id="edit_opt2_${idx}" value="${optC}"></div>
+                            <div class="flex-child"><div class="opt-label">D:</div><input type="text" id="edit_opt3_${idx}" value="${optD}"></div>
+                        </div>
+                        <div class="form-label">الإجابة الصحيحة:</div>
+                        <select id="edit_ans_${idx}">
+                            <option value="0" ${ans === 0 ? 'selected' : ''}>A (الأولى)</option>
+                            <option value="1" ${ans === 1 ? 'selected' : ''}>B (الثانية)</option>
+                            <option value="2" ${ans === 2 ? 'selected' : ''}>C (الثالثة)</option>
+                            <option value="3" ${ans === 3 ? 'selected' : ''}>D (الرابعة)</option>
+                        </select>
+                    `;
+                } else {
+                    let ansText = q.ans !== undefined ? q.ans : (q.correct || "");
+                    bodyHtml = `
+                        <div class="form-label">الإجابة الصحيحة النموذجية (للتصحيح الآلي):</div>
+                        <input type="text" id="edit_ans_text_${idx}" value="${ansText}" placeholder="اكتب الإجابة هنا...">
+                    `;
+                }
+
+                return `<div class="q-edit-card" id="q_edit_${idx}">${headerHtml}${bodyHtml}</div>`;
+            }).join('');
+        }
+
+        // تغيير نوع السؤال أثناء التعديل
+        function changeQuestionTypeInEdit(index, newType) {
+            gatherDeepEditData();
+            if(newType === 'mcq') {
+                deepEditingQuestions[index].options = ["", "", "", ""];
+                deepEditingQuestions[index].ans = 0;
+            } else {
+                deepEditingQuestions[index].options = [];
+                deepEditingQuestions[index].ans = "";
+            }
+            renderDeepEditQuestions();
+        }
+
+        // إضافة سؤال جديد فارغ بناءً على النوع المختار
+        function addNewEmptyQuestionToEdit(type) {
+            gatherDeepEditData();
+            if(type === 'mcq') deepEditingQuestions.push({ questionText: "", options: ["", "", "", ""], ans: 0 });
+            else deepEditingQuestions.push({ questionText: "", options: [], ans: "" });
+            
+            renderDeepEditQuestions();
+            setTimeout(() => { document.querySelector('.main-content').scrollTop = document.querySelector('.main-content').scrollHeight; }, 100);
+        }
+
+        function removeQuestionFromDeepEdit(index) {
+            if(confirm("هل أنت متأكد من حذف هذا السؤال من الاختبار؟")) {
+                gatherDeepEditData(); deepEditingQuestions.splice(index, 1); renderDeepEditQuestions();
+            }
+        }
+
+        function gatherDeepEditData() {
+            deepEditingQuestions.forEach((q, idx) => {
+                let qInput = document.getElementById(`edit_qtext_${idx}`);
+                if(qInput) {
+                    q.questionText = qInput.value;
+                    // فحص إذا كان السؤال اختياري (يوجد حقل opt0) أم أكمل
+                    if(document.getElementById(`edit_opt0_${idx}`)) {
+                        q.options = [
+                            document.getElementById(`edit_opt0_${idx}`).value,
+                            document.getElementById(`edit_opt1_${idx}`).value,
+                            document.getElementById(`edit_opt2_${idx}`).value,
+                            document.getElementById(`edit_opt3_${idx}`).value
+                        ];
+                        q.ans = parseInt(document.getElementById(`edit_ans_${idx}`).value);
+                    } else {
+                        q.options = [];
+                        q.ans = document.getElementById(`edit_ans_text_${idx}`).value;
+                    }
+                }
+            });
+        }
+
+        function saveDeepExamEdit() {
+            gatherDeepEditData();
+            const newTitle = document.getElementById('deepEditExamTitle').value.trim();
+            const newUnit = document.getElementById('deepEditExamUnit').value.trim();
+            if(!newTitle) { alert("يجب كتابة اسم للاختبار!"); return; }
+            
+            db.collection("exams").doc(deepEditingExamId).update({
+                title: newTitle, unit: newUnit, questions: deepEditingQuestions
+            }).then(() => {
+                alert("✅ تم حفظ الاختبار بكامل أسئلته وتعديلاته بنجاح!");
+                switchView('examsManagerView', document.querySelectorAll('.nav-item')[5], '🗂️ إدارة الاختبارات');
+            }).catch(e => alert("خطأ في الحفظ: " + e.message));
+        }
+
+        // =====================================
+        // Modal التعديل البسيط (للكورسات والمحتوى)
+        // =====================================
+        function openEditModal(collection, id, title, unit, url) {
+            document.getElementById("editTargetCollection").value = collection; document.getElementById("editTargetId").value = id;
+            document.getElementById("editTitleInput").value = title; document.getElementById("editUnitInput").value = unit; document.getElementById("editUrlInput").value = url;
+            document.getElementById("editUnitGroup").style.display = (collection === 'grades') ? 'none' : 'block'; document.getElementById("editUrlGroup").style.display = (collection === 'contents') ? 'block' : 'none';
+            document.getElementById("editModal").classList.add("active");
+        }
+        function closeEditModal() { document.getElementById("editModal").classList.remove("active"); }
+        function submitEdit() {
+            let col = document.getElementById("editTargetCollection").value; let id = document.getElementById("editTargetId").value; let updates = {};
+            if(col === 'grades') updates.name = document.getElementById("editTitleInput").value;
+            else if(col === 'contents') { updates.title = document.getElementById("editTitleInput").value; updates.unit = document.getElementById("editUnitInput").value; updates.url = document.getElementById("editUrlInput").value; }
+            db.collection(col).doc(id).update(updates).then(() => { alert("✅ تم الحفظ!"); closeEditModal(); });
+        }
+
+        // =====================================
+        // 🤖 محرك استوديو الذكاء الاصطناعي 
+        // =====================================
+        async function generateExamWithGemini() {
+            const fileInput = document.getElementById("aiFileInput").files[0];
+            const promptText = document.getElementById("aiPromptTextarea").value.trim();
+            const btn = document.getElementById("aiGenBtn");
+
+            if(!promptText) { alert("⚠️ يرجى كتابة أمر التوليد أولاً!"); return; }
+            btn.innerText = "جاري التحليل والتوليد... ⏳"; btn.disabled = true;
+
+            try {
+                let parts = [{ text: promptText + "\n\n(Output ONLY a valid JSON array of objects. Each object MUST have: 'questionText' (string), 'options' (array of exactly 4 strings), and 'ans' (integer 0, 1, 2, or 3). Do not wrap in markdown quotes, just plain JSON)" }];
+                if (fileInput) { const base64Data = await fileToBase64(fileInput); parts.unshift({ inlineData: { mimeType: fileInput.type, data: base64Data.split(",")[1] } }); }
+
+                const payload = { contents: [{ parts: parts }] };
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await response.json();
+                
+                if(!response.ok) throw new Error(data.error?.message || "خطأ غير معروف");
+
+                let aiText = data.candidates[0].content.parts[0].text;
+                aiText = aiText.replace(/```json/g, "").replace(/```/g, "").trim();
+
+                document.getElementById("aiGeneratedJson").value = aiText; document.getElementById("aiResultArea").style.display = "block";
+                btn.innerText = "✨ توليد الأسئلة الآن"; btn.disabled = false;
+            } catch (error) {
+                alert("❌ حدث خطأ أثناء الاتصال بالذكاء الاصطناعي:\n" + error.message);
+                btn.innerText = "✨ توليد الأسئلة الآن"; btn.disabled = false;
+            }
+        }
+        function fileToBase64(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => resolve(reader.result); reader.onerror = error => reject(error); }); }
+        function importGeneratedQuestions() {
+            try {
+                const parsedQs = JSON.parse(document.getElementById("aiGeneratedJson").value);
+                if(Array.isArray(parsedQs)) { currentExamQuestions = currentExamQuestions.concat(parsedQs); document.getElementById("qCount").innerText = currentExamQuestions.length; alert(`✅ تم استيراد ${parsedQs.length} أسئلة بنجاح!`); switchInnerTab('manualTab', document.querySelectorAll('.tab-btn')[0]); }
+            } catch (e) { alert("⚠️ صيغة المخرجات غير صحيحة، يرجى مراجعتها."); }
+        }
+
+        function addQuestionToCurrentExam() {
+            let qText = document.getElementById("qTextInput").value;
+            let options = [document.getElementById("opt1").value, document.getElementById("opt2").value, document.getElementById("opt3").value, document.getElementById("opt4").value];
+            let correct = document.getElementById("qMcqCorrectSelect").value;
+            if(!qText) return;
+            currentExamQuestions.push({ questionText: qText, options: options, ans: parseInt(correct) });
+            document.getElementById("qCount").innerText = currentExamQuestions.length; document.getElementById("qTextInput").value = "";
+        }
+        function saveFullExamToFirestore() {
+            const gradeId = document.getElementById("examGradeSelect").value; const gradeName = document.getElementById("examGradeSelect").options[document.getElementById("examGradeSelect").selectedIndex]?.text;
+            const title = document.getElementById("examTitleInput").value.trim(); const unit = document.getElementById("examUnitInput").value.trim();
+            if(!gradeId || !title || currentExamQuestions.length === 0) { alert("يرجى إكمال البيانات!"); return; }
+            db.collection("exams").add({ gradeId, gradeName, title, unit, questions: currentExamQuestions, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+            .then(() => { alert("🚀 تم نشر الاختبار!"); currentExamQuestions = []; document.getElementById("qCount").innerText = "0"; });
+        }
+        function addNewGradeToFirestore() { let name = document.getElementById("newGradeName").value; if(name) { db.collection("grades").add({ name: name, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => document.getElementById("newGradeName").value = ""); } }
+        function saveContentToFirestore() {
+            const gradeId = document.getElementById("contentGradeSelect").value, gradeName = document.getElementById("contentGradeSelect").options[document.getElementById("contentGradeSelect").selectedIndex].text, unit = document.getElementById("contentUnit").value.trim(), title = document.getElementById("contentTitle").value.trim(), type = document.getElementById("contentTypeSelect").value, url = document.getElementById("contentMediaUrl").value.trim();
+            if(!gradeId || !unit || !title || !url) return;
+            db.collection("contents").add({ gradeId, gradeName, unit, title, type, url, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { alert("🚀 تم النشر!"); document.getElementById("contentTitle").value = ""; document.getElementById("contentMediaUrl").value = ""; });
+        }
+        function logout() { auth.signOut().then(() => { window.location.href = "index.html"; }); }
+    </script>
+</body>
+</html>
