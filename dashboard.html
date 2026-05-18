@@ -19,12 +19,12 @@
         }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
         
-        header { background: linear-gradient(135deg, var(--primary), #34495e); color: white; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .logo-area h1 { margin: 0; font-size: 1.6em; font-weight: 900; }
+        header { background: linear-gradient(135deg, var(--primary), #34495e); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo-area h1 { margin: 0; font-size: 1.5em; font-weight: 900; }
         .logo-area p { margin: 5px 0 0; font-size: 12px; color: #bdc3c7; }
-        .nav-btns { display: flex; gap: 12px; }
+        .nav-btns { display: flex; gap: 12px; align-items: center; }
         
-        .btn { font-family: 'Tajawal'; font-weight: bold; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn { font-family: 'Tajawal'; font-weight: bold; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
         .btn-primary { background: var(--secondary); color: white; }
         .btn-primary:hover { background: #128f76; transform: translateY(-2px); }
         .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.4); color: white; }
@@ -32,68 +32,77 @@
         .btn-danger { background: var(--accent); color: white; }
         .btn-danger:hover { background: #c0392b; }
 
-        .main-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
         
-        .welcome-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 30px; border-right: 6px solid var(--secondary); }
-        .welcome-text h2 { margin: 0; font-size: 1.8em; color: var(--primary); font-weight: 900; }
-        .welcome-text p { margin: 8px 0 0; color: #7f8c8d; font-size: 14px; }
+        /* 📊 شريط الإحصائيات العلوي (الجديد) */
+        .top-stats-bar { display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 12px; padding: 15px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 25px; flex-wrap: wrap; gap: 15px; border-bottom: 3px solid var(--secondary); }
+        .student-main-info h2 { margin: 0; font-size: 1.5em; color: var(--primary); font-weight: 900; }
+        .student-main-info p { margin: 5px 0 0; color: #7f8c8d; font-size: 13px; }
+        .stats-badges { display: flex; gap: 20px; }
+        .stat-badge { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 1.2em; padding: 8px 15px; border-radius: 50px; background: #f8f9fa; }
+        .stat-streak { color: #e67e22; border: 1px solid #fdebd0; background: #fef9e7; }
+        .stat-xp { color: #8e44ad; border: 1px solid #f4ecf8; background: #f5eef8; }
+        .stat-notif { color: #e74c3c; cursor: pointer; position: relative; }
+        .notif-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; border: 2px solid white; }
 
-        .section-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; margin-top: 30px; }
-        .card-panel { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #eee; position: relative; overflow: hidden; }
+        /* 📑 نظام التبويبات */
+        .tabs-header { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 0; overflow-x: auto; }
+        .tab-btn { padding: 15px 30px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.3s; border-bottom: 4px solid transparent; white-space: nowrap; }
+        .tab-btn:hover { color: var(--primary); }
+        .tab-btn.active { color: var(--secondary); border-bottom-color: var(--secondary); }
+        .tab-content { display: none; animation: fadeIn 0.4s; }
+        .tab-content.active { display: block; }
+
+        .section-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .card-panel { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #eee; margin-bottom: 25px; }
         
-        /* 🎙️ تصميم تحدي النطق */
-        .pronounce-box { text-align: center; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 20px rgba(37, 117, 252, 0.2); margin-bottom: 25px; position: relative; }
-        .english-sentence { font-size: 1.8em; font-weight: bold; margin: 15px 0; font-family: 'Arial', sans-serif; letter-spacing: 1px; direction: ltr; }
-        .mic-btn { width: 70px; height: 70px; border-radius: 50%; background: var(--accent); border: 4px solid rgba(255,255,255,0.3); color: white; font-size: 28px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
-        .mic-btn:hover { transform: scale(1.1); background: #c0392b; }
-        .mic-btn.recording { animation: pulseMic 1.5s infinite; background: #e74c3c; border-color: white; }
-        @keyframes pulseMic { 0% {box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);} 70% {box-shadow: 0 0 0 20px rgba(231, 76, 60, 0);} 100% {box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);} }
-        .pronounce-result { margin-top: 15px; font-weight: bold; font-size: 1.2em; min-height: 30px; }
-
-        /* 🎯 تصميم رادار نقاط الضعف */
-        .radar-box { background: #fdfefe; border-left: 5px solid #e67e22; padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        /* 🏠 الرئيسية */
+        .radar-box { background: #fdfefe; border-right: 5px solid #e67e22; padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border-left: 1px solid #eee; }
         .radar-icon { font-size: 40px; }
         .radar-text h3 { margin: 0 0 5px 0; color: #d35400; font-size: 1.2em; }
         .radar-text p { margin: 0; color: #7f8c8d; font-size: 14px; font-weight: bold; }
 
+        /* 🏆 إنجازاتي */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
         @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
-        
-        /* المتجر والجدول ولوحة الشرف (كما هي) */
-        .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .course-card { background: white; border-radius: 15px; padding: 25px; text-align: center; border: 1px solid #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; position: relative; overflow: hidden; }
-        .course-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
-        .course-icon { font-size: 45px; margin-bottom: 10px; }
-        .course-title { font-size: 1.2em; font-weight: 900; color: var(--primary); margin: 0 0 10px 0; }
-        .course-badge { position: absolute; top: 15px; right: -30px; background: var(--accent); color: white; font-size: 11px; font-weight: bold; padding: 5px 30px; transform: rotate(45deg); }
-        .course-badge.free { background: var(--secondary); }
-
         table { width: 100%; border-collapse: collapse; text-align: right; }
         th { padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; font-weight: bold; border-bottom: 2px solid #eee; }
         td { padding: 16px 12px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
         .badge-score { background: #eafaf1; color: #27ae60; padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; }
-
         .leaderboard-list { list-style: none; padding: 0; margin: 0; }
         .leaderboard-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; transition: 0.3s; }
-        .leaderboard-item:hover { background: #fdfdfd; transform: translateX(-5px); }
         .student-info { display: flex; align-items: center; gap: 12px; font-weight: bold; color: var(--primary); }
         .rank-badge { width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: 900; color: white; background: var(--primary); }
         .rank-1 { background: var(--gold); } .rank-2 { background: var(--silver); } .rank-3 { background: var(--bronze); }
         .leader-score { font-size: 1.1em; font-weight: 900; color: var(--secondary); }
 
+        /* 🛒 المتجر والنطق */
+        .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .course-card { background: white; border-radius: 15px; padding: 25px; text-align: center; border: 1px solid #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; position: relative; overflow: hidden; }
+        .course-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
+        .course-icon { font-size: 45px; margin-bottom: 10px; }
+        .course-title { font-size: 1.2em; font-weight: 900; color: var(--primary); margin: 0 0 10px 0; }
+        .course-badge { position: absolute; top: 15px; left: -30px; background: var(--accent); color: white; font-size: 11px; font-weight: bold; padding: 5px 30px; transform: rotate(-45deg); }
+        .course-badge.free { background: var(--secondary); }
+
+        .pronounce-box { text-align: center; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 20px rgba(37, 117, 252, 0.2); }
+        .english-sentence { font-size: 1.8em; font-weight: bold; margin: 15px 0; font-family: 'Arial', sans-serif; letter-spacing: 1px; direction: ltr; }
+        .mic-btn { width: 70px; height: 70px; border-radius: 50%; background: var(--accent); border: 4px solid rgba(255,255,255,0.3); color: white; font-size: 28px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; }
+        .mic-btn:hover { transform: scale(1.1); background: #c0392b; }
+        .mic-btn.recording { animation: pulseMic 1.5s infinite; background: #e74c3c; border-color: white; }
+        @keyframes pulseMic { 0% {box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);} 70% {box-shadow: 0 0 0 20px rgba(231, 76, 60, 0);} 100% {box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);} }
+        .pronounce-result { margin-top: 15px; font-weight: bold; font-size: 1.2em; min-height: 30px; }
+
         /* Modal الإعدادات */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box { background: white; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border-radius: 16px; padding: 30px; transform: translateY(-20px); transition: 0.3s; }
+        .modal-box { background: white; width: 90%; max-width: 450px; border-radius: 16px; padding: 30px; transform: translateY(-20px); transition: 0.3s; }
         .modal-overlay.active .modal-box { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
         .close-modal { font-size: 24px; color: #95a5a6; cursor: pointer; border: none; background: transparent; }
         .form-group { margin-bottom: 18px; }
         .form-group label { display: block; font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 8px; }
         .form-group input { width: 100%; padding: 12px; border: 2px solid #eaeded; border-radius: 8px; font-family: 'Tajawal'; box-sizing: border-box; }
-        
-        .tracks-checkbox-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eef2f5; }
-        .track-checkbox-item { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 14px; color: var(--primary); cursor: pointer; padding: 5px 0; }
 
         footer { text-align: center; padding: 25px; color: #95a5a6; font-size: 13px; background: white; margin-top: auto; border-top: 1px solid #eee; }
         .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 2000; display: flex; justify-content: center; align-items: center; }
@@ -104,120 +113,123 @@
     <div class="auth-screen" id="authScreen"><h2 style="color: var(--primary);">🔐 جاري تحميل ملفك الأكاديمي...</h2></div>
 
     <header>
-        <div class="logo-area"><h1>🎓 لوحة تحكم الطالب</h1><p>أكاديمية مستر الحسيني يحيى</p></div>
+        <div class="logo-area"><h1>🎓 لوحة الطالب</h1><p>أكاديمية مستر الحسيني</p></div>
         <div class="nav-btns">
-            <button class="btn btn-outline" onclick="openSettingsModal()">⚙️ الإعدادات والمسارات</button>
+            <a href="classroom.html" class="btn btn-primary">🚀 دخول قاعة المحاضرات</a>
+            <button class="btn btn-outline" onclick="openSettingsModal()">⚙️</button>
             <button class="btn btn-danger" onclick="logout()">خروج 🚪</button>
         </div>
     </header>
 
     <div class="main-container">
         
-        <div class="welcome-card">
-            <div class="welcome-text">
+        <div class="top-stats-bar">
+            <div class="student-main-info">
                 <h2 id="studentName">أهلاً بك يا بطل! 👋</h2>
                 <p id="studentEmail">الحساب المعتمد: loading...</p>
             </div>
-            <a href="classroom.html" class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;">🚀 دخول قاعة المحاضرات</a>
+            <div class="stats-badges">
+                <div class="stat-badge stat-streak" title="أيام الدخول المتتالية">🔥 <span id="streakCount">0</span> يوم</div>
+                <div class="stat-badge stat-xp" title="نقاط الخبرة (تزيد بحل الامتحانات)">💎 <span id="xpCount">0</span> XP</div>
+                <div class="stat-badge stat-notif" title="الإشعارات التنبيهية">🔔<div class="notif-dot" id="notifDot"></div></div>
+            </div>
         </div>
 
-        <div class="pronounce-box">
-            <h3 style="margin-top: 0; color: #f1c40f;">🎙️ تحدي النطق اليومي (AI Speech Challenge)</h3>
-            <p style="font-size: 14px; margin-bottom: 5px;">اضغط على المايكروفون واقرأ الجملة التالية بصوت واضح:</p>
-            <div class="english-sentence" id="targetSentence">Learning English opens new doors for my future.</div>
-            <button class="mic-btn" id="micBtn" onclick="startPronunciationChallenge()">🎤</button>
-            <div class="pronounce-result" id="pronounceResult">اضغط للبدء والتسجيل...</div>
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchDashboardTab('homeTab', this)">🏠 الرئيسية والمتابعة</button>
+            <button class="tab-btn" onclick="switchDashboardTab('achievementsTab', this)">🏆 إنجازاتي والدرجات</button>
+            <button class="tab-btn" onclick="switchDashboardTab('storeTab', this)">🛒 المتجر والتدريب الذكي</button>
         </div>
 
-        <div id="radarContainer"></div>
+        <div id="homeTab" class="tab-content active">
+            <div class="section-title">🎯 رادار التقييم الذكي</div>
+            <div class="card-panel" style="padding: 0; overflow:hidden; border:none; margin-bottom: 25px;">
+                <div id="radarContainer">
+                    <div class="radar-box" style="border-right-color:#95a5a6;"><div class="radar-icon">⏳</div><div class="radar-text"><h3 style="color:#7f8c8d;">جاري التحليل...</h3><p>الذكاء الاصطناعي يقوم بمراجعة ملفك الأكاديمي.</p></div></div>
+                </div>
+            </div>
 
-        <div class="section-title">📈 منحنى تطور مستواك التعليمي</div>
-        <div class="card-panel" style="margin-bottom: 30px;">
-            <canvas id="progressChart" height="80"></canvas>
-            <p id="chartNoDataMsg" style="text-align: center; color: #95a5a6; display: none;">قم بحل المزيد من الامتحانات لرسم منحنى تطورك!</p>
+            <div class="section-title">📈 منحنى تطور مستواك التعليمي</div>
+            <div class="card-panel">
+                <canvas id="progressChart" height="80"></canvas>
+                <p id="chartNoDataMsg" style="text-align: center; color: #95a5a6; display: none;">قم بحل المزيد من الامتحانات لرسم منحنى تطورك!</p>
+            </div>
         </div>
 
-        <div class="dashboard-grid">
-            <div>
-                <div class="section-title">📊 سجل درجاتك وتقارير أدائك</div>
-                <div class="card-panel">
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead><tr><th>اسم الاختبار</th><th>التاريخ</th><th>النتيجة</th></tr></thead>
-                            <tbody id="studentResultsTable">
-                                <tr><td colspan="3" style="text-align: center; color: #7f8c8d;">جاري جلب درجاتك... ⏳</td></tr>
-                            </tbody>
-                        </table>
+        <div id="achievementsTab" class="tab-content">
+            <div class="dashboard-grid">
+                <div>
+                    <div class="section-title" style="justify-content: space-between;">
+                        <span>📊 سجل درجاتك</span>
+                        <button class="btn btn-outline" style="background:#34495e; font-size:12px; border:none;" onclick="alert('سيتم تفعيل مفكرة الأخطاء للامتحانات القادمة فور اعتماد تصحيحها.')">📓 كشكول أخطائي</button>
+                    </div>
+                    <div class="card-panel">
+                        <div style="overflow-x: auto;">
+                            <table>
+                                <thead><tr><th>اسم الاختبار</th><th>التاريخ</th><th>النتيجة النهائية</th></tr></thead>
+                                <tbody id="studentResultsTable"><tr><td colspan="3" style="text-align: center;">جاري الجلب...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">🏆 أوائل الأكاديمية</div>
+                    <div class="card-panel" style="padding: 0; background: linear-gradient(to bottom, #ffffff, #fdfefe);">
+                        <ul class="leaderboard-list" id="leaderboardList">
+                            <li style="text-align:center; padding: 30px; color:#95a5a6;">جاري حساب الترتيب... ⏳</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div>
-                <div class="section-title">🏆 لوحة شرف الأكاديمية</div>
-                <div class="card-panel" style="padding: 0; background: linear-gradient(to bottom, #ffffff, #fdfefe);">
-                    <ul class="leaderboard-list" id="leaderboardList">
-                        <li style="text-align:center; padding: 30px; color:#95a5a6;">جاري حساب الترتيب... ⏳</li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
-        <div class="section-title">🛒 استكشف وانضم لكورسات جديدة</div>
-        <div class="store-grid" id="storeGrid">
-            <div style="grid-column: 1/-1; text-align: center; color:#7f8c8d; padding:30px;">⏳ جاري تحميل الكورسات...</div>
+        <div id="storeTab" class="tab-content">
+            <div class="section-title">🎙️ التدريب التفاعلي</div>
+            <div class="pronounce-box" style="margin-bottom: 30px;">
+                <h3 style="margin-top: 0; color: #f1c40f;">تحدي النطق بالذكاء الاصطناعي (AI Speech)</h3>
+                <p style="font-size: 14px; margin-bottom: 5px;">اضغط على المايكروفون واقرأ الجملة التالية بصوت واضح:</p>
+                <div class="english-sentence" id="targetSentence">Learning English opens new doors for my future.</div>
+                <button class="mic-btn" id="micBtn" onclick="startPronunciationChallenge()">🎤</button>
+                <div class="pronounce-result" id="pronounceResult">اضغط للبدء والتسجيل...</div>
+            </div>
+
+            <div class="section-title">🛒 متجر الكورسات والمسارات</div>
+            <div class="store-grid" id="storeGrid">
+                <div style="grid-column: 1/-1; text-align: center; color:#7f8c8d; padding:30px;">⏳ جاري تحميل الكورسات المتاحة...</div>
+            </div>
         </div>
 
     </div>
 
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
-            <div class="modal-header"><h3 style="margin:0; color:var(--primary);">⚙️ الإعدادات والمسارات</h3><button class="close-modal" onclick="closeSettingsModal()">&times;</button></div>
-            <div class="form-group">
-                <label style="color: var(--secondary); font-size: 15px;">📚 مساراتك التعليمية:</label>
-                <div class="tracks-checkbox-container" id="modalTracksBox"><p style="font-size:13px; text-align:center;">جاري الجلب...</p></div>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 12px; background: #27ae60;" onclick="updateStudentTracks()">💾 حفظ الكورسات</button>
-            </div>
-            <hr style="border:0; border-top: 2px solid #eee; margin: 25px 0;">
-            <div class="form-group">
-                <label>تعديل الاسم الثلاثي:</label><input type="text" id="modalNameInput">
-                <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="updateStudentName()">💾 حفظ الاسم الجديد</button>
-            </div>
+            <div class="modal-header"><h3 style="margin:0; color:var(--primary);">⚙️ إعدادات الحساب</h3><button class="close-modal" onclick="closeSettingsModal()">&times;</button></div>
+            <div class="form-group"><label>تعديل الاسم الثلاثي:</label><input type="text" id="modalNameInput">
+            <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="updateStudentName()">💾 حفظ الاسم الجديد</button></div>
             <hr style="border:0; border-top: 1px solid #eee; margin: 20px 0;">
-            <div class="form-group">
-                <label>تغيير كلمة المرور:</label><input type="password" id="modalPasswordInput" placeholder="كلمة المرور الجديدة...">
-                <button class="btn btn-primary" style="width: 100%; margin-top: 8px; background: #2980b9;" onclick="updateStudentPassword()">🔒 تحديث كلمة المرور</button>
-            </div>
+            <div class="form-group"><label>تغيير كلمة المرور:</label><input type="password" id="modalPasswordInput" placeholder="اكتب كلمة المرور الجديدة...">
+            <button class="btn btn-primary" style="width: 100%; margin-top: 8px; background: #2980b9;" onclick="updateStudentPassword()">🔒 تحديث كلمة المرور</button></div>
         </div>
     </div>
 
     <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-            authDomain: "alhusseiny-academy.firebaseapp.com",
-            projectId: "alhusseiny-academy",
-            storageBucket: "alhusseiny-academy.firebasestorage.app",
-            messagingSenderId: "1048097240090",
-            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        const firebaseConfig = { apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY", authDomain: "alhusseiny-academy.firebaseapp.com", projectId: "alhusseiny-academy", storageBucket: "alhusseiny-academy.firebasestorage.app", messagingSenderId: "1048097240090", appId: "1:1048097240090:web:931635cccdb05213fd4da3" };
+        firebase.initializeApp(firebaseConfig); const auth = firebase.auth(); const db = firebase.firestore();
         let currentUser = null; let myCurrentGradesArray = []; let progressChartInstance = null;
 
-        // جمل عشوائية لتحدي النطق
-        const sentences = [
-            "Learning English opens new doors for my future.",
-            "Practice makes perfect in every language.",
-            "I am looking forward to seeing you soon.",
-            "Success is the sum of small efforts repeated day in and day out.",
-            "A journey of a thousand miles begins with a single step."
-        ];
+        const sentences = ["Practice makes perfect in every language.", "I am looking forward to seeing you soon.", "Success is the sum of small efforts repeated.", "A journey of a thousand miles begins with a single step."];
         document.getElementById("targetSentence").innerText = sentences[Math.floor(Math.random() * sentences.length)];
 
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentUser = user; document.getElementById("authScreen").style.display = "none";
+                
+                // 1. إدارة شعلة النشاط 🔥
+                manageDailyStreak(user.uid);
+
                 db.collection("students").doc(user.uid).get().then((doc) => {
                     let displayName = user.displayName || "طالب الأكاديمية";
                     if(doc.exists) {
@@ -229,61 +241,51 @@
                     document.getElementById("studentEmail").innerText = `الحساب المعتمد: ${user.email}`;
                     document.getElementById("modalNameInput").value = user.displayName || "";
 
-                    loadMyScoresAndRadar(user.email);
-                    loadLeaderboard();
+                    loadMyScoresChartAndRadar(user.email);
+                    loadFastLeaderboard();
                     loadAcademyStore();
                 });
             } else window.location.href = "login.html";
         });
 
-        // 🎙️ محرك تحليل النطق (Web Speech API)
-        function startPronunciationChallenge() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) { alert("عذراً، متصفحك لا يدعم خاصية تحليل الصوت. استخدم Google Chrome."); return; }
-            
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            const btn = document.getElementById("micBtn");
-            const resBox = document.getElementById("pronounceResult");
-            
-            btn.classList.add("recording");
-            resBox.innerText = "جاري الاستماع... تحدث الآن 🎧";
-
-            recognition.start();
-
-            recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,!]/g,"");
-                const targetText = document.getElementById("targetSentence").innerText.toLowerCase().replace(/[.,!]/g,"");
-                
-                // خوارزمية تطابق بسيطة
-                let matchedWords = 0;
-                let targetWords = targetText.split(" ");
-                let spokenWords = speechResult.split(" ");
-                
-                targetWords.forEach(word => { if(spokenWords.includes(word)) matchedWords++; });
-                let accuracy = Math.round((matchedWords / targetWords.length) * 100);
-                
-                btn.classList.remove("recording");
-                if(accuracy > 80) resBox.innerHTML = `🌟 رائع! دقة نطقك: <span style="color:#2ecc71;">${accuracy}%</span>. أنت تتحدث كالمحترفين!`;
-                else if(accuracy > 50) resBox.innerHTML = `👍 جيد! دقة نطقك: <span style="color:#f1c40f;">${accuracy}%</span>. حاول التركيز أكثر وإعادة المحاولة.`;
-                else resBox.innerHTML = `⚠️ دقة نطقك: <span style="color:#e74c3c;">${accuracy}%</span>. (سمعناك تقول: "${speechResult}"). جرب مرة أخرى!`;
-            };
-
-            recognition.onspeechend = function() { recognition.stop(); btn.classList.remove("recording"); };
-            recognition.onerror = function(event) { btn.classList.remove("recording"); resBox.innerText = "حدث خطأ في المايكروفون. تأكد من السماح للمتصفح باستخدامه."; };
+        // 📑 نظام التبديل بين التبويبات
+        function switchDashboardTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
         }
 
-        // 📊 سحب الدرجات + 🎯 تشغيل رادار نقاط الضعف
-        function loadMyScoresAndRadar(email) {
+        // 🔥 محرك شعلة النشاط الذكي (Daily Streaks)
+        function manageDailyStreak(uid) {
+            const todayStr = new Date().toDateString();
+            const studentRef = db.collection("students").doc(uid);
+            
+            studentRef.get().then(doc => {
+                let data = doc.data() || {};
+                let currentStreak = data.streak || 0;
+                let lastLogin = data.lastLogin || "";
+
+                if (lastLogin !== todayStr) {
+                    let yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                    if (lastLogin === yesterday.toDateString()) currentStreak++; // متتالي
+                    else currentStreak = 1; // انقطاع
+                    
+                    studentRef.update({ streak: currentStreak, lastLogin: todayStr }, {merge: true});
+                }
+                document.getElementById("streakCount").innerText = currentStreak;
+            });
+        }
+
+        // 📊 جلب الدرجات + 📈 الرسم البياني + 🎯 الرادار + 💎 حساب الـ XP
+        function loadMyScoresChartAndRadar(email) {
             db.collection("exam_results").where("email", "==", email).get().then((snapshot) => {
                 const tbody = document.getElementById("studentResultsTable");
                 if (snapshot.empty) {
                     tbody.innerHTML = "<tr><td colspan='3' style='text-align: center; color: #95a5a6;'>لم تقم بحل أي اختبار حتى الآن.</td></tr>";
                     document.getElementById("progressChart").style.display = "none";
                     document.getElementById("chartNoDataMsg").style.display = "block";
+                    document.getElementById("radarContainer").innerHTML = `<div class="radar-box"><div class="radar-icon">🚀</div><div class="radar-text"><h3 style="color:#2980b9;">أهلاً بك في الأكاديمية!</h3><p>ابدأ بحل الاختبارات لكي يتمكن الرادار من تحليل مستواك.</p></div></div>`;
                     return;
                 }
 
@@ -291,38 +293,48 @@
                 records.sort((a,b) => (a.timestamp ? a.timestamp.toMillis() : 0) - (b.timestamp ? b.timestamp.toMillis() : 0));
 
                 let chartLabels = []; let chartData = []; let tableHtml = "";
-                let lowestScore = 101; let weakestExam = ""; let totalExams = records.length;
+                let lowestScore = 101; let weakestExam = ""; let totalXP = 0; let pendingEssays = 0;
 
                 [...records].reverse().forEach(data => {
                     let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                    tableHtml += `<tr><td style="color:var(--primary); font-size:14px;">📝 ${data.examName}</td><td style="color:#7f8c8d;">${dateObj.toLocaleDateString('ar-EG')}</td><td><span class="badge-score">${data.score}</span></td></tr>`;
+                    
+                    // ⏳ معالجة المقالي
+                    let essayNotice = data.hasEssay ? `<span title="بانتظار تقييم المستر لأسئلة البراجراف" style="margin-right:5px; cursor:help;">⏳</span>` : "";
+                    if(data.hasEssay) pendingEssays++;
+
+                    tableHtml += `<tr><td style="color:var(--primary); font-size:14px;">📝 ${data.examName}</td><td style="color:#7f8c8d;">${dateObj.toLocaleDateString('ar-EG')}</td><td><span class="badge-score">${data.score}</span> ${essayNotice}</td></tr>`;
                 });
                 tbody.innerHTML = tableHtml;
+
+                // 🔔 جرس الإشعارات
+                if(pendingEssays > 0) document.getElementById("notifDot").style.display = "block";
+                else document.getElementById("notifDot").style.display = "none";
 
                 records.forEach((data, index) => {
                     if(data.score) {
                         let parts = data.score.split("/");
                         if(parts.length === 2) {
-                            let percentage = (parseFloat(parts[0]) / parseFloat(parts[1])) * 100;
+                            let correct = parseFloat(parts[0]); let total = parseFloat(parts[1]);
+                            let percentage = (correct / total) * 100;
                             chartLabels.push(`اختبار ${index + 1}`); chartData.push(percentage.toFixed(1));
                             
-                            // حساب نقطة الضعف
+                            // 💎 حساب نقاط الخبرة (10 نقاط دخول + 5 نقطة لكل إجابة صحيحة)
+                            totalXP += 10 + (correct * 5);
+
                             if(percentage < lowestScore) { lowestScore = percentage; weakestExam = data.examName; }
                         }
                     }
                 });
 
+                document.getElementById("xpCount").innerText = totalXP;
                 renderProgressChart(chartLabels, chartData);
 
-                // 🎯 تشغيل رادار الذكاء الاصطناعي (AI Weakness Radar)
+                // 🎯 الرادار
                 const radarBox = document.getElementById("radarContainer");
-                if (totalExams > 1) { // ننتظر حتى يحل امتحانين على الأقل
-                    if (lowestScore >= 90) {
-                        radarBox.innerHTML = `<div class="radar-box" style="border-left-color:#27ae60;"><div class="radar-icon">🌟</div><div class="radar-text"><h3 style="color:#27ae60;">الرادار الذكي: أداؤك مثالي!</h3><p>أنت لا تمتلك نقاط ضعف واضحة حالياً. استمر في هذا التفوق الرائع.</p></div></div>`;
-                    } else {
-                        radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">🎯</div><div class="radar-text"><h3>الرادار الذكي: انتبه لنقاط ضعفك!</h3><p>لاحظنا تراجعاً في مستوى درجاتك في <strong>( ${weakestExam} )</strong>. ننصحك بإعادة مشاهدة المحاضرة الخاصة به لتدارك الخطأ.</p></div></div>`;
-                    }
-                }
+                if (records.length > 1) {
+                    if (lowestScore >= 85) radarBox.innerHTML = `<div class="radar-box" style="border-right-color:#27ae60;"><div class="radar-icon">🌟</div><div class="radar-text"><h3 style="color:#27ae60;">الرادار الذكي: أداؤك مثالي!</h3><p>أنت لا تمتلك نقاط ضعف واضحة حالياً. استمر في هذا التفوق الرائع يا بطل.</p></div></div>`;
+                    else radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">🎯</div><div class="radar-text"><h3>الرادار الذكي: انتبه لنقاط ضعفك!</h3><p>لاحظنا تراجعاً في مستوى درجاتك في <strong>( ${weakestExam} )</strong>. نوصي بشدة بمراجعة هذا الجزء مرة أخرى.</p></div></div>`;
+                } else radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">⏳</div><div class="radar-text"><h3 style="color:#7f8c8d;">جاري جمع البيانات...</h3><p>حل امتحاناً آخر لكي يكتمل تحليل الرادار.</p></div></div>`;
             });
         }
 
@@ -332,7 +344,7 @@
             progressChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'نسبة النجاح %', data: dataPoints, borderColor: '#18bc9c', backgroundColor: 'rgba(24, 188, 156, 0.1)', borderWidth: 3, pointBackgroundColor: '#e74c3c', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } } });
         }
 
-        // باقي دوال المتجر والشرف والإعدادات (كما هي)
+        // 🛒 المتجر الذكي المبسط
         function loadAcademyStore() {
             db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => {
                 const storeGrid = document.getElementById("storeGrid");
@@ -342,17 +354,22 @@
                     let track = doc.data(); let isSubscribed = myCurrentGradesArray.includes(doc.id);
                     let badgeClass = (Math.random() > 0.5) ? "course-badge free" : "course-badge"; let badgeText = badgeClass.includes("free") ? "مجاني" : "مميز";
                     if(isSubscribed) { html += `<div class="course-card" style="border-color: #27ae60; background:#f9fdfa;"><div class="course-icon">🎓</div><h3 class="course-title">${track.name}</h3><div style="color: #27ae60; font-weight:bold; font-size:15px; margin-top:15px;">مسجل بالفعل ✅</div></div>`; } 
-                    else { html += `<div class="course-card"><div class="${badgeClass}">${badgeText}</div><div class="course-icon">🚀</div><h3 class="course-title">${track.name}</h3><button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="subscribeToCourse('${doc.id}', '${track.name}')">➕ انضم الآن مجاناً</button></div>`; }
+                    else { html += `<div class="course-card"><div class="${badgeClass}">${badgeText}</div><div class="course-icon">🚀</div><h3 class="course-title">${track.name}</h3><button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="subscribeToCourse('${doc.id}', '${track.name}')">➕ انضم للكورس</button></div>`; }
                 }); storeGrid.innerHTML = html;
             });
         }
+
         function subscribeToCourse(courseId, courseName) {
-            if(confirm(`هل تريد إضافة "${courseName}" لمساراتك التعليمية؟`)) {
-                myCurrentGradesArray.push(courseId); db.collection("students").doc(currentUser.uid).update({ grades: myCurrentGradesArray }).then(() => { alert(`🎉 تم اشتراكك في ${courseName} بنجاح.`); loadAcademyStore(); });
+            if(confirm(`هل أنت متأكد من اشتراكك في "${courseName}"؟`)) {
+                myCurrentGradesArray.push(courseId); 
+                db.collection("students").doc(currentUser.uid).update({ grades: myCurrentGradesArray }).then(() => { alert(`🎉 مبارك! تم فتح مسار ${courseName}.`); loadAcademyStore(); });
             }
         }
-        function loadLeaderboard() {
-            db.collection("exam_results").get().then((snapshot) => {
+
+        // 🏆 لوحة الشرف السريعة (Fast Leaderboard)
+        function loadFastLeaderboard() {
+            // سحب أحدث 50 نتيجة فقط للحفاظ على السرعة الفائقة للوحة
+            db.collection("exam_results").orderBy("timestamp", "desc").limit(50).get().then((snapshot) => {
                 let studentScores = {};
                 snapshot.forEach(doc => {
                     let data = doc.data();
@@ -364,12 +381,35 @@
                 list.innerHTML = top5.map((student, index) => { let rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : ''; let medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`; return `<li class="leaderboard-item"><div class="student-info"><div class="rank-badge ${rankClass}">${medal}</div><span>${student.name}</span></div><div class="leader-score">${Math.round(student.score)}%</div></li>`; }).join('');
             });
         }
-        function preloadAllAcademyTracks() { db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => { const box = document.getElementById("modalTracksBox"); if(snapshot.empty) return; let html = ""; snapshot.forEach(doc => { let track = doc.data(); let isChecked = myCurrentGradesArray.includes(doc.id) ? "checked" : ""; html += `<label class="track-checkbox-item"><input type="checkbox" name="academyTracks" value="${doc.id}" ${isChecked}><span>📚 ${track.name}</span></label>`; }); box.innerHTML = html; }); }
-        function updateStudentTracks() { let checkedBoxes = document.querySelectorAll('input[name="academyTracks"]:checked'); let selectedGrades = []; checkedBoxes.forEach(cb => selectedGrades.push(cb.value)); if(selectedGrades.length === 0) { alert("⚠️ حدد مساراً واحداً على الأقل!"); return; } db.collection("students").doc(currentUser.uid).update({ grades: selectedGrades, grade: selectedGrades[0] }).then(() => { myCurrentGradesArray = selectedGrades; alert("✅ تم التحديث!"); closeSettingsModal(); loadAcademyStore(); }); }
-        function openSettingsModal() { document.getElementById("settingsModal").classList.add("active"); preloadAllAcademyTracks(); }
+
+        // 🎙️ تحدي النطق
+        function startPronunciationChallenge() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) { alert("المتصفح لا يدعم المايكروفون. يرجى استخدام Google Chrome."); return; }
+            const recognition = new SpeechRecognition(); recognition.lang = 'en-US';
+            const btn = document.getElementById("micBtn"); const resBox = document.getElementById("pronounceResult");
+            btn.classList.add("recording"); resBox.innerText = "جاري الاستماع... تحدث الآن 🎧";
+            recognition.start();
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,!]/g,"");
+                const targetText = document.getElementById("targetSentence").innerText.toLowerCase().replace(/[.,!]/g,"");
+                let matchedWords = 0; let targetWords = targetText.split(" "); let spokenWords = speechResult.split(" ");
+                targetWords.forEach(word => { if(spokenWords.includes(word)) matchedWords++; });
+                let accuracy = Math.round((matchedWords / targetWords.length) * 100);
+                btn.classList.remove("recording");
+                if(accuracy > 80) resBox.innerHTML = `🌟 رائع! دقة نطقك: <span style="color:#2ecc71;">${accuracy}%</span>.`;
+                else if(accuracy > 50) resBox.innerHTML = `👍 جيد! دقة نطقك: <span style="color:#f1c40f;">${accuracy}%</span>. حاول مرة أخرى.`;
+                else resBox.innerHTML = `⚠️ دقة نطقك: <span style="color:#e74c3c;">${accuracy}%</span>. (سمعناك تقول: "${speechResult}").`;
+            };
+            recognition.onspeechend = function() { recognition.stop(); btn.classList.remove("recording"); };
+            recognition.onerror = function() { btn.classList.remove("recording"); resBox.innerText = "حدث خطأ. تأكد من إعطاء الصلاحية للمايك."; };
+        }
+
+        // ⚙️ الإعدادات البسيطة
+        function openSettingsModal() { document.getElementById("settingsModal").classList.add("active"); }
         function closeSettingsModal() { document.getElementById("settingsModal").classList.remove("active"); document.getElementById("modalPasswordInput").value = ""; }
-        function updateStudentName() { const newName = document.getElementById("modalNameInput").value.trim(); if (!newName) return; currentUser.updateProfile({ displayName: newName }).then(() => { document.getElementById("studentName").innerText = `أهلاً بك يا بطل، ${newName}! 👋`; closeSettingsModal(); loadLeaderboard(); }); }
-        function updateStudentPassword() { const newPassword = document.getElementById("modalPasswordInput").value.trim(); if (newPassword.length < 6) return; currentUser.updatePassword(newPassword).then(() => { alert("🔒 تم التغيير!"); closeSettingsModal(); }); }
+        function updateStudentName() { const newName = document.getElementById("modalNameInput").value.trim(); if (!newName) return; currentUser.updateProfile({ displayName: newName }).then(() => { document.getElementById("studentName").innerText = `أهلاً بك يا بطل، ${newName}! 👋`; closeSettingsModal(); }); }
+        function updateStudentPassword() { const newPassword = document.getElementById("modalPasswordInput").value.trim(); if (newPassword.length < 6) { alert("كلمة المرور قصيرة!"); return; } currentUser.updatePassword(newPassword).then(() => { alert("🔒 تم تغيير كلمة المرور!"); closeSettingsModal(); }).catch(e => alert("خطأ: " + e.message)); }
         function logout() { auth.signOut().then(() => { window.location.href = "index.html"; }); }
     </script>
 </body>
