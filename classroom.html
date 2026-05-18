@@ -3,407 +3,458 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الطالب | أكاديمية الحسيني</title>
+    <title>قاعة المحاضرات الذكية | أكاديمية مستر الحسيني</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root { 
-            --primary: #2c3e50; --secondary: #18bc9c; --bg: #f4f7f6; 
-            --white: #ffffff; --text: #34495e; --accent: #e74c3c;
-            --gold: #f1c40f; --silver: #bdc3c7; --bronze: #cd7f32;
+            --primary: #2c3e50; --secondary: #18bc9c; --accent: #e67e22; 
+            --teal: #0a7c6e; --bg: #f4f7f6; --white: #ffffff; --text: #2c3e50; 
+            --context-bg: #fffde7; /* لون مميز لقطعة الفهم */
         }
-        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; transition: background 0.5s; }
+
+        /* 🧘‍♂️ وضع التركيز العميق (يتم تفعيله بالـ JS) */
+        body.focus-mode { background: #fdfefe; }
+        body.focus-mode header { display: none !important; }
+        body.focus-mode .floating-ai-btn { display: none !important; }
+
+        header { background: linear-gradient(135deg, var(--primary), #34495e); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
+        .logo { font-weight: 900; font-size: 1.5em; display: flex; align-items: center; gap: 10px; }
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.5); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; cursor: pointer; }
+        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+        .user-greeting { font-weight: bold; color: #f1c40f; }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; transition: 0.3s; }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* مساراتي والدروس (كما هي نظيفة) */
+        .my-tracks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .track-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border-bottom: 5px solid var(--secondary); cursor: pointer; transition: 0.3s; }
+        .track-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: var(--teal); }
+        .track-card h3 { color: var(--primary); font-size: 1.4em; margin: 10px 0; font-weight: 900; }
+        .track-icon { font-size: 45px; }
+
+        .page-title-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .unit-box { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-right: 5px solid var(--teal); }
+        .unit-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-top: 0; margin-bottom: 15px; }
+        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; cursor: pointer; }
+        .content-item:hover { background: #f4f7f6; transform: translateX(-5px); border-color: var(--secondary); }
+        .content-info { display: flex; align-items: center; gap: 15px; font-weight: bold; }
+        .icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; color: white; }
+        .bg-video { background: #e74c3c; } .bg-pdf { background: #3498db; } .bg-exam { background: #f39c12; }
+        .btn-action { background: var(--teal); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Tajawal'; }
+
+        /* السينما */
+        .media-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 12px 12px 0 0; border-bottom: 2px solid #eee; }
+        .media-container { background: #000; width: 100%; aspect-ratio: 16 / 9; border-radius: 0 0 12px 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .media-container iframe { width: 100%; height: 100%; border: none; }
+        .pdf-container { aspect-ratio: auto; height: 80vh; background: #ecf0f1; }
+
+        /* 📝 محرك التقييم الشامل (Ultimate Assessment Player) */
+        .exam-header { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; border: 2px dashed var(--secondary); display: flex; justify-content: space-between; align-items: center; }
+        .exam-header h2 { margin: 0; color: var(--primary); }
+        .progress-bar { width: 100%; background: #e2e8f0; height: 8px; border-radius: 4px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { background: var(--secondary); height: 100%; width: 0%; transition: width 0.5s ease; }
         
-        header { background: linear-gradient(135deg, var(--primary), #34495e); color: white; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .logo-area h1 { margin: 0; font-size: 1.6em; font-weight: 900; }
-        .logo-area p { margin: 5px 0 0; font-size: 12px; color: #bdc3c7; }
-        .nav-btns { display: flex; gap: 12px; }
+        .block-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; animation: fadeIn 0.4s; }
         
-        .btn { font-family: 'Tajawal'; font-weight: bold; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-primary { background: var(--secondary); color: white; }
-        .btn-primary:hover { background: #128f76; transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.4); color: white; }
-        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
-        .btn-danger { background: var(--accent); color: white; }
-        .btn-danger:hover { background: #c0392b; }
+        /* 📌 تقنية القطعة المثبتة */
+        .context-block { background: var(--context-bg); border-right: 5px solid #f1c40f; position: sticky; top: 15px; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .context-text { font-size: 1.15em; line-height: 1.8; color: #333; direction: ltr; text-align: left; white-space: pre-wrap; font-family: 'Arial', sans-serif; }
 
-        .main-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        .question-text { font-size: 1.2em; font-weight: bold; color: var(--primary); margin-bottom: 15px; line-height: 1.6; direction: ltr; text-align: left; }
         
-        .welcome-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 30px; border-right: 6px solid var(--secondary); }
-        .welcome-text h2 { margin: 0; font-size: 1.8em; color: var(--primary); font-weight: 900; }
-        .welcome-text p { margin: 8px 0 0; color: #7f8c8d; font-size: 14px; }
-
-        .section-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; margin-top: 30px; }
-        .card-panel { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #eee; }
+        /* خيارات الأسئلة */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; direction: ltr; }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+        .option-btn { display: block; width: 100%; text-align: left; padding: 15px; background: #f8f9fa; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-family: 'Arial', sans-serif; font-size: 16px; transition: 0.2s; }
+        .option-btn:hover { background: #edf2f7; border-color: #cbd5e0; }
+        .option-btn.selected { background: #e6fffa; border-color: var(--secondary); color: #006d5b; font-weight: bold; box-shadow: 0 4px 10px rgba(24, 188, 156, 0.2); }
         
-        /* تصميم الشبكات */
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        /* حقول الأكمل والمقالي */
+        .input-text { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Arial', sans-serif; box-sizing: border-box; direction: ltr; text-align: left; transition: 0.3s; }
+        .input-text:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(24,188,156,0.1); }
+        .textarea-essay { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Arial', sans-serif; box-sizing: border-box; direction: ltr; text-align: left; resize: vertical; min-height: 120px; }
+        .textarea-essay:focus { border-color: var(--secondary); outline: none; }
+
+        .btn-submit-exam { background: var(--secondary); color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-family: 'Tajawal'; transition: 0.3s; }
+        .btn-submit-exam:hover { background: #128f76; }
         
-        /* 🛒 متجر الكورسات */
-        .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .course-card { background: white; border-radius: 15px; padding: 25px; text-align: center; border: 1px solid #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; position: relative; overflow: hidden; }
-        .course-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: var(--secondary); }
-        .course-icon { font-size: 45px; margin-bottom: 10px; }
-        .course-title { font-size: 1.2em; font-weight: 900; color: var(--primary); margin: 0 0 10px 0; }
-        .course-badge { position: absolute; top: 15px; right: -30px; background: var(--accent); color: white; font-size: 11px; font-weight: bold; padding: 5px 30px; transform: rotate(45deg); }
-        .course-badge.free { background: var(--secondary); }
+        .exam-navigation { display: flex; justify-content: space-between; gap: 15px; margin-top: 20px; }
+        .btn-nav { flex: 1; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; font-family: 'Tajawal'; transition: 0.3s; }
+        .btn-prev { background: #ecf0f1; color: var(--primary); } .btn-prev:hover { background: #bdc3c7; }
+        .btn-next { background: var(--teal); color: white; } .btn-next:hover { background: #0b6055; }
 
-        table { width: 100%; border-collapse: collapse; text-align: right; }
-        th { padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; font-weight: bold; border-bottom: 2px solid #eee; }
-        td { padding: 16px 12px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
-        .badge-score { background: #eafaf1; color: #27ae60; padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        /* 🛟 توست الحفظ التلقائي */
+        .toast-msg { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #2c3e50; color: white; padding: 10px 25px; border-radius: 30px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: bottom 0.4s ease; z-index: 3000; display: flex; align-items: center; gap: 8px; }
+        .toast-msg.show { bottom: 30px; }
 
-        .leaderboard-list { list-style: none; padding: 0; margin: 0; }
-        .leaderboard-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; transition: 0.3s; }
-        .leaderboard-item:hover { background: #fdfdfd; transform: translateX(-5px); }
-        .student-info { display: flex; align-items: center; gap: 12px; font-weight: bold; color: var(--primary); }
-        .rank-badge { width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: 900; color: white; background: var(--primary); }
-        .rank-1 { background: var(--gold); box-shadow: 0 0 10px rgba(241, 196, 15, 0.5); font-size: 20px; }
-        .rank-2 { background: var(--silver); }
-        .rank-3 { background: var(--bronze); }
-        .leader-score { font-size: 1.1em; font-weight: 900; color: var(--secondary); }
+        /* المدرس الذكي */
+        .floating-ai-btn { position: fixed; bottom: 30px; left: 30px; background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 15px 25px; border-radius: 50px; font-family: 'Tajawal'; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 10px 25px rgba(142, 68, 173, 0.4); border: none; z-index: 1000; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .floating-ai-btn:hover { transform: scale(1.05); }
+        .ai-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .ai-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .ai-modal-box { background: white; width: 95%; max-width: 800px; height: 85vh; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transform: scale(0.9); transition: 0.3s; }
+        .ai-modal-overlay.active .ai-modal-box { transform: scale(1); }
+        .ai-modal-header { background: #8e44ad; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .close-ai-modal { background: transparent; border: none; color: white; font-size: 28px; cursor: pointer; }
+        .ai-modal-body { flex: 1; width: 100%; } .ai-modal-body iframe { width: 100%; height: 100%; border: none; }
 
-        /* ⚙️ إعدادات Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box { background: white; width: 90%; max-width: 450px; border-radius: 16px; padding: 30px; transform: translateY(-20px); transition: 0.3s; }
-        .modal-overlay.active .modal-box { transform: translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
-        .close-modal { font-size: 24px; color: #95a5a6; cursor: pointer; border: none; background: transparent; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px; border: 2px solid #eaeded; border-radius: 8px; font-family: 'Tajawal'; box-sizing: border-box; }
-        .form-group input:focus { border-color: var(--secondary); outline: none; }
-
-        footer { text-align: center; padding: 25px; color: #95a5a6; font-size: 13px; background: white; margin-top: auto; border-top: 1px solid #eee; }
-        .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        footer { text-align: center; padding: 30px; color: #95a5a6; font-size: 13px; background: white; margin-top: auto; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-    <div class="auth-screen" id="authScreen">
-        <h2 style="color: var(--primary);">🔐 جاري تحميل ملفك الأكاديمي...</h2>
-    </div>
-
     <header>
-        <div class="logo-area">
-            <h1>🎓 لوحة تحكم الطالب</h1>
-            <p>أكاديمية مستر الحسيني يحيى</p>
-        </div>
-        <div class="nav-btns">
-            <button class="btn btn-outline" onclick="openSettingsModal()">⚙️ إعدادات الحساب</button>
-            <button class="btn btn-danger" onclick="logout()">خروج 🚪</button>
+        <div class="logo">👑 قاعة المحاضرات השاملة</div>
+        <div class="nav-actions">
+            <span class="user-greeting" id="userInfo">جاري التحميل...</span>
+            <a href="dashboard.html" class="btn-outline">📊 لوحة تحكمي</a>
         </div>
     </header>
 
-    <div class="main-container">
+    <div class="container" id="mainContainer">
         
-        <div class="welcome-card">
-            <div class="welcome-text">
-                <h2 id="studentName">أهلاً بك يا بطل! 👋</h2>
-                <p id="studentEmail">الحساب المعتمد: loading...</p>
+        <section id="myTracksHubView" class="view-section active">
+            <div style="text-align: center;"><h2 style="color: var(--primary); font-size: 2em; margin-bottom: 5px;">مرحباً بك في قاعتك المخصصة 🎓</h2><p style="color: #7f8c8d; font-size: 16px;">اختر الكورس الذي تريد استكمال مذاكرته اليوم</p></div>
+            <div class="my-tracks-grid" id="myTracksContainer"><div style="text-align: center; grid-column: 1 / -1; padding: 50px;">⏳ جاري الفحص...</div></div>
+        </section>
+
+        <section id="contentView" class="view-section">
+            <div class="page-title-box"><h2 id="selectedGradeTitle" style="color: var(--primary); margin: 0;">--</h2><button class="btn-outline" style="color: var(--primary); border-color: #bdc3c7;" onclick="switchView('myTracksHubView')">🔙 العودة لكورساتي</button></div>
+            <div id="unitsContainer"><div style="text-align:center; padding:50px;">⏳ جاري جلب الدروس...</div></div>
+        </section>
+
+        <section id="mediaView" class="view-section">
+            <div class="media-header"><h2 id="mediaTitle">--</h2><button class="btn-outline" style="color: var(--primary); border-color: #bdc3c7;" onclick="closeMedia()">🔙 عودة للدروس</button></div>
+            <div id="mediaContainerWrapper" class="media-container"><iframe id="mediaIframe" src="" allowfullscreen></iframe></div>
+        </section>
+
+        <section id="examView" class="view-section">
+            <div class="exam-header">
+                <h2 id="activeExamTitle">--</h2>
+                <button class="btn-outline" style="color:#e74c3c; border-color:#e74c3c; font-size:12px;" onclick="exitExam()">❌ خروج طوارئ</button>
             </div>
-            <a href="classroom.html" class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;">🚀 دخول قاعة المحاضرات</a>
-        </div>
-
-        <div class="section-title">📈 منحنى تطور مستواك التعليمي</div>
-        <div class="card-panel" style="margin-bottom: 30px;">
-            <canvas id="progressChart" height="80"></canvas>
-            <p id="chartNoDataMsg" style="text-align: center; color: #95a5a6; display: none;">قم بحل المزيد من الامتحانات لرسم منحنى تطورك!</p>
-        </div>
-
-        <div class="dashboard-grid">
-            <div>
-                <div class="section-title">📊 سجل درجاتك وتقارير أدائك</div>
-                <div class="card-panel">
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr><th>اسم الاختبار</th><th>التاريخ</th><th>النتيجة</th></tr>
-                            </thead>
-                            <tbody id="studentResultsTable">
-                                <tr><td colspan="3" style="text-align: center; color: #7f8c8d;">جاري جلب درجاتك... ⏳</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div style="text-align:left; color:#7f8c8d; font-weight:bold; margin-bottom:15px; direction:ltr;" id="questionCounter"></div>
+            
+            <div id="examBlocksContainer"></div>
+            
+            <div class="exam-navigation" id="examNavButtons" style="display:none;">
+                <button class="btn-nav btn-prev" id="btnPrev" onclick="navigateExam(-1)">⬅️ السابق</button>
+                <button class="btn-nav btn-next" id="btnNext" onclick="navigateExam(1)">التالي ➡️</button>
             </div>
+            
+            <button class="btn-submit-exam" id="btnSubmitExam" style="display:none;" onclick="finishAndSubmitExam()">🏁 إنهاء الاختبار وإرسال النتيجة</button>
+        </section>
 
-            <div>
-                <div class="section-title">🏆 لوحة شرف الأكاديمية</div>
-                <div class="card-panel" style="padding: 0; background: linear-gradient(to bottom, #ffffff, #fdfefe);">
-                    <ul class="leaderboard-list" id="leaderboardList">
-                        <li style="text-align:center; padding: 30px; color:#95a5a6;">جاري حساب الترتيب... ⏳</li>
-                    </ul>
-                </div>
+        <section id="resultView" class="view-section">
+            <div style="text-align: center; background: white; padding: 40px; border-radius: 15px; margin-bottom: 25px;">
+                <h2 style="color: var(--secondary);">🎉 تمت المهمة بنجاح!</h2>
+                <div style="font-size: 50px; font-weight: 900; color: var(--primary); margin: 15px 0;" id="scoreDisplay">0 / 0</div>
+                <p id="essayNotice" style="color:#e67e22; font-weight:bold; display:none;">⚠️ الدرجة لا تشمل الأسئلة المقالية (بانتظار تقييم المستر).</p>
+                <button class="btn-action" onclick="switchView('contentView')">🔙 العودة للدروس</button>
             </div>
-        </div>
-
-        <div class="section-title">🛒 استكشف وانضم لكورسات جديدة</div>
-        <div class="store-grid" id="storeGrid">
-            <div style="grid-column: 1/-1; text-align: center; color:#7f8c8d; padding:30px;">⏳ جاري تحميل الكورسات المتاحة...</div>
-        </div>
+        </section>
 
     </div>
 
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3 style="margin:0; color:var(--primary);">⚙️ إعدادات الحساب</h3>
-                <button class="close-modal" onclick="closeSettingsModal()">&times;</button>
-            </div>
-            <div class="form-group">
-                <label>تعديل الاسم الثلاثي:</label>
-                <input type="text" id="modalNameInput">
-                <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="updateStudentName()">💾 حفظ الاسم</button>
-            </div>
-            <hr style="border:0; border-top: 1px solid #eee; margin: 20px 0;">
-            <div class="form-group">
-                <label>تغيير كلمة المرور:</label>
-                <input type="password" id="modalPasswordInput" placeholder="اكتب كلمة المرور الجديدة...">
-                <button class="btn btn-primary" style="width: 100%; margin-top: 8px; background: #2980b9;" onclick="updateStudentPassword()">🔒 تحديث كلمة المرور</button>
-            </div>
-        </div>
-    </div>
+    <div class="toast-msg" id="saveToast">🛟 تم الحفظ التلقائي لإجاباتك</div>
+
+    <button class="floating-ai-btn" onclick="openAITutor()">🤖 اسأل المدرس الذكي</button>
+    <div class="ai-modal-overlay" id="aiTutorModal"><div class="ai-modal-box"><div class="ai-modal-header"><h3>🤖 المدرس الذكي</h3><button class="close-ai-modal" onclick="closeAITutor()">&times;</button></div><div class="ai-modal-body"><iframe src="ai-tutor.html"></iframe></div></div></div>
 
     <footer>جميع الحقوق محفوظة لأكاديمية مستر الحسيني يحيى © 2026</footer>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY",
-            authDomain: "alhusseiny-academy.firebaseapp.com",
-            projectId: "alhusseiny-academy",
-            storageBucket: "alhusseiny-academy.firebasestorage.app",
-            messagingSenderId: "1048097240090",
-            appId: "1:1048097240090:web:931635cccdb05213fd4da3"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        let currentUser = null;
-        let myCurrentGradesArray = []; 
-        let progressChartInstance = null; // للاحتفاظ بنسخة الرسم البياني
+        const firebaseConfig = { apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY", authDomain: "alhusseiny-academy.firebaseapp.com", projectId: "alhusseiny-academy", storageBucket: "alhusseiny-academy.firebasestorage.app", messagingSenderId: "1048097240090", appId: "1:1048097240090:web:931635cccdb05213fd4da3" };
+        firebase.initializeApp(firebaseConfig); const auth = firebase.auth(); const db = firebase.firestore();
+
+        let currentStudentName = ""; let currentStudentEmail = "";
+        
+        // متغيرات محرك الاختبارات
+        let activeExamData = null;
+        let activeExamId = null;
+        let studentAnswers = []; // المصفوفة التي تُحفظ محلياً
+        let currentDisplayStep = 0; // يستخدم للكويز والصفحات
+        let totalSteps = 1;
+        let blocksPerStep = 1; // 1 للكويز، كل الكتل للورقة، 5 للصفحات
+        let hasEssayQuestions = false;
 
         auth.onAuthStateChanged((user) => {
             if (user) {
-                currentUser = user;
-                document.getElementById("authScreen").style.display = "none";
-                
-                db.collection("students").doc(user.uid).get().then((doc) => {
-                    let displayName = user.displayName || "طالب الأكاديمية";
-                    if(doc.exists) {
-                        let data = doc.data();
-                        if(data.grades && Array.isArray(data.grades)) myCurrentGradesArray = data.grades;
-                        else if(data.grade) myCurrentGradesArray = [data.grade];
-                    }
-                    
-                    document.getElementById("studentName").innerText = `أهلاً بك يا بطل، ${displayName}! 👋`;
-                    document.getElementById("studentEmail").innerText = `الحساب المعتمد: ${user.email}`;
-                    document.getElementById("modalNameInput").value = user.displayName || "";
-
-                    loadMyScoresAndChart(user.email);
-                    loadLeaderboard();
-                    loadAcademyStore(); // استدعاء متجر الكورسات الذكي
-                });
-            } else {
-                window.location.href = "login.html";
-            }
+                currentStudentName = user.displayName || "طالب الأكاديمية"; currentStudentEmail = user.email;
+                document.getElementById('userInfo').innerText = `👋 أهلاً، ${currentStudentName}`;
+                loadStudentActiveTracks(user.uid);
+            } else window.location.href = "login.html";
         });
 
-        // 📊 سحب الدرجات + 📈 رسم المنحنى
-        function loadMyScoresAndChart(email) {
-            db.collection("exam_results").where("email", "==", email).get().then((snapshot) => {
-                const tbody = document.getElementById("studentResultsTable");
-                if (snapshot.empty) {
-                    tbody.innerHTML = "<tr><td colspan='3' style='text-align: center; color: #95a5a6;'>لم تقم بحل أي اختبار حتى الآن.</td></tr>";
-                    document.getElementById("progressChart").style.display = "none";
-                    document.getElementById("chartNoDataMsg").style.display = "block";
-                    return;
-                }
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0);
+        }
 
-                let records = []; 
-                snapshot.forEach(doc => records.push(doc.data()));
-                // ترتيب من الأقدم للأحدث للرسم البياني بشكل صحيح
-                records.sort((a,b) => (a.timestamp ? a.timestamp.toMillis() : 0) - (b.timestamp ? b.timestamp.toMillis() : 0));
-
-                let chartLabels = [];
-                let chartData = [];
-                let tableHtml = "";
-
-                // قلب المصفوفة لعرض الجدول من الأحدث للأقدم
-                [...records].reverse().forEach(data => {
-                    let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                    tableHtml += `<tr>
-                                    <td style="color: var(--primary); font-size:14px;">📝 ${data.examName}</td>
-                                    <td style="color: #7f8c8d;">${dateObj.toLocaleDateString('ar-EG')}</td>
-                                    <td><span class="badge-score">${data.score}</span></td>
-                                  </tr>`;
+        function loadStudentActiveTracks(uid) {
+            db.collection("students").doc(uid).get().then((doc) => {
+                let myTracks = [];
+                if(doc.exists) { let d = doc.data(); if(d.grades && Array.isArray(d.grades)) myTracks = d.grades; else if(d.grade) myTracks = [d.grade]; }
+                if(myTracks.length === 0) { document.getElementById("myTracksContainer").innerHTML = `<div style="grid-column: 1/-1; text-align:center;"><p style="color:var(--accent);">⚠️ لم تشترك في أي كورس بعد!</p><a href="dashboard.html" class="btn-action">توجه للمتجر 🛒</a></div>`; return; }
+                db.collection("grades").where(firebase.firestore.FieldPath.documentId(), "in", myTracks).get().then((snapshot) => {
+                    document.getElementById("myTracksContainer").innerHTML = snapshot.docs.map(gDoc => `<div class="track-card" onclick="openTrackDirectly('${gDoc.id}', '${gDoc.data().name}')"><div class="track-icon">📚</div><h3>${gDoc.data().name}</h3><span class="btn-action" style="font-size:12px;">دخول المذاكرة 🚀</span></div>`).join('');
                 });
-                tbody.innerHTML = tableHtml;
-
-                // استخراج النسب المئوية للرسم البياني (من الأقدم للأحدث)
-                records.forEach((data, index) => {
-                    if(data.score) {
-                        let parts = data.score.split("/");
-                        if(parts.length === 2) {
-                            let percentage = (parseFloat(parts[0]) / parseFloat(parts[1])) * 100;
-                            chartLabels.push(`اختبار ${index + 1}`);
-                            chartData.push(percentage.toFixed(1));
-                        }
-                    }
-                });
-
-                renderProgressChart(chartLabels, chartData);
             });
         }
 
-        // 📈 دالة رسم منحنى التطور بـ Chart.js
-        function renderProgressChart(labels, dataPoints) {
-            const ctx = document.getElementById('progressChart').getContext('2d');
-            if(progressChartInstance) progressChartInstance.destroy(); // تنظيف القديم
-
-            progressChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'نسبة النجاح %',
-                        data: dataPoints,
-                        borderColor: '#18bc9c',
-                        backgroundColor: 'rgba(24, 188, 156, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#e74c3c',
-                        pointRadius: 5,
-                        fill: true,
-                        tension: 0.3 // نعومة الخط
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true, max: 100 } },
-                    plugins: { legend: { display: false } }
-                }
+        function openTrackDirectly(gradeId, gradeName) {
+            document.getElementById("selectedGradeTitle").innerText = `📚 ${gradeName}`; switchView('contentView');
+            Promise.all([db.collection("contents").where("gradeId", "==", gradeId).get(), db.collection("exams").where("gradeId", "==", gradeId).get()]).then((results) => {
+                let allItems = [];
+                results[0].forEach(doc => { let d = doc.data(); allItems.push({ id: doc.id, unit: d.unit || 'عام', title: d.title, type: d.type, url: d.url }); });
+                results[1].forEach(doc => { let e = doc.data(); allItems.push({ id: doc.id, unit: e.unit || 'عام', title: e.title, type: 'exam', examData: e }); });
+                renderUnits(allItems);
             });
         }
 
-        // 🛒 سحب وعرض متجر الكورسات الذكي
-        function loadAcademyStore() {
-            db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => {
-                const storeGrid = document.getElementById("storeGrid");
-                if(snapshot.empty) {
-                    storeGrid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>لا توجد كورسات متاحة حالياً.</p>"; return;
-                }
-
-                let html = "";
-                snapshot.forEach(doc => {
-                    let track = doc.data();
-                    let isSubscribed = myCurrentGradesArray.includes(doc.id);
-                    
-                    // لمسات جمالية عشوائية للمتجر لإبهار الطالب
-                    let badgeClass = (Math.random() > 0.5) ? "course-badge free" : "course-badge";
-                    let badgeText = badgeClass.includes("free") ? "مجاني" : "مميز";
-
-                    if(isSubscribed) {
-                        html += `
-                            <div class="course-card" style="border-color: #27ae60; background:#f9fdfa;">
-                                <div class="course-icon">🎓</div>
-                                <h3 class="course-title">${track.name}</h3>
-                                <div style="color: #27ae60; font-weight:bold; font-size:15px; margin-top:15px;">مسجل بالفعل ✅</div>
-                            </div>
-                        `;
-                    } else {
-                        html += `
-                            <div class="course-card">
-                                <div class="${badgeClass}">${badgeText}</div>
-                                <div class="course-icon">🚀</div>
-                                <h3 class="course-title">${track.name}</h3>
-                                <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="subscribeToCourse('${doc.id}', '${track.name}')">➕ انضم الآن مجاناً</button>
-                            </div>
-                        `;
-                    }
-                });
-                storeGrid.innerHTML = html;
-            });
+        function renderUnits(items) {
+            const container = document.getElementById("unitsContainer");
+            if(items.length === 0) { container.innerHTML = "<div style='text-align:center; padding:50px;'>لا توجد دروس حالياً.</div>"; return; }
+            let grouped = {}; items.forEach(i => { if(!grouped[i.unit]) grouped[i.unit] = []; grouped[i.unit].push(i); });
+            let html = "";
+            for(let unit in grouped) {
+                html += `<div class="unit-box"><h3 class="unit-title">🔖 ${unit}</h3>`;
+                grouped[unit].forEach(item => {
+                    if(item.type === 'video') html += `<div class="content-item" onclick="openMedia('${item.url}', 'video', '${item.title}')"><div class="content-info"><div class="icon-circle bg-video">🎥</div> ${item.title}</div><span class="btn-action">مشاهدة</span></div>`;
+                    else if(item.type === 'pdf') html += `<div class="content-item" onclick="openMedia('${item.url}', 'pdf', '${item.title}')"><div class="content-info"><div class="icon-circle bg-pdf">📄</div> ${item.title}</div><span class="btn-action" style="background:#3498db;">قراءة</span></div>`;
+                    else if(item.type === 'exam') html += `<div class="content-item" onclick="startExam('${encodeURIComponent(JSON.stringify(item.examData))}', '${item.id}')"><div class="content-info"><div class="icon-circle bg-exam">📝</div> ${item.title}</div><span class="btn-action" style="background:var(--accent);">ابدأ الاختبار</span></div>`;
+                }); html += `</div>`;
+            } container.innerHTML = html;
         }
 
-        // ➕ دالة الاشتراك السريع في كورس جديد
-        function subscribeToCourse(courseId, courseName) {
-            if(confirm(`هل تريد إضافة "${courseName}" لمساراتك التعليمية؟`)) {
-                myCurrentGradesArray.push(courseId);
-                
-                db.collection("students").doc(currentUser.uid).update({
-                    grades: myCurrentGradesArray
-                }).then(() => {
-                    alert(`🎉 مبارك! تم اشتراكك في ${courseName} بنجاح.`);
-                    loadAcademyStore(); // تحديث المتجر ليعرض "مسجل بالفعل"
-                }).catch(err => alert("خطأ: " + err.message));
+        function openMedia(url, type, title) { document.getElementById("mediaTitle").innerText = title; let finalUrl = url; if (type === 'video') { document.getElementById("mediaContainerWrapper").className = "media-container"; if (url.includes("watch?v=")) finalUrl = url.replace("watch?v=", "embed/").split("&")[0]; else if (url.includes("youtu.be/")) finalUrl = url.replace("youtu.be/", "www.youtube.com/embed/").split("?")[0]; } else if (type === 'pdf') { document.getElementById("mediaContainerWrapper").className = "media-container pdf-container"; if (url.includes("/view")) finalUrl = url.replace("/view", "/preview"); } document.getElementById("mediaIframe").src = finalUrl; switchView('mediaView'); }
+        function closeMedia() { document.getElementById("mediaIframe").src = ""; switchView('contentView'); }
+
+        // =====================================
+        // 🚀 محرك التقييم الشامل (Ultimate Engine)
+        // =====================================
+        function startExam(encodedExamData, examId) {
+            activeExamData = JSON.parse(decodeURIComponent(encodedExamData));
+            activeExamId = examId;
+            document.getElementById("activeExamTitle").innerText = activeExamData.title;
+            hasEssayQuestions = false;
+
+            // 🧘‍♂️ تفعيل وضع التركيز
+            document.body.classList.add('focus-mode');
+
+            // 🛟 طوق النجاة: استرجاع الإجابات المحفوظة
+            let savedProgress = localStorage.getItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`);
+            if (savedProgress) {
+                studentAnswers = JSON.parse(savedProgress);
+                // شوية دلال: نطلعله رسالة إننا رجعناله حقه
+                showAutoSaveToast("🛟 تم استرجاع إجاباتك السابقة بنجاح!");
+            } else {
+                studentAnswers = new Array(activeExamData.questions.length).fill(null);
+            }
+
+            // إعداد نمط العرض
+            let mode = activeExamData.displayMode || 'paper';
+            currentDisplayStep = 0;
+            
+            if (mode === 'paper') { blocksPerStep = activeExamData.questions.length; totalSteps = 1; } 
+            else if (mode === 'quiz') { blocksPerStep = 1; totalSteps = activeExamData.questions.length; } 
+            else if (mode === 'paginated') { blocksPerStep = 5; totalSteps = Math.ceil(activeExamData.questions.length / 5); }
+
+            switchView('examView');
+            renderExamEngine();
+        }
+
+        function exitExam() {
+            if(confirm("هل أنت متأكد من الخروج؟ إجاباتك ستظل محفوظة للعودة لاحقاً.")) {
+                document.body.classList.remove('focus-mode');
+                switchView('contentView');
             }
         }
 
-        // 🏆 لوحة الشرف
-        function loadLeaderboard() {
-            db.collection("exam_results").get().then((snapshot) => {
-                let studentScores = {};
-                snapshot.forEach(doc => {
-                    let data = doc.data();
-                    if(data.score && data.name) {
-                        let parts = data.score.split("/");
-                        if(parts.length === 2) {
-                            let correct = parseFloat(parts[0].trim());
-                            let total = parseFloat(parts[1].trim());
-                            let percentage = (correct / total) * 100;
-                            if(!studentScores[data.name] || studentScores[data.name] < percentage) {
-                                studentScores[data.name] = percentage;
-                            }
-                        }
+        function renderExamEngine() {
+            const container = document.getElementById("examBlocksContainer");
+            const qs = activeExamData.questions;
+            
+            // تحديد بداية ونهاية الكتل المطلوبة في هذه الشاشة
+            let startIndex = currentDisplayStep * blocksPerStep;
+            let endIndex = Math.min(startIndex + blocksPerStep, qs.length);
+            
+            // 📌 ميزة القطعة المثبتة في وضع (الكويز): لو السؤال الحالي مش قطعة، ابحث عن أقرب قطعة قبله لتعرضها!
+            let contextHtml = "";
+            let mode = activeExamData.displayMode || 'paper';
+            if (mode === 'quiz' && qs[startIndex].type !== 'context') {
+                for (let i = startIndex - 1; i >= 0; i--) {
+                    if (qs[i].type === 'context') {
+                        contextHtml = `<div class="block-card context-block"><div class="context-text">${qs[i].questionText}</div></div>`;
+                        break; // جيب أقرب قطعة بس
                     }
-                });
+                }
+            }
 
-                let sortedStudents = Object.keys(studentScores).map(name => ({ name: name, score: studentScores[name] })).sort((a,b) => b.score - a.score);
-                let top5 = sortedStudents.slice(0, 5);
-                const list = document.getElementById("leaderboardList");
+            let html = contextHtml;
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                let q = qs[i];
+                let type = q.type || ((q.options && q.options.length > 0) ? 'mcq' : 'short'); // توافق قديم
+                
+                let blockClass = type === 'context' ? "block-card context-block" : "block-card";
+                html += `<div class="${blockClass}" id="block_${i}">`;
+                
+                if (type === 'context') {
+                    html += `<div class="context-text">${q.questionText}</div>`;
+                } else {
+                    html += `<div class="question-text">${i+1}. ${q.questionText.replace(/\n/g, "<br>")}</div>`;
+                    
+                    let savedAns = studentAnswers[i];
+                    
+                    if (type === 'mcq' || type === 'tf') {
+                        let opts = q.options || (type === 'tf' ? ["True", "False"] : []);
+                        html += `<div class="options-grid">`;
+                        opts.forEach((opt, optIdx) => {
+                            let selClass = savedAns === optIdx ? "selected" : "";
+                            let optLabel = type === 'mcq' ? ['A','B','C','D'][optIdx] + ". " : "";
+                            html += `<button class="option-btn ${selClass}" onclick="selectEngineOption(${i}, ${optIdx})"><strong>${optLabel}</strong> ${opt}</button>`;
+                        });
+                        html += `</div>`;
+                    } else if (type === 'short') {
+                        html += `<input type="text" class="input-text" oninput="saveEngineAnswer(${i}, this.value)" value="${savedAns || ''}" placeholder="Type your answer here...">`;
+                    } else if (type === 'long') {
+                        hasEssayQuestions = true;
+                        html += `<textarea class="textarea-essay" oninput="saveEngineAnswer(${i}, this.value)" placeholder="Write your paragraph/essay here...">${savedAns || ''}</textarea>`;
+                        html += `<div style="color:#e67e22; font-size:12px; margin-top:8px;">* سيقوم المستر بتقييم هذا السؤال لاحقاً.</div>`;
+                    }
+                }
+                html += `</div>`;
+            }
 
-                if(top5.length === 0) { list.innerHTML = "<li style='text-align:center; padding: 20px; color:#95a5a6;'>لا يوجد نتائج مسجلة.</li>"; return; }
+            container.innerHTML = html;
 
-                list.innerHTML = top5.map((student, index) => {
-                    let rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
-                    let medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`;
-                    return `<li class="leaderboard-item">
-                                <div class="student-info"><div class="rank-badge ${rankClass}">${medal}</div><span>${student.name}</span></div>
-                                <div class="leader-score">${Math.round(student.score)}%</div>
-                            </li>`;
-                }).join('');
+            // تحديث شريط التقدم والأزرار
+            let currentQNum = Math.min(endIndex, qs.length);
+            document.getElementById("progressFill").style.width = `${(currentQNum / qs.length) * 100}%`;
+            document.getElementById("questionCounter").innerText = `Question ${currentQNum} of ${qs.length}`;
+
+            if (totalSteps > 1) {
+                document.getElementById("examNavButtons").style.display = "flex";
+                document.getElementById("btnPrev").disabled = (currentDisplayStep === 0);
+                document.getElementById("btnPrev").style.opacity = (currentDisplayStep === 0) ? "0.5" : "1";
+                
+                if (currentDisplayStep === totalSteps - 1) {
+                    document.getElementById("btnNext").style.display = "none";
+                    document.getElementById("btnSubmitExam").style.display = "block";
+                } else {
+                    document.getElementById("btnNext").style.display = "block";
+                    document.getElementById("btnSubmitExam").style.display = "none";
+                }
+            } else {
+                document.getElementById("examNavButtons").style.display = "none";
+                document.getElementById("btnSubmitExam").style.display = "block";
+            }
+        }
+
+        // 🛟 حفظ الإجابات التلقائي مع مؤثر التوست
+        function saveEngineAnswer(qIndex, value) {
+            studentAnswers[qIndex] = value;
+            localStorage.setItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`, JSON.stringify(studentAnswers));
+            showAutoSaveToast("🛟 تم الحفظ التلقائي");
+        }
+
+        function selectEngineOption(qIndex, optIndex) {
+            saveEngineAnswer(qIndex, optIndex);
+            
+            // في وضع الكويز السريع، لو اختار سؤال نوديه للسؤال اللي بعده تلقائي للسرعة
+            if (activeExamData.displayMode === 'quiz' && currentDisplayStep < totalSteps - 1) {
+                setTimeout(() => navigateExam(1), 400); // تأخير بسيط ليشوف لونه اتغير
+            } else {
+                renderExamEngine(); // فقط تحديث ألوان الأزرار في نفس الشاشة
+            }
+        }
+
+        function showAutoSaveToast(msg) {
+            const toast = document.getElementById("saveToast");
+            toast.innerText = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2000);
+        }
+
+        function navigateExam(direction) {
+            currentDisplayStep += direction;
+            renderExamEngine();
+            window.scrollTo(0, 0);
+        }
+
+        // 🏁 التصحيح والإنهاء (Grader Engine)
+        function finishAndSubmitExam() {
+            // التحقق من أن الطالب أجاب على جميع الأسئلة المطلوبة (باستثناء القطع)
+            let missed = 0;
+            activeExamData.questions.forEach((q, idx) => {
+                if(q.type !== 'context' && (studentAnswers[idx] === null || studentAnswers[idx] === "")) missed++;
             });
-        }
 
-        function openSettingsModal() { document.getElementById("settingsModal").classList.add("active"); }
-        function closeSettingsModal() { document.getElementById("settingsModal").classList.remove("active"); document.getElementById("modalPasswordInput").value = ""; }
-        
-        function updateStudentName() {
-            const newName = document.getElementById("modalNameInput").value.trim();
-            if (!newName) { alert("⚠️ من فضلك اكتب الاسم أولاً!"); return; }
-            currentUser.updateProfile({ displayName: newName }).then(() => {
-                alert("✅ تم تحديث اسمك بنجاح!");
-                document.getElementById("studentName").innerText = `أهلاً بك يا بطل، ${newName}! 👋`;
-                closeSettingsModal(); loadLeaderboard();
+            if (missed > 0) {
+                if(!confirm(`⚠️ لقد تركت ${missed} سؤال بدون إجابة! هل أنت متأكد من تسليم الورقة؟`)) return;
+            }
+
+            document.getElementById("btnSubmitExam").innerText = "جاري الحفظ وإرسال النتيجة... ⏳";
+            document.getElementById("btnSubmitExam").disabled = true;
+
+            let score = 0;
+            let totalGradableQs = 0; // الكتل من نوع قطعة أو مقالي لا تحسب آلياً
+
+            activeExamData.questions.forEach((q, idx) => {
+                if (q.type === 'context' || q.type === 'long') return; // تجاهل القطع والمقالي من التصحيح الآلي
+                
+                totalGradableQs++;
+                let sAns = studentAnswers[idx];
+                
+                if (q.type === 'mcq' || q.type === 'tf') {
+                    if (parseInt(sAns) === parseInt(q.ans)) score++;
+                } else if (q.type === 'short') {
+                    let cleanStudentAns = String(sAns).trim().toLowerCase().replace(/[.,!]/g,"");
+                    let cleanModelAns = String(q.ans).trim().toLowerCase().replace(/[.,!]/g,"");
+                    if (cleanStudentAns === cleanModelAns) score++;
+                }
             });
+
+            // إرسال للخزنة
+            db.collection("exam_results").add({ 
+                name: currentStudentName, email: currentStudentEmail, examName: activeExamData.title, 
+                score: score + " / " + totalGradableQs, 
+                hasEssay: hasEssayQuestions, // تنبيه للمستر أن الورقة بها براجراف يحتاج تصحيح
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+            }).then(() => {
+                // تدمير طوق النجاة لأن الامتحان انتهى بنجاح
+                localStorage.removeItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`);
+                
+                // الخروج من وضع التركيز
+                document.body.classList.remove('focus-mode');
+                
+                document.getElementById("scoreDisplay").innerText = score + " / " + totalGradableQs;
+                document.getElementById("essayNotice").style.display = hasEssayQuestions ? "block" : "none";
+                document.getElementById("btnSubmitExam").disabled = false;
+                document.getElementById("btnSubmitExam").innerText = "🏁 إنهاء الاختبار وإرسال النتيجة";
+                
+                switchView('resultView');
+            }).catch(e => alert("خطأ في الإرسال: " + e.message));
         }
 
-        function updateStudentPassword() {
-            const newPassword = document.getElementById("modalPasswordInput").value.trim();
-            if (newPassword.length < 6) { alert("⚠️ كلمة المرور قصيرة!"); return; }
-            currentUser.updatePassword(newPassword).then(() => {
-                alert("🔒 تم التغيير بنجاح!"); closeSettingsModal();
-            }).catch(err => alert("خطأ: " + err.message));
-        }
+        // المدرس الذكي
+        function openAITutor() { document.getElementById("aiTutorModal").classList.add("active"); }
+        function closeAITutor() { document.getElementById("aiTutorModal").classList.remove("active"); }
 
-        function logout() { auth.signOut().then(() => { window.location.href = "index.html"; }); }
     </script>
 </body>
 </html>
