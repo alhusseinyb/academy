@@ -14,18 +14,28 @@
         :root { --primary: #1a252f; --secondary: #2c3e50; --accent: #e74c3c; --teal: #16a085; --bg: #f4f7f6; --white: #ffffff; --text: #2c3e50; --sidebar-width: 260px; }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
 
-        .sidebar { width: var(--sidebar-width); background: var(--primary); color: white; display: flex; flex-direction: column; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 100; transition: 0.3s; }
-        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        /* 📱 تعديلات القائمة الجانبية للموبايل */
+        .sidebar { width: var(--sidebar-width); background: var(--primary); color: white; display: flex; flex-direction: column; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 1000; transition: 0.3s; }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative; }
         .sidebar-header h2 { margin: 0; font-size: 1.4em; color: var(--teal); font-weight: 900; }
+        .close-sidebar-btn { display: none; position: absolute; left: 15px; top: 20px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
         
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; right: -100%; height: 100%; }
+            .sidebar.active { right: 0; }
+            .close-sidebar-btn { display: block; }
+        }
+
         .nav-menu { list-style: none; padding: 0; margin: 20px 0; flex: 1; overflow-y: auto; }
         .nav-item { padding: 15px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; transition: 0.3s; font-size: 14px; border-right: 4px solid transparent; }
         .nav-item:hover { background: rgba(255,255,255,0.05); }
         .nav-item.active { background: rgba(22, 160, 133, 0.15); border-right-color: var(--teal); color: var(--teal); }
         .logout-btn-side { padding: 15px; background: #c0392b; color: white; text-align: center; cursor: pointer; font-weight: bold; transition: 0.3s; }
 
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--bg); }
-        .top-navbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--bg); width: 100%; }
+        .top-navbar { background: white; padding: 15px 30px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .menu-toggle-btn { display: none; background: none; border: none; font-size: 24px; color: var(--secondary); cursor: pointer; padding: 0; }
+        @media (max-width: 768px) { .menu-toggle-btn { display: block; } }
         .top-navbar h2 { margin: 0; font-size: 1.3em; color: var(--secondary); font-weight: 900; }
         .content-wrapper { padding: 30px; box-sizing: border-box; }
         
@@ -36,8 +46,9 @@
         .card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.01); margin-bottom: 25px; border: 1px solid #eee; }
         
         table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 10px; }
-        th { padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; border-bottom: 2px solid #eee; }
+        th { padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; border-bottom: 2px solid #eee; white-space: nowrap; }
         td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
+        .badge { background: #eafaf1; color: #27ae60; padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
         .action-btn { padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; font-family: 'Tajawal'; font-size: 12px; font-weight: bold; transition: 0.3s; margin-left: 5px; }
         .btn-edit { background: #e8f8f5; color: #16a085; } .btn-edit:hover { background: #16a085; color: white; }
         .btn-delete { background: #fdedec; color: #c0392b; } .btn-delete:hover { background: #c0392b; color: white; }
@@ -51,7 +62,7 @@
         .btn-primary { background: var(--teal); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-family: 'Tajawal'; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-primary:hover { background: #117a65; }
 
-        .tabs-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .tabs-header { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; flex-wrap: wrap; }
         .tab-btn { padding: 10px 20px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; }
         .tab-btn.active { background: var(--teal); color: white; border-radius: 8px 8px 0 0; }
         .tab-content { display: none; }
@@ -59,27 +70,30 @@
 
         .ai-studio-box { background: linear-gradient(135deg, #f3e5f5, #e8eaf6); border: 2px dashed #9c27b0; border-radius: 12px; padding: 25px; margin-bottom: 20px; }
         
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .q-edit-card { background: #fafbfc; border: 1px solid #e1e4e8; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-right: 5px solid var(--secondary); }
+        .q-edit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; color: var(--primary); flex-wrap: wrap; gap:10px; }
+        .opt-label { font-weight: bold; color: #e67e22; margin-bottom: 5px; font-size: 15px; }
+        
+        /* شاشات منبثقة */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-box { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; transform: translateY(-20px); transition: 0.3s; }
         .modal-overlay.active .modal-box { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
         .close-modal { font-size: 24px; color: #95a5a6; cursor: pointer; border: none; background: transparent; }
 
-        /* ✏️ تنسيق شاشة التعديل العميق للاختبارات */
-        .q-edit-card { background: #fafbfc; border: 1px solid #e1e4e8; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-right: 5px solid var(--secondary); }
-        .q-edit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; color: var(--primary); }
-        .opt-label { font-weight: bold; color: #e67e22; margin-bottom: 5px; font-size: 15px; }
-        
-        .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 3000; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     <div class="auth-screen" id="authScreen"><h2 style="color: var(--primary);">🔐 جاري تأمين الاتصال...</h2></div>
 
-    <aside class="sidebar">
-        <div class="sidebar-header"><h2>👑 لوحة المستر</h2><p>غرفة العمليات المركزية</p></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>👑 لوحة المستر</h2>
+            <button class="close-sidebar-btn" onclick="toggleSidebar()">✖</button>
+        </div>
         <ul class="nav-menu">
             <li class="nav-item active" onclick="switchView('resultsView', this, '📊 نتائج الطلاب')">📊 نتائج الطلاب</li>
             <li class="nav-item" onclick="switchView('studentsRadarView', this, '📈 رادار شؤون الطلاب')">📈 رادار الطلاب</li>
@@ -93,21 +107,27 @@
     </aside>
 
     <main class="main-content">
-        <div class="top-navbar"><h2 id="topNavTitle">📊 نتائج الطلاب</h2></div>
+        <div class="top-navbar">
+            <button class="menu-toggle-btn" onclick="toggleSidebar()">☰</button>
+            <h2 id="topNavTitle">📊 نتائج الطلاب</h2>
+        </div>
         <div class="content-wrapper">
             
             <section id="resultsView" class="view-section active">
                 <div class="card"><div style="overflow-x: auto;"><table id="resultsTable"><thead><tr><th>الطالب</th><th>الاختبار</th><th>التاريخ</th><th>الدرجة</th></tr></thead><tbody id="adminTableBody"><tr><td colspan="4" style="text-align:center;">جاري الجلب...</td></tr></tbody></table></div></div>
             </section>
+            
             <section id="studentsRadarView" class="view-section">
                 <div class="card"><div style="overflow-x: auto;"><table id="radarTable"><thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>تاريخ التسجيل</th><th>إجراءات</th></tr></thead><tbody id="studentsRadarTableBody"><tr><td colspan="5" style="text-align:center;">جاري الجلب...</td></tr></tbody></table></div></div>
             </section>
+
             <section id="gradesManagerView" class="view-section">
                 <div class="flex-row">
                     <div class="card flex-child"><h3 style="margin-top:0;">➕ إضافة كورس جديد</h3><div class="form-label">اسم الكورس</div><input type="text" id="newGradeName"><button class="btn-primary" onclick="addNewGradeToFirestore()">💾 حفظ</button></div>
-                    <div class="card flex-child" style="flex:1.5;"><table id="gradesTable"><thead><tr><th>اسم الكورس</th><th>إجراءات</th></tr></thead><tbody id="gradesTableBody"><tr><td colspan="2" style="text-align:center;">جاري الجلب...</td></tr></tbody></table></div>
+                    <div class="card flex-child" style="flex:1.5;"><div style="overflow-x: auto;"><table id="gradesTable"><thead><tr><th>اسم الكورس</th><th>إجراءات</th></tr></thead><tbody id="gradesTableBody"><tr><td colspan="2" style="text-align:center;">جاري الجلب...</td></tr></tbody></table></div></div>
                 </div>
             </section>
+
             <section id="addContentView" class="view-section">
                 <div class="card">
                     <h3 style="margin-top:0;">✨ نشر درس أو ملزمة</h3>
@@ -117,35 +137,32 @@
                     <button class="btn-primary" onclick="saveContentToFirestore()">🚀 نشر فوراً</button>
                 </div>
             </section>
+
             <section id="contentListView" class="view-section">
                 <div class="card"><div style="overflow-x: auto;"><table id="contentTable"><thead><tr><th>الكورس</th><th>الوحدة</th><th>العنوان</th><th>النوع</th><th>إجراءات</th></tr></thead><tbody id="contentTableBody"><tr><td colspan="5" style="text-align:center;">جاري الجلب...</td></tr></tbody></table></div></div>
             </section>
+
             <section id="examsManagerView" class="view-section">
                 <div class="card"><div style="overflow-x: auto;"><table id="examsTable"><thead><tr><th>اسم الاختبار</th><th>الكورس</th><th>الوحدة</th><th>إجراءات</th></tr></thead><tbody id="examsTableBody"><tr><td colspan="4" style="text-align:center;">جاري الجلب...</td></tr></tbody></table></div></div>
             </section>
 
             <section id="deepEditExamView" class="view-section">
                 <div class="card">
-                    <div class="page-title-box" style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #eee; padding-bottom:15px; margin-bottom:20px;">
+                    <div class="page-title-box" style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #eee; padding-bottom:15px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
                         <h3 style="margin:0; color:var(--primary);">✏️ التعديل الشامل للاختبار</h3>
-                        <button class="btn-outline" style="color:var(--text); border-color:#ccc;" onclick="switchView('examsManagerView', document.querySelectorAll('.nav-item')[5], '🗂️ إدارة الاختبارات')">🔙 عودة بدون حفظ</button>
+                        <button class="btn-outline" style="color:var(--text); border-color:#ccc; padding:8px 15px;" onclick="switchView('examsManagerView', document.querySelectorAll('.nav-item')[5], '🗂️ إدارة الاختبارات')">🔙 عودة بدون حفظ</button>
                     </div>
-                    
                     <div class="flex-row">
                         <div class="flex-child"><div class="form-label">اسم الاختبار:</div><input type="text" id="deepEditExamTitle"></div>
                         <div class="flex-child"><div class="form-label">الوحدة:</div><input type="text" id="deepEditExamUnit"></div>
                     </div>
-                    
                     <hr style="border: 1px solid #eee; margin: 20px 0;">
                     <h3 style="color:var(--teal);">📋 أسئلة الاختبار:</h3>
-                    
-                    <div id="deepEditQuestionsContainer">
-                        </div>
-                    
-                    <div style="display: flex; gap:15px; margin-top:20px; flex-wrap: wrap;">
-                        <button class="btn-primary flex-child" style="background:#2980b9;" onclick="addNewEmptyQuestionToEdit('mcq')">➕ إضافة سؤال اختياري جديد</button>
-                        <button class="btn-primary flex-child" style="background:#8e44ad;" onclick="addNewEmptyQuestionToEdit('text')">➕ إضافة سؤال أكمل جديد</button>
-                        <button class="btn-primary flex-child" style="background:var(--secondary);" onclick="saveDeepExamEdit()">💾 حفظ الاختبار نهائياً</button>
+                    <div id="deepEditQuestionsContainer"></div>
+                    <div style="display: flex; gap:10px; margin-top:20px; flex-wrap: wrap;">
+                        <button class="btn-primary flex-child" style="background:#2980b9; min-width:200px;" onclick="addNewEmptyQuestionToEdit('mcq')">➕ إضافة سؤال اختياري</button>
+                        <button class="btn-primary flex-child" style="background:#8e44ad; min-width:200px;" onclick="addNewEmptyQuestionToEdit('text')">➕ إضافة سؤال أكمل</button>
+                        <button class="btn-primary flex-child" style="background:var(--secondary); min-width:200px;" onclick="saveDeepExamEdit()">💾 حفظ الاختبار نهائياً</button>
                     </div>
                 </div>
             </section>
@@ -159,7 +176,7 @@
                     <div id="manualTab" class="tab-content active">
                         <div class="flex-row"><div class="flex-child"><div class="form-label">الكورس:</div><select id="examGradeSelect"></select></div><div class="flex-child"><div class="form-label">اسم الاختبار:</div><input type="text" id="examTitleInput"></div><div class="flex-child"><div class="form-label">الوحدة:</div><input type="text" id="examUnitInput"></div></div>
                         <hr style="border: 1px solid #eee;">
-                        <h3 style="color:var(--teal);">📝 إضافة سؤال جديد</h3>
+                        <h3 style="color:var(--teal);">📝 إضافة سؤال اختياري جديد</h3>
                         <div class="form-label">نص السؤال</div><textarea id="qTextInput" rows="2"></textarea>
                         <div class="flex-row"><div class="flex-child"><div class="opt-label">A:</div><input type="text" id="opt1"></div><div class="flex-child"><div class="opt-label">B:</div><input type="text" id="opt2"></div></div>
                         <div class="flex-row"><div class="flex-child"><div class="opt-label">C:</div><input type="text" id="opt3"></div><div class="flex-child"><div class="opt-label">D:</div><input type="text" id="opt4"></div></div>
@@ -203,16 +220,21 @@
         const ADMIN_EMAIL = "h.y.s249.hy@gmail.com";
         const GEMINI_API_KEY = "AIzaSyB22UVOAawiGvU85KL0atJhyl0NFdmloc0";
         
-        let currentExamQuestions = [];
-        let deepEditingExamId = null;
-        let deepEditingQuestions = [];
+        let currentExamQuestions = []; let deepEditingExamId = null; let deepEditingQuestions = [];
 
         auth.onAuthStateChanged((user) => {
             if (user && user.email === ADMIN_EMAIL) {
                 document.getElementById("authScreen").style.display = "none";
                 loadAllGrades(); loadAllContents(); loadAllExams();
+                // استعادة الدوال التي كانت مفقودة (جاري الجلب)
+                loadAllStudentResults(); loadStudentsRadar();
             } else window.location.href = "login.html";
         });
+
+        // 📱 دالة التحكم في القائمة الجانبية للموبايل
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("active");
+        }
 
         function switchView(viewId, element, title) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
@@ -220,6 +242,8 @@
             document.getElementById(viewId).classList.add('active');
             if(element) element.classList.add('active'); 
             if(title) document.getElementById('topNavTitle').innerText = title;
+            // إغلاق القائمة في الموبايل بعد اختيار الشاشة
+            if(window.innerWidth <= 768) toggleSidebar();
         }
 
         function switchInnerTab(tabId, element) {
@@ -229,7 +253,32 @@
         }
 
         // =====================================
-        // دوال الجلب والحذف
+        // استعادة دوال جلب البيانات التي كانت مفقودة
+        // =====================================
+        function loadAllStudentResults() {
+            db.collection("exam_results").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                const tbody = document.getElementById("adminTableBody");
+                if (snapshot.empty) { tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>لا توجد نتائج مسجلة حتى الآن</td></tr>"; return; }
+                tbody.innerHTML = snapshot.docs.map(doc => {
+                    let d = doc.data(); let dateObj = d.timestamp ? d.timestamp.toDate() : new Date();
+                    return `<tr><td><div style="font-weight:900;color:var(--primary);">${d.name||'غير معروف'}</div><div style="font-size:11px;color:#95a5a6;">${d.email||''}</div></td><td>${d.examName}</td><td>${dateObj.toLocaleDateString('ar-EG')}</td><td><span class="badge">${d.score}</span></td></tr>`;
+                }).join('');
+            });
+        }
+
+        function loadStudentsRadar() {
+            db.collection("students").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                const tbody = document.getElementById("studentsRadarTableBody");
+                if (snapshot.empty) { tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>لا يوجد طلاب مسجلين حتى الآن</td></tr>"; return; }
+                tbody.innerHTML = snapshot.docs.map(doc => {
+                    let st = doc.data(); let dateObj = st.createdAt ? st.createdAt.toDate() : new Date();
+                    return `<tr><td style="color:var(--secondary); font-weight:900;">👨‍🎓 ${st.name}</td><td style="direction:ltr; text-align:right;">${st.email}</td><td>${st.phone||'غير مسجل'}</td><td style="color:#7f8c8d; font-size:12px;">${dateObj.toLocaleDateString('ar-EG')}</td><td><button class="action-btn btn-delete" onclick="safeDelete('students', '${doc.id}', '${st.name}')">🗑️ طرد / حذف</button></td></tr>`;
+                }).join('');
+            });
+        }
+
+        // =====================================
+        // دوال الحذف والجلب الأساسية (الصفوف والمحتوى)
         // =====================================
         function safeDelete(collectionName, docId, itemTitle) {
             if (confirm(`⚠️ تحذير: هل أنت متأكد من رغبتك في حذف [ ${itemTitle} ] نهائياً؟\nلا يمكن التراجع عن هذا الإجراء!`)) {
@@ -241,11 +290,11 @@
             db.collection("grades").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
                 let tbody = document.getElementById("gradesTableBody");
                 let sel1 = document.getElementById("contentGradeSelect"), sel2 = document.getElementById("examGradeSelect"), sel3 = document.getElementById("aiGradeSelect");
-                if(snapshot.empty) return;
+                if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>لا يوجد كورسات</td></tr>"; return; }
                 let tableHtml = "", selectHtml = "<option value=''>-- اختر الكورس --</option>";
                 snapshot.forEach((doc) => {
                     let g = doc.data(); 
-                    tableHtml += `<tr><td>📁 ${g.name}</td><td><button class="action-btn btn-edit" onclick="openEditModal('grades', '${doc.id}', '${g.name}', '', '')">✏️ تعديل الاسم</button><button class="action-btn btn-delete" onclick="safeDelete('grades', '${doc.id}', '${g.name}')">🗑️ حذف</button></td></tr>`;
+                    tableHtml += `<tr><td>📁 ${g.name}</td><td><button class="action-btn btn-edit" onclick="openEditModal('grades', '${doc.id}', '${g.name}', '', '')">✏️ تعديل</button><button class="action-btn btn-delete" onclick="safeDelete('grades', '${doc.id}', '${g.name}')">🗑️ حذف</button></td></tr>`;
                     selectHtml += `<option value="${doc.id}">${g.name}</option>`;
                 });
                 tbody.innerHTML = tableHtml; sel1.innerHTML = selectHtml; sel2.innerHTML = selectHtml; sel3.innerHTML = selectHtml;
@@ -254,7 +303,7 @@
 
         function loadAllContents() {
             db.collection("contents").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                const tbody = document.getElementById("contentTableBody"); if(snapshot.empty) return;
+                const tbody = document.getElementById("contentTableBody"); if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>لا يوجد محتوى</td></tr>"; return; }
                 tbody.innerHTML = snapshot.docs.map(doc => { 
                     let c = doc.data(); 
                     return `<tr><td>${c.gradeName}</td><td>${c.unit}</td><td>${c.title}</td><td>${c.type==='video'?'🎥':'📄'}</td><td><button class="action-btn btn-edit" onclick="openEditModal('contents', '${doc.id}', '${c.title}', '${c.unit}', '${c.url}')">✏️ تعديل</button><button class="action-btn btn-delete" onclick="safeDelete('contents', '${doc.id}', '${c.title}')">🗑️ حذف</button></td></tr>`; 
@@ -264,16 +313,16 @@
 
         function loadAllExams() {
             db.collection("exams").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let tbody = document.getElementById("examsTableBody"); if(snapshot.empty) return;
+                let tbody = document.getElementById("examsTableBody"); if(snapshot.empty) { tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>لا يوجد اختبارات</td></tr>"; return; }
                 tbody.innerHTML = snapshot.docs.map(doc => { 
                     let e = doc.data(); 
-                    return `<tr><td>${e.title}</td><td>${e.gradeName}</td><td>${e.unit||'عام'}</td><td><button class="action-btn btn-edit" onclick="openDeepExamEdit('${doc.id}')">✏️ تعديل شامل للاختبار</button><button class="action-btn btn-delete" onclick="safeDelete('exams', '${doc.id}', '${e.title}')">🗑️ حذف</button></td></tr>`; 
+                    return `<tr><td>${e.title}</td><td>${e.gradeName}</td><td>${e.unit||'عام'}</td><td><button class="action-btn btn-edit" onclick="openDeepExamEdit('${doc.id}')">✏️ تعديل شامل</button><button class="action-btn btn-delete" onclick="safeDelete('exams', '${doc.id}', '${e.title}')">🗑️ حذف</button></td></tr>`; 
                 }).join('');
             });
         }
 
         // =====================================
-        // ✏️ التعديل العميق للاختبارات (Deep Edit) المطور
+        // ✏️ التعديل العميق للاختبارات (Deep Edit)
         // =====================================
         function openDeepExamEdit(examId) {
             deepEditingExamId = examId;
@@ -290,23 +339,22 @@
         function renderDeepEditQuestions() {
             const container = document.getElementById("deepEditQuestionsContainer");
             container.innerHTML = deepEditingQuestions.map((q, idx) => {
-                // تحديد نوع السؤال (اختياري أم أكمل)
                 let isMcq = (q.options && q.options.length > 0) || (!q.options && q.a);
-                if(q.a && !q.options) q.options = [q.a, q.b, q.c, q.d].filter(Boolean); // للتوافق مع الإصدارات القديمة
+                if(q.a && !q.options) q.options = [q.a, q.b, q.c, q.d].filter(Boolean);
 
                 let headerHtml = `
                     <div class="q-edit-header">
                         <span>السؤال ${idx + 1}</span>
                         <div>
-                            <select id="edit_type_${idx}" onchange="changeQuestionTypeInEdit(${idx}, this.value)" style="padding:5px; margin-left:10px; border-radius:5px; border:1px solid #ccc;">
+                            <select id="edit_type_${idx}" onchange="changeQuestionTypeInEdit(${idx}, this.value)" style="padding:5px; margin-left:10px; border-radius:5px; border:1px solid #ccc; font-family:'Tajawal';">
                                 <option value="mcq" ${isMcq ? 'selected' : ''}>🔠 سؤال اختياري</option>
-                                <option value="text" ${!isMcq ? 'selected' : ''}>✏️ سؤال أكمل</option>
+                                <option value="text" ${!isMcq ? 'selected' : ''}>✏️ سؤال أكمل/قصير</option>
                             </select>
                             <button class="action-btn btn-delete" onclick="removeQuestionFromDeepEdit(${idx})">🗑️ حذف</button>
                         </div>
                     </div>
                     <div class="form-label">نص السؤال:</div>
-                    <textarea id="edit_qtext_${idx}" rows="2">${q.questionText || q.question || ""}</textarea>
+                    <textarea id="edit_qtext_${idx}" rows="2" style="direction:ltr; text-align:left;">${q.questionText || q.question || ""}</textarea>
                 `;
 
                 let bodyHtml = "";
@@ -316,15 +364,15 @@
                     let ans = parseInt(q.ans) || 0;
                     bodyHtml = `
                         <div class="flex-row">
-                            <div class="flex-child"><div class="opt-label">A:</div><input type="text" id="edit_opt0_${idx}" value="${optA}"></div>
-                            <div class="flex-child"><div class="opt-label">B:</div><input type="text" id="edit_opt1_${idx}" value="${optB}"></div>
+                            <div class="flex-child"><div class="opt-label">A:</div><input type="text" id="edit_opt0_${idx}" value="${optA}" style="direction:ltr;"></div>
+                            <div class="flex-child"><div class="opt-label">B:</div><input type="text" id="edit_opt1_${idx}" value="${optB}" style="direction:ltr;"></div>
                         </div>
                         <div class="flex-row">
-                            <div class="flex-child"><div class="opt-label">C:</div><input type="text" id="edit_opt2_${idx}" value="${optC}"></div>
-                            <div class="flex-child"><div class="opt-label">D:</div><input type="text" id="edit_opt3_${idx}" value="${optD}"></div>
+                            <div class="flex-child"><div class="opt-label">C:</div><input type="text" id="edit_opt2_${idx}" value="${optC}" style="direction:ltr;"></div>
+                            <div class="flex-child"><div class="opt-label">D:</div><input type="text" id="edit_opt3_${idx}" value="${optD}" style="direction:ltr;"></div>
                         </div>
                         <div class="form-label">الإجابة الصحيحة:</div>
-                        <select id="edit_ans_${idx}">
+                        <select id="edit_ans_${idx}" style="font-family:'Tajawal';">
                             <option value="0" ${ans === 0 ? 'selected' : ''}>A (الأولى)</option>
                             <option value="1" ${ans === 1 ? 'selected' : ''}>B (الثانية)</option>
                             <option value="2" ${ans === 2 ? 'selected' : ''}>C (الثالثة)</option>
@@ -334,8 +382,8 @@
                 } else {
                     let ansText = q.ans !== undefined ? q.ans : (q.correct || "");
                     bodyHtml = `
-                        <div class="form-label">الإجابة الصحيحة النموذجية (للتصحيح الآلي):</div>
-                        <input type="text" id="edit_ans_text_${idx}" value="${ansText}" placeholder="اكتب الإجابة هنا...">
+                        <div class="form-label">الإجابة النموذجية (للتصحيح الآلي):</div>
+                        <input type="text" id="edit_ans_text_${idx}" value="${ansText}" placeholder="اكتب الإجابة هنا..." style="direction:ltr;">
                     `;
                 }
 
@@ -343,33 +391,23 @@
             }).join('');
         }
 
-        // تغيير نوع السؤال أثناء التعديل
         function changeQuestionTypeInEdit(index, newType) {
             gatherDeepEditData();
-            if(newType === 'mcq') {
-                deepEditingQuestions[index].options = ["", "", "", ""];
-                deepEditingQuestions[index].ans = 0;
-            } else {
-                deepEditingQuestions[index].options = [];
-                deepEditingQuestions[index].ans = "";
-            }
+            if(newType === 'mcq') { deepEditingQuestions[index].options = ["", "", "", ""]; deepEditingQuestions[index].ans = 0; } 
+            else { deepEditingQuestions[index].options = []; deepEditingQuestions[index].ans = ""; }
             renderDeepEditQuestions();
         }
 
-        // إضافة سؤال جديد فارغ بناءً على النوع المختار
         function addNewEmptyQuestionToEdit(type) {
             gatherDeepEditData();
             if(type === 'mcq') deepEditingQuestions.push({ questionText: "", options: ["", "", "", ""], ans: 0 });
             else deepEditingQuestions.push({ questionText: "", options: [], ans: "" });
-            
             renderDeepEditQuestions();
             setTimeout(() => { document.querySelector('.main-content').scrollTop = document.querySelector('.main-content').scrollHeight; }, 100);
         }
 
         function removeQuestionFromDeepEdit(index) {
-            if(confirm("هل أنت متأكد من حذف هذا السؤال من الاختبار؟")) {
-                gatherDeepEditData(); deepEditingQuestions.splice(index, 1); renderDeepEditQuestions();
-            }
+            if(confirm("هل أنت متأكد من حذف هذا السؤال من الاختبار؟")) { gatherDeepEditData(); deepEditingQuestions.splice(index, 1); renderDeepEditQuestions(); }
         }
 
         function gatherDeepEditData() {
@@ -377,18 +415,11 @@
                 let qInput = document.getElementById(`edit_qtext_${idx}`);
                 if(qInput) {
                     q.questionText = qInput.value;
-                    // فحص إذا كان السؤال اختياري (يوجد حقل opt0) أم أكمل
                     if(document.getElementById(`edit_opt0_${idx}`)) {
-                        q.options = [
-                            document.getElementById(`edit_opt0_${idx}`).value,
-                            document.getElementById(`edit_opt1_${idx}`).value,
-                            document.getElementById(`edit_opt2_${idx}`).value,
-                            document.getElementById(`edit_opt3_${idx}`).value
-                        ];
+                        q.options = [ document.getElementById(`edit_opt0_${idx}`).value, document.getElementById(`edit_opt1_${idx}`).value, document.getElementById(`edit_opt2_${idx}`).value, document.getElementById(`edit_opt3_${idx}`).value ];
                         q.ans = parseInt(document.getElementById(`edit_ans_${idx}`).value);
                     } else {
-                        q.options = [];
-                        q.ans = document.getElementById(`edit_ans_text_${idx}`).value;
+                        q.options = []; q.ans = document.getElementById(`edit_ans_text_${idx}`).value;
                     }
                 }
             });
@@ -396,16 +427,11 @@
 
         function saveDeepExamEdit() {
             gatherDeepEditData();
-            const newTitle = document.getElementById('deepEditExamTitle').value.trim();
-            const newUnit = document.getElementById('deepEditExamUnit').value.trim();
+            const newTitle = document.getElementById('deepEditExamTitle').value.trim(); const newUnit = document.getElementById('deepEditExamUnit').value.trim();
             if(!newTitle) { alert("يجب كتابة اسم للاختبار!"); return; }
-            
-            db.collection("exams").doc(deepEditingExamId).update({
-                title: newTitle, unit: newUnit, questions: deepEditingQuestions
-            }).then(() => {
-                alert("✅ تم حفظ الاختبار بكامل أسئلته وتعديلاته بنجاح!");
-                switchView('examsManagerView', document.querySelectorAll('.nav-item')[5], '🗂️ إدارة الاختبارات');
-            }).catch(e => alert("خطأ في الحفظ: " + e.message));
+            db.collection("exams").doc(deepEditingExamId).update({ title: newTitle, unit: newUnit, questions: deepEditingQuestions })
+            .then(() => { alert("✅ تم حفظ الاختبار بكامل أسئلته وتعديلاته بنجاح!"); switchView('examsManagerView', document.querySelectorAll('.nav-item')[5], '🗂️ إدارة الاختبارات'); })
+            .catch(e => alert("خطأ في الحفظ: " + e.message));
         }
 
         // =====================================
@@ -464,6 +490,7 @@
             } catch (e) { alert("⚠️ صيغة المخرجات غير صحيحة، يرجى مراجعتها."); }
         }
 
+        // بناء وحفظ الاختبار اليدوي (السريع)
         function addQuestionToCurrentExam() {
             let qText = document.getElementById("qTextInput").value;
             let options = [document.getElementById("opt1").value, document.getElementById("opt2").value, document.getElementById("opt3").value, document.getElementById("opt4").value];
