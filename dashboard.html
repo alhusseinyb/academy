@@ -25,16 +25,12 @@
         .nav-btns { display: flex; gap: 12px; align-items: center; }
         
         .btn { font-family: 'Tajawal'; font-weight: bold; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--secondary); color: white; }
-        .btn-primary:hover { background: #128f76; transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.4); color: white; }
-        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
-        .btn-danger { background: var(--accent); color: white; }
-        .btn-danger:hover { background: #c0392b; }
+        .btn-primary { background: var(--secondary); color: white; } .btn-primary:hover { background: #128f76; transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.4); color: white; } .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
+        .btn-danger { background: var(--accent); color: white; } .btn-danger:hover { background: #c0392b; }
 
         .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
         
-        /* 📊 شريط الإحصائيات العلوي (الجديد) */
         .top-stats-bar { display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 12px; padding: 15px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 25px; flex-wrap: wrap; gap: 15px; border-bottom: 3px solid var(--secondary); }
         .student-main-info h2 { margin: 0; font-size: 1.5em; color: var(--primary); font-weight: 900; }
         .student-main-info p { margin: 5px 0 0; color: #7f8c8d; font-size: 13px; }
@@ -43,32 +39,31 @@
         .stat-streak { color: #e67e22; border: 1px solid #fdebd0; background: #fef9e7; }
         .stat-xp { color: #8e44ad; border: 1px solid #f4ecf8; background: #f5eef8; }
         .stat-notif { color: #e74c3c; cursor: pointer; position: relative; }
-        .notif-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; border: 2px solid white; }
+        .notif-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #e74c3c; border-radius: 50%; border: 2px solid white; display:none; }
 
-        /* 📑 نظام التبويبات */
         .tabs-header { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 0; overflow-x: auto; }
         .tab-btn { padding: 15px 30px; border: none; background: transparent; font-family: 'Tajawal'; font-size: 16px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.3s; border-bottom: 4px solid transparent; white-space: nowrap; }
         .tab-btn:hover { color: var(--primary); }
         .tab-btn.active { color: var(--secondary); border-bottom-color: var(--secondary); }
         .tab-content { display: none; animation: fadeIn 0.4s; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .section-title { font-size: 1.3em; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .card-panel { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #eee; margin-bottom: 25px; }
         
-        /* 🏠 الرئيسية */
         .radar-box { background: #fdfefe; border-right: 5px solid #e67e22; padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border-left: 1px solid #eee; }
         .radar-icon { font-size: 40px; }
         .radar-text h3 { margin: 0 0 5px 0; color: #d35400; font-size: 1.2em; }
         .radar-text p { margin: 0; color: #7f8c8d; font-size: 14px; font-weight: bold; }
 
-        /* 🏆 إنجازاتي */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
         @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
         table { width: 100%; border-collapse: collapse; text-align: right; }
         th { padding: 12px; background: #f8f9fa; color: #7f8c8d; font-size: 13px; font-weight: bold; border-bottom: 2px solid #eee; }
         td { padding: 16px 12px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
         .badge-score { background: #eafaf1; color: #27ae60; padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        
         .leaderboard-list { list-style: none; padding: 0; margin: 0; }
         .leaderboard-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; transition: 0.3s; }
         .student-info { display: flex; align-items: center; gap: 12px; font-weight: bold; color: var(--primary); }
@@ -76,7 +71,6 @@
         .rank-1 { background: var(--gold); } .rank-2 { background: var(--silver); } .rank-3 { background: var(--bronze); }
         .leader-score { font-size: 1.1em; font-weight: 900; color: var(--secondary); }
 
-        /* 🛒 المتجر والنطق */
         .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .course-card { background: white; border-radius: 15px; padding: 25px; text-align: center; border: 1px solid #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; position: relative; overflow: hidden; }
         .course-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
@@ -91,18 +85,24 @@
         .mic-btn:hover { transform: scale(1.1); background: #c0392b; }
         .mic-btn.recording { animation: pulseMic 1.5s infinite; background: #e74c3c; border-color: white; }
         @keyframes pulseMic { 0% {box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);} 70% {box-shadow: 0 0 0 20px rgba(231, 76, 60, 0);} 100% {box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);} }
-        .pronounce-result { margin-top: 15px; font-weight: bold; font-size: 1.2em; min-height: 30px; }
 
-        /* Modal الإعدادات */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box { background: white; width: 90%; max-width: 450px; border-radius: 16px; padding: 30px; transform: translateY(-20px); transition: 0.3s; }
+        .modal-box { background: white; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border-radius: 16px; padding: 30px; transform: translateY(-20px); transition: 0.3s; }
         .modal-overlay.active .modal-box { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
         .close-modal { font-size: 24px; color: #95a5a6; cursor: pointer; border: none; background: transparent; }
         .form-group { margin-bottom: 18px; }
         .form-group label { display: block; font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 8px; }
         .form-group input { width: 100%; padding: 12px; border: 2px solid #eaeded; border-radius: 8px; font-family: 'Tajawal'; box-sizing: border-box; }
+
+        /* 📓 تصميم كشكول الأخطاء */
+        .mistake-card { background: #fff5f5; border-right: 4px solid #e74c3c; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .m-exam-title { font-size: 12px; color: #7f8c8d; margin-bottom: 5px; font-weight: bold; }
+        .m-question { font-size: 15px; color: var(--primary); font-weight: bold; margin-bottom: 10px; direction: ltr; text-align: left; }
+        .m-your-ans { color: #c0392b; font-size: 14px; margin-bottom: 5px; direction: ltr; text-align: left; }
+        .m-correct-ans { color: #27ae60; font-size: 14px; font-weight: bold; direction: ltr; text-align: left; }
 
         footer { text-align: center; padding: 25px; color: #95a5a6; font-size: 13px; background: white; margin-top: auto; border-top: 1px solid #eee; }
         .auth-screen { position: fixed; top:0; left:0; width: 100%; height: 100%; background: white; z-index: 2000; display: flex; justify-content: center; align-items: center; }
@@ -124,10 +124,7 @@
     <div class="main-container">
         
         <div class="top-stats-bar">
-            <div class="student-main-info">
-                <h2 id="studentName">أهلاً بك يا بطل! 👋</h2>
-                <p id="studentEmail">الحساب المعتمد: loading...</p>
-            </div>
+            <div class="student-main-info"><h2 id="studentName">أهلاً بك يا بطل! 👋</h2><p id="studentEmail">الحساب المعتمد: loading...</p></div>
             <div class="stats-badges">
                 <div class="stat-badge stat-streak" title="أيام الدخول المتتالية">🔥 <span id="streakCount">0</span> يوم</div>
                 <div class="stat-badge stat-xp" title="نقاط الخبرة (تزيد بحل الامتحانات)">💎 <span id="xpCount">0</span> XP</div>
@@ -148,7 +145,6 @@
                     <div class="radar-box" style="border-right-color:#95a5a6;"><div class="radar-icon">⏳</div><div class="radar-text"><h3 style="color:#7f8c8d;">جاري التحليل...</h3><p>الذكاء الاصطناعي يقوم بمراجعة ملفك الأكاديمي.</p></div></div>
                 </div>
             </div>
-
             <div class="section-title">📈 منحنى تطور مستواك التعليمي</div>
             <div class="card-panel">
                 <canvas id="progressChart" height="80"></canvas>
@@ -161,7 +157,7 @@
                 <div>
                     <div class="section-title" style="justify-content: space-between;">
                         <span>📊 سجل درجاتك</span>
-                        <button class="btn btn-outline" style="background:#34495e; font-size:12px; border:none;" onclick="alert('سيتم تفعيل مفكرة الأخطاء للامتحانات القادمة فور اعتماد تصحيحها.')">📓 كشكول أخطائي</button>
+                        <button class="btn btn-outline" style="background:#2c3e50; font-size:12px; border:none;" onclick="openMistakesModal()">📓 كشكول أخطائي</button>
                     </div>
                     <div class="card-panel">
                         <div style="overflow-x: auto;">
@@ -172,7 +168,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <div class="section-title">🏆 أوائل الأكاديمية</div>
                     <div class="card-panel" style="padding: 0; background: linear-gradient(to bottom, #ffffff, #fdfefe);">
@@ -193,13 +188,21 @@
                 <button class="mic-btn" id="micBtn" onclick="startPronunciationChallenge()">🎤</button>
                 <div class="pronounce-result" id="pronounceResult">اضغط للبدء والتسجيل...</div>
             </div>
-
             <div class="section-title">🛒 متجر الكورسات والمسارات</div>
             <div class="store-grid" id="storeGrid">
                 <div style="grid-column: 1/-1; text-align: center; color:#7f8c8d; padding:30px;">⏳ جاري تحميل الكورسات المتاحة...</div>
             </div>
         </div>
 
+    </div>
+
+    <div class="modal-overlay" id="mistakesModal">
+        <div class="modal-box" style="max-width: 600px;">
+            <div class="modal-header"><h3 style="margin:0; color:var(--primary);">📓 كشكول أخطائي للمراجعة</h3><button class="close-modal" onclick="closeMistakesModal()">&times;</button></div>
+            <div id="mistakesContainer">
+                <p style="text-align:center; color:#7f8c8d;">⏳ جاري فحص دفاترك القديمة...</p>
+            </div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="settingsModal">
@@ -219,6 +222,7 @@
         const firebaseConfig = { apiKey: "AIzaSyDOJMIXgFPJiQJmUvgR1sIv2NZ7_WJB4mY", authDomain: "alhusseiny-academy.firebaseapp.com", projectId: "alhusseiny-academy", storageBucket: "alhusseiny-academy.firebasestorage.app", messagingSenderId: "1048097240090", appId: "1:1048097240090:web:931635cccdb05213fd4da3" };
         firebase.initializeApp(firebaseConfig); const auth = firebase.auth(); const db = firebase.firestore();
         let currentUser = null; let myCurrentGradesArray = []; let progressChartInstance = null;
+        let myAllMistakes = []; // مصفوفة لتخزين الأخطاء المسحوبة
 
         const sentences = ["Practice makes perfect in every language.", "I am looking forward to seeing you soon.", "Success is the sum of small efforts repeated.", "A journey of a thousand miles begins with a single step."];
         document.getElementById("targetSentence").innerText = sentences[Math.floor(Math.random() * sentences.length)];
@@ -226,8 +230,6 @@
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentUser = user; document.getElementById("authScreen").style.display = "none";
-                
-                // 1. إدارة شعلة النشاط 🔥
                 manageDailyStreak(user.uid);
 
                 db.collection("students").doc(user.uid).get().then((doc) => {
@@ -248,48 +250,33 @@
             } else window.location.href = "login.html";
         });
 
-        // 📑 نظام التبديل بين التبويبات
-        function switchDashboardTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
-        }
+        function switchDashboardTab(tabId, btnElement) { document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); document.getElementById(tabId).classList.add('active'); btnElement.classList.add('active'); }
 
-        // 🔥 محرك شعلة النشاط الذكي (Daily Streaks)
         function manageDailyStreak(uid) {
-            const todayStr = new Date().toDateString();
-            const studentRef = db.collection("students").doc(uid);
-            
+            const todayStr = new Date().toDateString(); const studentRef = db.collection("students").doc(uid);
             studentRef.get().then(doc => {
-                let data = doc.data() || {};
-                let currentStreak = data.streak || 0;
-                let lastLogin = data.lastLogin || "";
-
+                let data = doc.data() || {}; let currentStreak = data.streak || 0; let lastLogin = data.lastLogin || "";
                 if (lastLogin !== todayStr) {
                     let yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                    if (lastLogin === yesterday.toDateString()) currentStreak++; // متتالي
-                    else currentStreak = 1; // انقطاع
-                    
+                    if (lastLogin === yesterday.toDateString()) currentStreak++; else currentStreak = 1;
                     studentRef.update({ streak: currentStreak, lastLogin: todayStr }, {merge: true});
                 }
                 document.getElementById("streakCount").innerText = currentStreak;
             });
         }
 
-        // 📊 جلب الدرجات + 📈 الرسم البياني + 🎯 الرادار + 💎 حساب الـ XP
         function loadMyScoresChartAndRadar(email) {
             db.collection("exam_results").where("email", "==", email).get().then((snapshot) => {
                 const tbody = document.getElementById("studentResultsTable");
                 if (snapshot.empty) {
                     tbody.innerHTML = "<tr><td colspan='3' style='text-align: center; color: #95a5a6;'>لم تقم بحل أي اختبار حتى الآن.</td></tr>";
-                    document.getElementById("progressChart").style.display = "none";
-                    document.getElementById("chartNoDataMsg").style.display = "block";
+                    document.getElementById("progressChart").style.display = "none"; document.getElementById("chartNoDataMsg").style.display = "block";
                     document.getElementById("radarContainer").innerHTML = `<div class="radar-box"><div class="radar-icon">🚀</div><div class="radar-text"><h3 style="color:#2980b9;">أهلاً بك في الأكاديمية!</h3><p>ابدأ بحل الاختبارات لكي يتمكن الرادار من تحليل مستواك.</p></div></div>`;
                     return;
                 }
 
-                let records = []; snapshot.forEach(doc => records.push(doc.data()));
+                let records = []; myAllMistakes = [];
+                snapshot.forEach(doc => records.push(doc.data()));
                 records.sort((a,b) => (a.timestamp ? a.timestamp.toMillis() : 0) - (b.timestamp ? b.timestamp.toMillis() : 0));
 
                 let chartLabels = []; let chartData = []; let tableHtml = "";
@@ -297,18 +284,19 @@
 
                 [...records].reverse().forEach(data => {
                     let dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                    
-                    // ⏳ معالجة المقالي
-                    let essayNotice = data.hasEssay ? `<span title="بانتظار تقييم المستر لأسئلة البراجراف" style="margin-right:5px; cursor:help;">⏳</span>` : "";
+                    let essayNotice = data.hasEssay ? `<span title="بانتظار التقييم" style="cursor:help;">⏳</span>` : "";
                     if(data.hasEssay) pendingEssays++;
+                    
+                    // جمع الأخطاء من هذا الامتحان لرميها في الكشكول
+                    if(data.mistakes && Array.isArray(data.mistakes)) {
+                        data.mistakes.forEach(m => myAllMistakes.push({ exam: data.examName, ...m }));
+                    }
 
                     tableHtml += `<tr><td style="color:var(--primary); font-size:14px;">📝 ${data.examName}</td><td style="color:#7f8c8d;">${dateObj.toLocaleDateString('ar-EG')}</td><td><span class="badge-score">${data.score}</span> ${essayNotice}</td></tr>`;
                 });
                 tbody.innerHTML = tableHtml;
 
-                // 🔔 جرس الإشعارات
                 if(pendingEssays > 0) document.getElementById("notifDot").style.display = "block";
-                else document.getElementById("notifDot").style.display = "none";
 
                 records.forEach((data, index) => {
                     if(data.score) {
@@ -317,95 +305,51 @@
                             let correct = parseFloat(parts[0]); let total = parseFloat(parts[1]);
                             let percentage = (correct / total) * 100;
                             chartLabels.push(`اختبار ${index + 1}`); chartData.push(percentage.toFixed(1));
-                            
-                            // 💎 حساب نقاط الخبرة (10 نقاط دخول + 5 نقطة لكل إجابة صحيحة)
                             totalXP += 10 + (correct * 5);
-
                             if(percentage < lowestScore) { lowestScore = percentage; weakestExam = data.examName; }
                         }
                     }
                 });
 
-                document.getElementById("xpCount").innerText = totalXP;
-                renderProgressChart(chartLabels, chartData);
+                document.getElementById("xpCount").innerText = totalXP; renderProgressChart(chartLabels, chartData);
 
-                // 🎯 الرادار
                 const radarBox = document.getElementById("radarContainer");
                 if (records.length > 1) {
-                    if (lowestScore >= 85) radarBox.innerHTML = `<div class="radar-box" style="border-right-color:#27ae60;"><div class="radar-icon">🌟</div><div class="radar-text"><h3 style="color:#27ae60;">الرادار الذكي: أداؤك مثالي!</h3><p>أنت لا تمتلك نقاط ضعف واضحة حالياً. استمر في هذا التفوق الرائع يا بطل.</p></div></div>`;
-                    else radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">🎯</div><div class="radar-text"><h3>الرادار الذكي: انتبه لنقاط ضعفك!</h3><p>لاحظنا تراجعاً في مستوى درجاتك في <strong>( ${weakestExam} )</strong>. نوصي بشدة بمراجعة هذا الجزء مرة أخرى.</p></div></div>`;
-                } else radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">⏳</div><div class="radar-text"><h3 style="color:#7f8c8d;">جاري جمع البيانات...</h3><p>حل امتحاناً آخر لكي يكتمل تحليل الرادار.</p></div></div>`;
+                    if (lowestScore >= 85) radarBox.innerHTML = `<div class="radar-box" style="border-right-color:#27ae60;"><div class="radar-icon">🌟</div><div class="radar-text"><h3 style="color:#27ae60;">الرادار الذكي: أداؤك مثالي!</h3><p>لا تمتلك نقاط ضعف واضحة حالياً.</p></div></div>`;
+                    else radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">🎯</div><div class="radar-text"><h3>الرادار الذكي: انتبه لنقاط ضعفك!</h3><p>تراجع مستواك في <strong>( ${weakestExam} )</strong>. نوصي بمراجعة هذا الجزء.</p></div></div>`;
+                } else radarBox.innerHTML = `<div class="radar-box"><div class="radar-icon">⏳</div><div class="radar-text"><h3 style="color:#7f8c8d;">جاري جمع البيانات...</h3><p>حل امتحاناً آخر لكي يكتمل التحليل.</p></div></div>`;
             });
         }
 
-        function renderProgressChart(labels, dataPoints) {
-            const ctx = document.getElementById('progressChart').getContext('2d');
-            if(progressChartInstance) progressChartInstance.destroy();
-            progressChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'نسبة النجاح %', data: dataPoints, borderColor: '#18bc9c', backgroundColor: 'rgba(24, 188, 156, 0.1)', borderWidth: 3, pointBackgroundColor: '#e74c3c', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } } });
-        }
+        function renderProgressChart(labels, dataPoints) { const ctx = document.getElementById('progressChart').getContext('2d'); if(progressChartInstance) progressChartInstance.destroy(); progressChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'نسبة النجاح %', data: dataPoints, borderColor: '#18bc9c', backgroundColor: 'rgba(24, 188, 156, 0.1)', borderWidth: 3, pointBackgroundColor: '#e74c3c', pointRadius: 5, fill: true, tension: 0.3 }] }, options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } } }); }
 
-        // 🛒 المتجر الذكي المبسط
-        function loadAcademyStore() {
-            db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => {
-                const storeGrid = document.getElementById("storeGrid");
-                if(snapshot.empty) { storeGrid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>لا توجد كورسات متاحة حالياً.</p>"; return; }
-                let html = "";
-                snapshot.forEach(doc => {
-                    let track = doc.data(); let isSubscribed = myCurrentGradesArray.includes(doc.id);
-                    let badgeClass = (Math.random() > 0.5) ? "course-badge free" : "course-badge"; let badgeText = badgeClass.includes("free") ? "مجاني" : "مميز";
-                    if(isSubscribed) { html += `<div class="course-card" style="border-color: #27ae60; background:#f9fdfa;"><div class="course-icon">🎓</div><h3 class="course-title">${track.name}</h3><div style="color: #27ae60; font-weight:bold; font-size:15px; margin-top:15px;">مسجل بالفعل ✅</div></div>`; } 
-                    else { html += `<div class="course-card"><div class="${badgeClass}">${badgeText}</div><div class="course-icon">🚀</div><h3 class="course-title">${track.name}</h3><button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="subscribeToCourse('${doc.id}', '${track.name}')">➕ انضم للكورس</button></div>`; }
-                }); storeGrid.innerHTML = html;
-            });
-        }
-
-        function subscribeToCourse(courseId, courseName) {
-            if(confirm(`هل أنت متأكد من اشتراكك في "${courseName}"؟`)) {
-                myCurrentGradesArray.push(courseId); 
-                db.collection("students").doc(currentUser.uid).update({ grades: myCurrentGradesArray }).then(() => { alert(`🎉 مبارك! تم فتح مسار ${courseName}.`); loadAcademyStore(); });
+        // 📓 دوال كشكول الأخطاء
+        function openMistakesModal() {
+            const container = document.getElementById("mistakesContainer");
+            if(myAllMistakes.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:30px;"><div style="font-size:50px;">🎉</div><h3 style="color:var(--secondary);">سجلك نظيف تماماً!</h3><p style="color:#7f8c8d;">لم تسجل أي إجابات خاطئة في امتحاناتك السابقة.</p></div>`;
+            } else {
+                // عرض الأخطاء بترتيب من الأحدث للأقدم
+                container.innerHTML = myAllMistakes.map(m => `
+                    <div class="mistake-card">
+                        <div class="m-exam-title">📌 في اختبار: ${m.exam}</div>
+                        <div class="m-question">Q: ${m.question}</div>
+                        <div class="m-your-ans">❌ Your Answer: ${m.studentAns}</div>
+                        <div class="m-correct-ans">✅ Correct Answer: ${m.correctAns}</div>
+                    </div>
+                `).join('');
             }
+            document.getElementById("mistakesModal").classList.add("active");
         }
+        function closeMistakesModal() { document.getElementById("mistakesModal").classList.remove("active"); }
 
-        // 🏆 لوحة الشرف السريعة (Fast Leaderboard)
-        function loadFastLeaderboard() {
-            // سحب أحدث 50 نتيجة فقط للحفاظ على السرعة الفائقة للوحة
-            db.collection("exam_results").orderBy("timestamp", "desc").limit(50).get().then((snapshot) => {
-                let studentScores = {};
-                snapshot.forEach(doc => {
-                    let data = doc.data();
-                    if(data.score && data.name) { let parts = data.score.split("/"); if(parts.length === 2) { let percentage = (parseFloat(parts[0]) / parseFloat(parts[1])) * 100; if(!studentScores[data.name] || studentScores[data.name] < percentage) { studentScores[data.name] = percentage; } } }
-                });
-                let sortedStudents = Object.keys(studentScores).map(name => ({ name: name, score: studentScores[name] })).sort((a,b) => b.score - a.score);
-                let top5 = sortedStudents.slice(0, 5); const list = document.getElementById("leaderboardList");
-                if(top5.length === 0) { list.innerHTML = "<li style='text-align:center; padding: 20px; color:#95a5a6;'>لا يوجد نتائج.</li>"; return; }
-                list.innerHTML = top5.map((student, index) => { let rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : ''; let medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`; return `<li class="leaderboard-item"><div class="student-info"><div class="rank-badge ${rankClass}">${medal}</div><span>${student.name}</span></div><div class="leader-score">${Math.round(student.score)}%</div></li>`; }).join('');
-            });
-        }
+        function loadAcademyStore() { db.collection("grades").orderBy("timestamp", "desc").get().then((snapshot) => { const storeGrid = document.getElementById("storeGrid"); if(snapshot.empty) { storeGrid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>لا توجد كورسات.</p>"; return; } let html = ""; snapshot.forEach(doc => { let track = doc.data(); let isSubscribed = myCurrentGradesArray.includes(doc.id); let badgeClass = (Math.random() > 0.5) ? "course-badge free" : "course-badge"; let badgeText = badgeClass.includes("free") ? "مجاني" : "مميز"; if(isSubscribed) { html += `<div class="course-card" style="border-color: #27ae60; background:#f9fdfa;"><div class="course-icon">🎓</div><h3 class="course-title">${track.name}</h3><div style="color: #27ae60; font-weight:bold; font-size:15px; margin-top:15px;">مسجل بالفعل ✅</div></div>`; } else { html += `<div class="course-card"><div class="${badgeClass}">${badgeText}</div><div class="course-icon">🚀</div><h3 class="course-title">${track.name}</h3><button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="subscribeToCourse('${doc.id}', '${track.name}')">➕ انضم للكورس</button></div>`; } }); storeGrid.innerHTML = html; }); }
+        function subscribeToCourse(courseId, courseName) { if(confirm(`هل أنت متأكد من اشتراكك في "${courseName}"؟`)) { myCurrentGradesArray.push(courseId); db.collection("students").doc(currentUser.uid).update({ grades: myCurrentGradesArray }).then(() => { alert(`🎉 مبارك! تم فتح مسار ${courseName}.`); loadAcademyStore(); }); } }
 
-        // 🎙️ تحدي النطق
-        function startPronunciationChallenge() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) { alert("المتصفح لا يدعم المايكروفون. يرجى استخدام Google Chrome."); return; }
-            const recognition = new SpeechRecognition(); recognition.lang = 'en-US';
-            const btn = document.getElementById("micBtn"); const resBox = document.getElementById("pronounceResult");
-            btn.classList.add("recording"); resBox.innerText = "جاري الاستماع... تحدث الآن 🎧";
-            recognition.start();
-            recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,!]/g,"");
-                const targetText = document.getElementById("targetSentence").innerText.toLowerCase().replace(/[.,!]/g,"");
-                let matchedWords = 0; let targetWords = targetText.split(" "); let spokenWords = speechResult.split(" ");
-                targetWords.forEach(word => { if(spokenWords.includes(word)) matchedWords++; });
-                let accuracy = Math.round((matchedWords / targetWords.length) * 100);
-                btn.classList.remove("recording");
-                if(accuracy > 80) resBox.innerHTML = `🌟 رائع! دقة نطقك: <span style="color:#2ecc71;">${accuracy}%</span>.`;
-                else if(accuracy > 50) resBox.innerHTML = `👍 جيد! دقة نطقك: <span style="color:#f1c40f;">${accuracy}%</span>. حاول مرة أخرى.`;
-                else resBox.innerHTML = `⚠️ دقة نطقك: <span style="color:#e74c3c;">${accuracy}%</span>. (سمعناك تقول: "${speechResult}").`;
-            };
-            recognition.onspeechend = function() { recognition.stop(); btn.classList.remove("recording"); };
-            recognition.onerror = function() { btn.classList.remove("recording"); resBox.innerText = "حدث خطأ. تأكد من إعطاء الصلاحية للمايك."; };
-        }
+        function loadFastLeaderboard() { db.collection("exam_results").orderBy("timestamp", "desc").limit(50).get().then((snapshot) => { let studentScores = {}; snapshot.forEach(doc => { let data = doc.data(); if(data.score && data.name) { let parts = data.score.split("/"); if(parts.length === 2) { let percentage = (parseFloat(parts[0]) / parseFloat(parts[1])) * 100; if(!studentScores[data.name] || studentScores[data.name] < percentage) { studentScores[data.name] = percentage; } } } }); let sortedStudents = Object.keys(studentScores).map(name => ({ name: name, score: studentScores[name] })).sort((a,b) => b.score - a.score); let top5 = sortedStudents.slice(0, 5); const list = document.getElementById("leaderboardList"); if(top5.length === 0) { list.innerHTML = "<li style='text-align:center; padding: 20px; color:#95a5a6;'>لا يوجد نتائج.</li>"; return; } list.innerHTML = top5.map((student, index) => { let rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : ''; let medal = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`; return `<li class="leaderboard-item"><div class="student-info"><div class="rank-badge ${rankClass}">${medal}</div><span>${student.name}</span></div><div class="leader-score">${Math.round(student.score)}%</div></li>`; }).join(''); }); }
 
-        // ⚙️ الإعدادات البسيطة
+        function startPronunciationChallenge() { const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SpeechRecognition) { alert("المتصفح لا يدعم المايكروفون. يرجى استخدام Google Chrome."); return; } const recognition = new SpeechRecognition(); recognition.lang = 'en-US'; const btn = document.getElementById("micBtn"); const resBox = document.getElementById("pronounceResult"); btn.classList.add("recording"); resBox.innerText = "جاري الاستماع... تحدث الآن 🎧"; recognition.start(); recognition.onresult = function(event) { const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,!]/g,""); const targetText = document.getElementById("targetSentence").innerText.toLowerCase().replace(/[.,!]/g,""); let matchedWords = 0; let targetWords = targetText.split(" "); let spokenWords = speechResult.split(" "); targetWords.forEach(word => { if(spokenWords.includes(word)) matchedWords++; }); let accuracy = Math.round((matchedWords / targetWords.length) * 100); btn.classList.remove("recording"); if(accuracy > 80) resBox.innerHTML = `🌟 رائع! دقة نطقك: <span style="color:#2ecc71;">${accuracy}%</span>.`; else if(accuracy > 50) resBox.innerHTML = `👍 جيد! دقة نطقك: <span style="color:#f1c40f;">${accuracy}%</span>. حاول مرة أخرى.`; else resBox.innerHTML = `⚠️ دقة نطقك: <span style="color:#e74c3c;">${accuracy}%</span>.`; }; recognition.onspeechend = function() { recognition.stop(); btn.classList.remove("recording"); }; recognition.onerror = function() { btn.classList.remove("recording"); resBox.innerText = "حدث خطأ. تأكد من إعطاء الصلاحية للمايك."; }; }
+
         function openSettingsModal() { document.getElementById("settingsModal").classList.add("active"); }
         function closeSettingsModal() { document.getElementById("settingsModal").classList.remove("active"); document.getElementById("modalPasswordInput").value = ""; }
         function updateStudentName() { const newName = document.getElementById("modalNameInput").value.trim(); if (!newName) return; currentUser.updateProfile({ displayName: newName }).then(() => { document.getElementById("studentName").innerText = `أهلاً بك يا بطل، ${newName}! 👋`; closeSettingsModal(); }); }

@@ -14,11 +14,10 @@
         :root { 
             --primary: #2c3e50; --secondary: #18bc9c; --accent: #e67e22; 
             --teal: #0a7c6e; --bg: #f4f7f6; --white: #ffffff; --text: #2c3e50; 
-            --context-bg: #fffde7; /* لون مميز لقطعة الفهم */
+            --context-bg: #fffde7; 
         }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; transition: background 0.5s; }
 
-        /* 🧘‍♂️ وضع التركيز العميق (يتم تفعيله بالـ JS) */
         body.focus-mode { background: #fdfefe; }
         body.focus-mode header { display: none !important; }
         body.focus-mode .floating-ai-btn { display: none !important; }
@@ -36,7 +35,6 @@
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* مساراتي والدروس (كما هي نظيفة) */
         .my-tracks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
         .track-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border-bottom: 5px solid var(--secondary); cursor: pointer; transition: 0.3s; }
         .track-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: var(--teal); }
@@ -53,34 +51,27 @@
         .bg-video { background: #e74c3c; } .bg-pdf { background: #3498db; } .bg-exam { background: #f39c12; }
         .btn-action { background: var(--teal); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Tajawal'; }
 
-        /* السينما */
         .media-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 12px 12px 0 0; border-bottom: 2px solid #eee; }
         .media-container { background: #000; width: 100%; aspect-ratio: 16 / 9; border-radius: 0 0 12px 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .media-container iframe { width: 100%; height: 100%; border: none; }
         .pdf-container { aspect-ratio: auto; height: 80vh; background: #ecf0f1; }
 
-        /* 📝 محرك التقييم الشامل (Ultimate Assessment Player) */
         .exam-header { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; border: 2px dashed var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .exam-header h2 { margin: 0; color: var(--primary); }
         .progress-bar { width: 100%; background: #e2e8f0; height: 8px; border-radius: 4px; margin-bottom: 25px; overflow: hidden; }
         .progress-fill { background: var(--secondary); height: 100%; width: 0%; transition: width 0.5s ease; }
         
         .block-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; animation: fadeIn 0.4s; }
-        
-        /* 📌 تقنية القطعة المثبتة */
         .context-block { background: var(--context-bg); border-right: 5px solid #f1c40f; position: sticky; top: 15px; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .context-text { font-size: 1.15em; line-height: 1.8; color: #333; direction: ltr; text-align: left; white-space: pre-wrap; font-family: 'Arial', sans-serif; }
 
         .question-text { font-size: 1.2em; font-weight: bold; color: var(--primary); margin-bottom: 15px; line-height: 1.6; direction: ltr; text-align: left; }
-        
-        /* خيارات الأسئلة */
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; direction: ltr; }
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
         .option-btn { display: block; width: 100%; text-align: left; padding: 15px; background: #f8f9fa; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-family: 'Arial', sans-serif; font-size: 16px; transition: 0.2s; }
         .option-btn:hover { background: #edf2f7; border-color: #cbd5e0; }
         .option-btn.selected { background: #e6fffa; border-color: var(--secondary); color: #006d5b; font-weight: bold; box-shadow: 0 4px 10px rgba(24, 188, 156, 0.2); }
         
-        /* حقول الأكمل والمقالي */
         .input-text { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Arial', sans-serif; box-sizing: border-box; direction: ltr; text-align: left; transition: 0.3s; }
         .input-text:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(24,188,156,0.1); }
         .textarea-essay { width: 100%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; font-family: 'Arial', sans-serif; box-sizing: border-box; direction: ltr; text-align: left; resize: vertical; min-height: 120px; }
@@ -94,11 +85,9 @@
         .btn-prev { background: #ecf0f1; color: var(--primary); } .btn-prev:hover { background: #bdc3c7; }
         .btn-next { background: var(--teal); color: white; } .btn-next:hover { background: #0b6055; }
 
-        /* 🛟 توست الحفظ التلقائي */
         .toast-msg { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #2c3e50; color: white; padding: 10px 25px; border-radius: 30px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: bottom 0.4s ease; z-index: 3000; display: flex; align-items: center; gap: 8px; }
         .toast-msg.show { bottom: 30px; }
 
-        /* المدرس الذكي */
         .floating-ai-btn { position: fixed; bottom: 30px; left: 30px; background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 15px 25px; border-radius: 50px; font-family: 'Tajawal'; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 10px 25px rgba(142, 68, 173, 0.4); border: none; z-index: 1000; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
         .floating-ai-btn:hover { transform: scale(1.05); }
         .ai-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
@@ -115,7 +104,7 @@
 <body>
 
     <header>
-        <div class="logo">👑 قاعة المحاضرات השاملة</div>
+        <div class="logo">👑 قاعة المحاضرات الشاملة</div>
         <div class="nav-actions">
             <span class="user-greeting" id="userInfo">جاري التحميل...</span>
             <a href="dashboard.html" class="btn-outline">📊 لوحة تحكمي</a>
@@ -144,7 +133,6 @@
                 <h2 id="activeExamTitle">--</h2>
                 <button class="btn-outline" style="color:#e74c3c; border-color:#e74c3c; font-size:12px;" onclick="exitExam()">❌ خروج طوارئ</button>
             </div>
-            
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <div style="text-align:left; color:#7f8c8d; font-weight:bold; margin-bottom:15px; direction:ltr;" id="questionCounter"></div>
             
@@ -170,7 +158,6 @@
     </div>
 
     <div class="toast-msg" id="saveToast">🛟 تم الحفظ التلقائي لإجاباتك</div>
-
     <button class="floating-ai-btn" onclick="openAITutor()">🤖 اسأل المدرس الذكي</button>
     <div class="ai-modal-overlay" id="aiTutorModal"><div class="ai-modal-box"><div class="ai-modal-header"><h3>🤖 المدرس الذكي</h3><button class="close-ai-modal" onclick="closeAITutor()">&times;</button></div><div class="ai-modal-body"><iframe src="ai-tutor.html"></iframe></div></div></div>
 
@@ -181,15 +168,8 @@
         firebase.initializeApp(firebaseConfig); const auth = firebase.auth(); const db = firebase.firestore();
 
         let currentStudentName = ""; let currentStudentEmail = "";
-        
-        // متغيرات محرك الاختبارات
-        let activeExamData = null;
-        let activeExamId = null;
-        let studentAnswers = []; // المصفوفة التي تُحفظ محلياً
-        let currentDisplayStep = 0; // يستخدم للكويز والصفحات
-        let totalSteps = 1;
-        let blocksPerStep = 1; // 1 للكويز، كل الكتل للورقة، 5 للصفحات
-        let hasEssayQuestions = false;
+        let activeExamData = null; let activeExamId = null; let studentAnswers = [];
+        let currentDisplayStep = 0; let totalSteps = 1; let blocksPerStep = 1; let hasEssayQuestions = false;
 
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -199,10 +179,7 @@
             } else window.location.href = "login.html";
         });
 
-        function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0);
-        }
+        function switchView(viewId) { document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0); }
 
         function loadStudentActiveTracks(uid) {
             db.collection("students").doc(uid).get().then((doc) => {
@@ -243,106 +220,52 @@
         function openMedia(url, type, title) { document.getElementById("mediaTitle").innerText = title; let finalUrl = url; if (type === 'video') { document.getElementById("mediaContainerWrapper").className = "media-container"; if (url.includes("watch?v=")) finalUrl = url.replace("watch?v=", "embed/").split("&")[0]; else if (url.includes("youtu.be/")) finalUrl = url.replace("youtu.be/", "www.youtube.com/embed/").split("?")[0]; } else if (type === 'pdf') { document.getElementById("mediaContainerWrapper").className = "media-container pdf-container"; if (url.includes("/view")) finalUrl = url.replace("/view", "/preview"); } document.getElementById("mediaIframe").src = finalUrl; switchView('mediaView'); }
         function closeMedia() { document.getElementById("mediaIframe").src = ""; switchView('contentView'); }
 
-        // =====================================
-        // 🚀 محرك التقييم الشامل (Ultimate Engine)
-        // =====================================
         function startExam(encodedExamData, examId) {
-            activeExamData = JSON.parse(decodeURIComponent(encodedExamData));
-            activeExamId = examId;
-            document.getElementById("activeExamTitle").innerText = activeExamData.title;
-            hasEssayQuestions = false;
-
-            // 🧘‍♂️ تفعيل وضع التركيز
+            activeExamData = JSON.parse(decodeURIComponent(encodedExamData)); activeExamId = examId;
+            document.getElementById("activeExamTitle").innerText = activeExamData.title; hasEssayQuestions = false;
             document.body.classList.add('focus-mode');
-
-            // 🛟 طوق النجاة: استرجاع الإجابات المحفوظة
-            let savedProgress = localStorage.getItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`);
-            if (savedProgress) {
-                studentAnswers = JSON.parse(savedProgress);
-                // شوية دلال: نطلعله رسالة إننا رجعناله حقه
-                showAutoSaveToast("🛟 تم استرجاع إجاباتك السابقة بنجاح!");
-            } else {
-                studentAnswers = new Array(activeExamData.questions.length).fill(null);
-            }
-
-            // إعداد نمط العرض
-            let mode = activeExamData.displayMode || 'paper';
-            currentDisplayStep = 0;
             
+            let savedProgress = localStorage.getItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`);
+            if (savedProgress) { studentAnswers = JSON.parse(savedProgress); showAutoSaveToast("🛟 تم استرجاع إجاباتك السابقة بنجاح!"); } 
+            else studentAnswers = new Array(activeExamData.questions.length).fill(null);
+
+            let mode = activeExamData.displayMode || 'paper'; currentDisplayStep = 0;
             if (mode === 'paper') { blocksPerStep = activeExamData.questions.length; totalSteps = 1; } 
             else if (mode === 'quiz') { blocksPerStep = 1; totalSteps = activeExamData.questions.length; } 
             else if (mode === 'paginated') { blocksPerStep = 5; totalSteps = Math.ceil(activeExamData.questions.length / 5); }
-
-            switchView('examView');
-            renderExamEngine();
+            switchView('examView'); renderExamEngine();
         }
 
-        function exitExam() {
-            if(confirm("هل أنت متأكد من الخروج؟ إجاباتك ستظل محفوظة للعودة لاحقاً.")) {
-                document.body.classList.remove('focus-mode');
-                switchView('contentView');
-            }
-        }
+        function exitExam() { if(confirm("هل أنت متأكد من الخروج؟ إجاباتك ستظل محفوظة للعودة لاحقاً.")) { document.body.classList.remove('focus-mode'); switchView('contentView'); } }
 
         function renderExamEngine() {
-            const container = document.getElementById("examBlocksContainer");
-            const qs = activeExamData.questions;
+            const container = document.getElementById("examBlocksContainer"); const qs = activeExamData.questions;
+            let startIndex = currentDisplayStep * blocksPerStep; let endIndex = Math.min(startIndex + blocksPerStep, qs.length);
             
-            // تحديد بداية ونهاية الكتل المطلوبة في هذه الشاشة
-            let startIndex = currentDisplayStep * blocksPerStep;
-            let endIndex = Math.min(startIndex + blocksPerStep, qs.length);
-            
-            // 📌 ميزة القطعة المثبتة في وضع (الكويز): لو السؤال الحالي مش قطعة، ابحث عن أقرب قطعة قبله لتعرضها!
-            let contextHtml = "";
-            let mode = activeExamData.displayMode || 'paper';
+            let contextHtml = ""; let mode = activeExamData.displayMode || 'paper';
             if (mode === 'quiz' && qs[startIndex].type !== 'context') {
-                for (let i = startIndex - 1; i >= 0; i--) {
-                    if (qs[i].type === 'context') {
-                        contextHtml = `<div class="block-card context-block"><div class="context-text">${qs[i].questionText}</div></div>`;
-                        break; // جيب أقرب قطعة بس
-                    }
-                }
+                for (let i = startIndex - 1; i >= 0; i--) { if (qs[i].type === 'context') { contextHtml = `<div class="block-card context-block"><div class="context-text">${qs[i].questionText}</div></div>`; break; } }
             }
 
             let html = contextHtml;
-            
             for (let i = startIndex; i < endIndex; i++) {
-                let q = qs[i];
-                let type = q.type || ((q.options && q.options.length > 0) ? 'mcq' : 'short'); // توافق قديم
-                
+                let q = qs[i]; let type = q.type || ((q.options && q.options.length > 0) ? 'mcq' : 'short');
                 let blockClass = type === 'context' ? "block-card context-block" : "block-card";
                 html += `<div class="${blockClass}" id="block_${i}">`;
-                
-                if (type === 'context') {
-                    html += `<div class="context-text">${q.questionText}</div>`;
-                } else {
+                if (type === 'context') { html += `<div class="context-text">${q.questionText}</div>`; } 
+                else {
                     html += `<div class="question-text">${i+1}. ${q.questionText.replace(/\n/g, "<br>")}</div>`;
-                    
                     let savedAns = studentAnswers[i];
-                    
                     if (type === 'mcq' || type === 'tf') {
-                        let opts = q.options || (type === 'tf' ? ["True", "False"] : []);
-                        html += `<div class="options-grid">`;
-                        opts.forEach((opt, optIdx) => {
-                            let selClass = savedAns === optIdx ? "selected" : "";
-                            let optLabel = type === 'mcq' ? ['A','B','C','D'][optIdx] + ". " : "";
-                            html += `<button class="option-btn ${selClass}" onclick="selectEngineOption(${i}, ${optIdx})"><strong>${optLabel}</strong> ${opt}</button>`;
-                        });
+                        let opts = q.options || (type === 'tf' ? ["True", "False"] : []); html += `<div class="options-grid">`;
+                        opts.forEach((opt, optIdx) => { let selClass = savedAns === optIdx ? "selected" : ""; let optLabel = type === 'mcq' ? ['A','B','C','D'][optIdx] + ". " : ""; html += `<button class="option-btn ${selClass}" onclick="selectEngineOption(${i}, ${optIdx})"><strong>${optLabel}</strong> ${opt}</button>`; });
                         html += `</div>`;
-                    } else if (type === 'short') {
-                        html += `<input type="text" class="input-text" oninput="saveEngineAnswer(${i}, this.value)" value="${savedAns || ''}" placeholder="Type your answer here...">`;
-                    } else if (type === 'long') {
-                        hasEssayQuestions = true;
-                        html += `<textarea class="textarea-essay" oninput="saveEngineAnswer(${i}, this.value)" placeholder="Write your paragraph/essay here...">${savedAns || ''}</textarea>`;
-                        html += `<div style="color:#e67e22; font-size:12px; margin-top:8px;">* سيقوم المستر بتقييم هذا السؤال لاحقاً.</div>`;
-                    }
+                    } else if (type === 'short') html += `<input type="text" class="input-text" oninput="saveEngineAnswer(${i}, this.value)" value="${savedAns || ''}" placeholder="Type your answer here...">`;
+                    else if (type === 'long') { hasEssayQuestions = true; html += `<textarea class="textarea-essay" oninput="saveEngineAnswer(${i}, this.value)" placeholder="Write your paragraph/essay here...">${savedAns || ''}</textarea><div style="color:#e67e22; font-size:12px; margin-top:8px;">* سيتم تقييم هذا السؤال يدوياً لاحقاً.</div>`; }
                 }
                 html += `</div>`;
             }
-
             container.innerHTML = html;
-
-            // تحديث شريط التقدم والأزرار
             let currentQNum = Math.min(endIndex, qs.length);
             document.getElementById("progressFill").style.width = `${(currentQNum / qs.length) * 100}%`;
             document.getElementById("questionCounter").innerText = `Question ${currentQNum} of ${qs.length}`;
@@ -351,110 +274,83 @@
                 document.getElementById("examNavButtons").style.display = "flex";
                 document.getElementById("btnPrev").disabled = (currentDisplayStep === 0);
                 document.getElementById("btnPrev").style.opacity = (currentDisplayStep === 0) ? "0.5" : "1";
-                
-                if (currentDisplayStep === totalSteps - 1) {
-                    document.getElementById("btnNext").style.display = "none";
-                    document.getElementById("btnSubmitExam").style.display = "block";
-                } else {
-                    document.getElementById("btnNext").style.display = "block";
-                    document.getElementById("btnSubmitExam").style.display = "none";
-                }
-            } else {
-                document.getElementById("examNavButtons").style.display = "none";
-                document.getElementById("btnSubmitExam").style.display = "block";
-            }
+                if (currentDisplayStep === totalSteps - 1) { document.getElementById("btnNext").style.display = "none"; document.getElementById("btnSubmitExam").style.display = "block"; } 
+                else { document.getElementById("btnNext").style.display = "block"; document.getElementById("btnSubmitExam").style.display = "none"; }
+            } else { document.getElementById("examNavButtons").style.display = "none"; document.getElementById("btnSubmitExam").style.display = "block"; }
         }
 
-        // 🛟 حفظ الإجابات التلقائي مع مؤثر التوست
-        function saveEngineAnswer(qIndex, value) {
-            studentAnswers[qIndex] = value;
-            localStorage.setItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`, JSON.stringify(studentAnswers));
-            showAutoSaveToast("🛟 تم الحفظ التلقائي");
-        }
-
+        function saveEngineAnswer(qIndex, value) { studentAnswers[qIndex] = value; localStorage.setItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`, JSON.stringify(studentAnswers)); showAutoSaveToast("🛟 تم الحفظ التلقائي"); }
         function selectEngineOption(qIndex, optIndex) {
             saveEngineAnswer(qIndex, optIndex);
-            
-            // في وضع الكويز السريع، لو اختار سؤال نوديه للسؤال اللي بعده تلقائي للسرعة
-            if (activeExamData.displayMode === 'quiz' && currentDisplayStep < totalSteps - 1) {
-                setTimeout(() => navigateExam(1), 400); // تأخير بسيط ليشوف لونه اتغير
-            } else {
-                renderExamEngine(); // فقط تحديث ألوان الأزرار في نفس الشاشة
-            }
+            if (activeExamData.displayMode === 'quiz' && currentDisplayStep < totalSteps - 1) setTimeout(() => navigateExam(1), 400);
+            else renderExamEngine();
         }
+        function showAutoSaveToast(msg) { const toast = document.getElementById("saveToast"); toast.innerText = msg; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2000); }
+        function navigateExam(dir) { currentDisplayStep += dir; renderExamEngine(); window.scrollTo(0, 0); }
 
-        function showAutoSaveToast(msg) {
-            const toast = document.getElementById("saveToast");
-            toast.innerText = msg;
-            toast.classList.add("show");
-            setTimeout(() => toast.classList.remove("show"), 2000);
-        }
-
-        function navigateExam(direction) {
-            currentDisplayStep += direction;
-            renderExamEngine();
-            window.scrollTo(0, 0);
-        }
-
-        // 🏁 التصحيح والإنهاء (Grader Engine)
+        // 🏁 التصحيح + صائد الأخطاء (Mistake Catcher)
         function finishAndSubmitExam() {
-            // التحقق من أن الطالب أجاب على جميع الأسئلة المطلوبة (باستثناء القطع)
-            let missed = 0;
-            activeExamData.questions.forEach((q, idx) => {
-                if(q.type !== 'context' && (studentAnswers[idx] === null || studentAnswers[idx] === "")) missed++;
-            });
+            let missed = 0; activeExamData.questions.forEach((q, idx) => { if(q.type !== 'context' && (studentAnswers[idx] === null || studentAnswers[idx] === "")) missed++; });
+            if (missed > 0 && !confirm(`⚠️ لقد تركت ${missed} سؤال بدون إجابة! هل أنت متأكد من تسليم الورقة؟`)) return;
 
-            if (missed > 0) {
-                if(!confirm(`⚠️ لقد تركت ${missed} سؤال بدون إجابة! هل أنت متأكد من تسليم الورقة؟`)) return;
-            }
+            document.getElementById("btnSubmitExam").innerText = "جاري الحفظ وإرسال النتيجة... ⏳"; document.getElementById("btnSubmitExam").disabled = true;
 
-            document.getElementById("btnSubmitExam").innerText = "جاري الحفظ وإرسال النتيجة... ⏳";
-            document.getElementById("btnSubmitExam").disabled = true;
-
-            let score = 0;
-            let totalGradableQs = 0; // الكتل من نوع قطعة أو مقالي لا تحسب آلياً
+            let score = 0; let totalGradableQs = 0; 
+            let myMistakes = []; // مصفوفة لتخزين الأخطاء
 
             activeExamData.questions.forEach((q, idx) => {
-                if (q.type === 'context' || q.type === 'long') return; // تجاهل القطع والمقالي من التصحيح الآلي
-                
+                if (q.type === 'context' || q.type === 'long') return;
                 totalGradableQs++;
                 let sAns = studentAnswers[idx];
-                
+                let isCorrect = false;
+                let cAnsText = "";
+                let sAnsText = "";
+
                 if (q.type === 'mcq' || q.type === 'tf') {
-                    if (parseInt(sAns) === parseInt(q.ans)) score++;
+                    let parsedSAns = parseInt(sAns); let parsedCAns = parseInt(q.ans);
+                    if (parsedSAns === parsedCAns) isCorrect = true;
+                    
+                    let opts = q.options || []; if(q.type === 'tf' && opts.length===0) opts = ["True", "False"];
+                    cAnsText = opts[parsedCAns] || parsedCAns;
+                    sAnsText = isNaN(parsedSAns) ? "لم يتم الحل" : (opts[parsedSAns] || parsedSAns);
                 } else if (q.type === 'short') {
-                    let cleanStudentAns = String(sAns).trim().toLowerCase().replace(/[.,!]/g,"");
-                    let cleanModelAns = String(q.ans).trim().toLowerCase().replace(/[.,!]/g,"");
-                    if (cleanStudentAns === cleanModelAns) score++;
+                    let cleanStudentAns = String(sAns || "").trim().toLowerCase().replace(/[.,!]/g,"");
+                    let cleanModelAns = String(q.ans || "").trim().toLowerCase().replace(/[.,!]/g,"");
+                    if (cleanStudentAns === cleanModelAns) isCorrect = true;
+                    cAnsText = q.ans;
+                    sAnsText = sAns || "لم يتم الحل";
+                }
+
+                if (isCorrect) score++;
+                else {
+                    myMistakes.push({
+                        question: q.questionText,
+                        studentAns: sAnsText,
+                        correctAns: cAnsText,
+                        type: q.type
+                    });
                 }
             });
 
-            // إرسال للخزنة
             db.collection("exam_results").add({ 
                 name: currentStudentName, email: currentStudentEmail, examName: activeExamData.title, 
                 score: score + " / " + totalGradableQs, 
-                hasEssay: hasEssayQuestions, // تنبيه للمستر أن الورقة بها براجراف يحتاج تصحيح
+                hasEssay: hasEssayQuestions,
+                mistakes: myMistakes, // إرسال الأخطاء للكشكول
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
-                // تدمير طوق النجاة لأن الامتحان انتهى بنجاح
                 localStorage.removeItem(`husseiny_exam_${activeExamId}_${currentStudentEmail}`);
-                
-                // الخروج من وضع التركيز
                 document.body.classList.remove('focus-mode');
-                
                 document.getElementById("scoreDisplay").innerText = score + " / " + totalGradableQs;
                 document.getElementById("essayNotice").style.display = hasEssayQuestions ? "block" : "none";
                 document.getElementById("btnSubmitExam").disabled = false;
                 document.getElementById("btnSubmitExam").innerText = "🏁 إنهاء الاختبار وإرسال النتيجة";
-                
                 switchView('resultView');
             }).catch(e => alert("خطأ في الإرسال: " + e.message));
         }
 
-        // المدرس الذكي
         function openAITutor() { document.getElementById("aiTutorModal").classList.add("active"); }
         function closeAITutor() { document.getElementById("aiTutorModal").classList.remove("active"); }
-
     </script>
 </body>
 </html>
